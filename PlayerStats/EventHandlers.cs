@@ -749,6 +749,36 @@ namespace PlayerStats
 
 		public void OnWaitingForPlayers()
 		{
+			Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnd;
+			Exiled.Events.Handlers.Player.Died += OnPlayerDeath;
+			Exiled.Events.Handlers.Player.MedicalItemUsed += OnMedicalItem;
+			Exiled.Events.Handlers.Server.RespawningTeam += OnTeamRespawn;
+			Exiled.Events.Handlers.Server.SendingConsoleCommand += OnConsoleCommand;
+			Exiled.Events.Handlers.Player.FailingEscapePocketDimension += OnPocketDimDeath;
+			Exiled.Events.Handlers.Player.Escaping += OnCheckEscape;
+			Exiled.Events.Handlers.Player.InteractingDoor += OnDoorInteract;
+			Exiled.Events.Handlers.Scp106.Containing += OnScp106Contain;
+			Exiled.Events.Handlers.Player.DroppingItem += OnDropItem;
+			Exiled.Events.Handlers.Player.PickingUpItem += OnPickupItem;
+			Exiled.Events.Handlers.Player.Hurting += OnPlayerHurt;
+			Exiled.Events.Handlers.Player.EscapingPocketDimension += OnPocketDimEscaped;
+			Exiled.Events.Handlers.Player.ChangingRole += OnSetClass;
+			Exiled.Events.Handlers.Player.Spawning += OnPlayerSpawn;
+			Exiled.Events.Handlers.Scp079.GainingLevel += OnScp079LvlGain;
+			Exiled.Events.Handlers.Player.UnlockingGenerator += OnGeneratorUnlock;
+			Exiled.Events.Handlers.Player.Joined += OnPlayerJoin;
+			Exiled.Events.Handlers.Warhead.Stopping += ONWarheadCancelled;
+			Exiled.Events.Handlers.Server.SendingRemoteAdminCommand += OnRemoteAdminCommand;
+			Exiled.Events.Handlers.Scp096.Enraging += OnScp096Enrage;
+			Exiled.Events.Handlers.Server.EndingRound += OnCheckRoundEnd;
+			Exiled.Events.Handlers.Scp914.ChangingKnobSetting += On914KnobChange;
+			Exiled.Events.Handlers.Map.Decontaminating += OnDecontaminate;
+			Exiled.Events.Handlers.Server.RoundStarted += OnRoundStart;
+
+
+
+
+
 			pmd = new Thread(PMD);
 			pmd.Start();
 			Coroutines.Add(Timing.RunCoroutine(SecondCounter14()));
@@ -3431,6 +3461,32 @@ namespace PlayerStats
 
 		public void OnRoundEnd(RoundEndedEventArgs ev)
 		{
+			Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnd;
+			Exiled.Events.Handlers.Player.Died -= OnPlayerDeath;
+			Exiled.Events.Handlers.Player.MedicalItemUsed -= OnMedicalItem;
+			Exiled.Events.Handlers.Server.RespawningTeam -= OnTeamRespawn;
+			Exiled.Events.Handlers.Server.SendingConsoleCommand -= OnConsoleCommand;
+			Exiled.Events.Handlers.Player.FailingEscapePocketDimension -= OnPocketDimDeath;
+			Exiled.Events.Handlers.Player.Escaping -= OnCheckEscape;
+			Exiled.Events.Handlers.Player.InteractingDoor -= OnDoorInteract;
+			Exiled.Events.Handlers.Scp106.Containing -= OnScp106Contain;
+			Exiled.Events.Handlers.Player.DroppingItem -= OnDropItem;
+			Exiled.Events.Handlers.Player.PickingUpItem -= OnPickupItem;
+			Exiled.Events.Handlers.Player.Hurting -= OnPlayerHurt;
+			Exiled.Events.Handlers.Player.EscapingPocketDimension -= OnPocketDimEscaped;
+			Exiled.Events.Handlers.Player.ChangingRole -= OnSetClass;
+			Exiled.Events.Handlers.Player.Spawning -= OnPlayerSpawn;
+			Exiled.Events.Handlers.Scp079.GainingLevel -= OnScp079LvlGain;
+			Exiled.Events.Handlers.Player.UnlockingGenerator -= OnGeneratorUnlock;
+			Exiled.Events.Handlers.Player.Joined -= OnPlayerJoin;
+			Exiled.Events.Handlers.Warhead.Stopping -= ONWarheadCancelled;
+			Exiled.Events.Handlers.Server.SendingRemoteAdminCommand -= OnRemoteAdminCommand;
+			Exiled.Events.Handlers.Scp096.Enraging -= OnScp096Enrage;
+			Exiled.Events.Handlers.Server.EndingRound -= OnCheckRoundEnd;
+			Exiled.Events.Handlers.Scp914.ChangingKnobSetting -= On914KnobChange;
+			Exiled.Events.Handlers.Map.Decontaminating -= OnDecontaminate;
+			Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStart;
+
 			foreach (Exiled.API.Features.Player p in Exiled.API.Features.Player.List)
 			{
 				if (!p.IsHost && player_list.Contains(p))
