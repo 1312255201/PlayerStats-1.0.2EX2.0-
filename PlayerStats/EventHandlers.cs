@@ -4289,7 +4289,7 @@ namespace PlayerStats
 				tiems++;
 				if(player.Role == RoleType.NtfCadet)
 				{
-					switch(times)
+					switch(tiems)
 					{
 						case 1:
 							mrfish = player;
