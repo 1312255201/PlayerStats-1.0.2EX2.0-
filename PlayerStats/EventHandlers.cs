@@ -770,10 +770,8 @@ namespace PlayerStats
 			Coroutines.Add(Timing.RunCoroutine(Chenghao()));
 			Coroutines.Add(Timing.RunCoroutine(SecondCounter()));
 			Coroutines.Add(Timing.RunCoroutine(SecondCounter2()));
-			Coroutines.Add(Timing.RunCoroutine(SecondCounter4()));
 			Coroutines.Add(Timing.RunCoroutine(SecondCounter5()));
 			Coroutines.Add(Timing.RunCoroutine(SecondCounter7()));
-			Coroutines.Add(Timing.RunCoroutine(SecondCounter9()));
 		}
 
 		private IEnumerator<float> HdjjsCD()
@@ -1136,19 +1134,6 @@ namespace PlayerStats
 			}
 		}
 
-		private IEnumerator<float> SecondCounter28()
-		{
-			yield return Timing.WaitForSeconds(1f);
-			D9341.ClearInventory();
-			yield return Timing.WaitForSeconds(3f);
-			D9341.Position = D9341zb;
-			yield return Timing.WaitForSeconds(1f);
-			foreach (Inventory.SyncItemInfo item2 in D9341Item)
-			{
-				D9341.AddItem(item2);
-			}
-		}
-
 		private IEnumerator<float> RunRestoreMaxHp(Exiled.API.Features.Player player, int maxHp)
 		{
 			yield return Timing.WaitForSeconds(0.1f);
@@ -1159,20 +1144,6 @@ namespace PlayerStats
 		private IEnumerator<float> SecondCounter25()
 		{
 			yield return Timing.WaitForSeconds(2f);
-			jwhng.ClearInventory();
-			yield return Timing.WaitForSeconds(2f);
-			foreach (Inventory.SyncItemInfo syncItemInfo in item)
-			{
-				jwhng.AddItem(syncItemInfo);
-			}
-			jwhng.AddItem(ItemType.GunLogicer);
-			jwhng.AddItem(ItemType.GunLogicer);
-			jwhng.AddItem(ItemType.GunLogicer);
-			jwhng.AddItem(ItemType.GunLogicer);
-			jwhng.AddItem(ItemType.GunE11SR);
-			jwhng.AddItem(ItemType.GunE11SR);
-			jwhng.AddItem(ItemType.GunE11SR);
-			jwhng.AddItem(ItemType.GunE11SR);
 			jwhng.Health = health;
 			bscd = true;
 		}
@@ -1181,12 +1152,7 @@ namespace PlayerStats
 		{
 			yield return Timing.WaitForSeconds(2f);
 			Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(scp035, 500)));
-			scp035.ClearInventory();
 			yield return Timing.WaitForSeconds(2f);
-			foreach (Inventory.SyncItemInfo item in scp035item)
-			{
-				scp035.AddItem(item);
-			}
 		}
 
 		private IEnumerator<float> Wshf()
@@ -1822,7 +1788,7 @@ namespace PlayerStats
 					{
 						if (!Dio2.Contains(referenceHub3.UserId))
 						{
-							referenceHub3.Position = referenceHub3.Position;
+							referenceHub3.ReferenceHub.playerMovementSync.OverridePosition(referenceHub3.Position, 0, false);
 						}
 					}
 				}
@@ -1836,7 +1802,8 @@ namespace PlayerStats
 					{
 						if (referenceHub2.Id != fkyyzid)
 						{
-							referenceHub2.Position = referenceHub2.Position;
+							referenceHub2.ReferenceHub.playerMovementSync.OverridePosition(referenceHub2.Position, 0, false);
+
 						}
 					}
 				}
@@ -1846,7 +1813,7 @@ namespace PlayerStats
 					{
 						if (referenceHub.Id != fkyyzid)
 						{
-							referenceHub.Position = referenceHub.Position;
+							referenceHub.ReferenceHub.playerMovementSync.OverridePosition(referenceHub.Position, 0, false);
 						}
 					}
 				}
@@ -1884,43 +1851,43 @@ namespace PlayerStats
 				switch (new System.Random().Next(1, 14))
 				{
 					case 1:
-						scp817.Role = RoleType.Scientist;
+						scp817.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.Scientist,true);
 						break;
 					case 2:
-						scp817.Role = RoleType.ChaosInsurgency;
+						scp817.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.ChaosInsurgency, true);
 						break;
 					case 3:
-						scp817.Role = RoleType.FacilityGuard;
+						scp817.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.FacilityGuard, true);
 						break;
 					case 4:
-						scp817.Role = RoleType.NtfCadet;
+						scp817.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.NtfCadet, true);
 						break;
 					case 5:
-						scp817.Role = RoleType.NtfCommander;
+						scp817.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.NtfCommander, true);
 						break;
 					case 6:
-						scp817.Role = RoleType.NtfLieutenant;
+						scp817.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.NtfLieutenant, true);
 						break;
 					case 7:
-						scp817.Role = RoleType.NtfScientist;
+						scp817.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.NtfScientist, true);
 						break;
 					case 8:
-						scp817.Role = RoleType.Scp079;
+						scp817.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.Scp079, true);
 						break;
 					case 9:
-						scp817.Role = RoleType.Scp106;
+						scp817.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.Scp106, true);
 						break;
 					case 10:
-						scp817.Role = RoleType.Scp173;
+						scp817.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.Scp173, true);
 						break;
 					case 11:
-						scp817.Role = RoleType.Scp93953;
+						scp817.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.Scp93953, true);
 						break;
 					case 12:
-						scp817.Role = RoleType.Scp93989;
+						scp817.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.Scp93989, true);
 						break;
 					case 13:
-						scp817.Role = RoleType.Tutorial;
+						scp817.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.Tutorial, true);
 						break;
 				}
 				scp817.Broadcast(5, "<color=red>[个人通知]</color>\n<color=#FFFF00>恭喜你性转成功 你已经是女孩子了</color>");
@@ -2020,35 +1987,6 @@ namespace PlayerStats
 			}
 		}
 
-		private IEnumerator<float> SecondCounter9()
-		{
-			while (true)
-			{
-				scp2006.AddItem(ItemType.Coin);
-				foreach (Exiled.API.Features.Player player2 in Exiled.API.Features.Player.List)
-				{
-					if (player2.Team == Team.SCP)
-					{
-						player2.Health += 25f;
-					}
-				}
-				if (bpb)
-				{
-					foreach (Exiled.API.Features.Player player in Exiled.API.Features.Player.List)
-					{
-						if (bpb2.Contains(player.Id))
-						{
-							player.AddItem(ItemType.GrenadeFrag);
-						}
-					}
-				}
-				if (ylb1)
-				{
-					ylb.AddItem(ItemType.Medkit);
-				}
-				yield return Timing.WaitForSeconds(100f);
-			}
-		}
 
 		private IEnumerator<float> SecondCounter7()
 		{
@@ -2123,15 +2061,6 @@ namespace PlayerStats
 			scp073.SetRole(RoleType.NtfLieutenant);
 		}
 
-		private IEnumerator<float> Scp999tp()
-		{
-			yield return Timing.WaitForSeconds(10f);
-			scp.Position = RoleType.FacilityGuard.GetRandomSpawnPoint();
-			yield return Timing.WaitForSeconds(2f);
-			scp.Position = RoleType.FacilityGuard.GetRandomSpawnPoint();
-			scp.IsGodModeEnabled = false;
-		}
-
 		private IEnumerator<float> Scp550item()
 		{
 			yield return Timing.WaitForSeconds(2f);
@@ -2172,7 +2101,7 @@ namespace PlayerStats
 		private IEnumerator<float> Mrfishzb()
 		{
 			yield return Timing.WaitForSeconds(1f);
-			mrfish.Role = RoleType.Scientist;
+			mrfish.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.Scientist,true);
 			yield return Timing.WaitForSeconds(1f);
 			mrfish.Position = RoleType.NtfCommander.GetRandomSpawnPoint();
 			mrfish.ClearInventory();
@@ -2359,6 +2288,38 @@ namespace PlayerStats
 				if (starttimer)
 				{
 					yield return Timing.WaitForSeconds(200f);
+					if (bhsx)
+					{
+						bhsx = false;
+					}
+					if (scp650yes)
+					{
+						foreach (Exiled.API.Features.Player player in Exiled.API.Features.Player.List)
+						{
+							if (player.Id == scp650id && player.Role != 0)
+							{
+								scp650.IsGodModeEnabled = false;
+							}
+							int Rolenum = new System.Random().Next(1, 10);
+							if (Rolenum >= 6 && (int)player.Team > 0)
+							{
+								scp650.Position = player.Position;
+							}
+						}
+					}
+					stealcd = false;
+					Exiled.API.Features.Map.Broadcast(10, "<color=#00FFFF>如果你有什么好点子或者游玩中有什么问题欢迎您加群哦\n1021889243</color>");
+					if (scp2006id != 0)
+					{
+						scp2006.AddItem(ItemType.Coin);
+					}
+					foreach (Exiled.API.Features.Player player2 in Exiled.API.Features.Player.List)
+					{
+						if (player2.Team == Team.SCP)
+						{
+							player2.Health += 50f;
+						}
+					}
 					foreach (Exiled.API.Features.Player referenceHub in Exiled.API.Features.Player.List)
 					{
 						if (referenceHub.Team == Team.SCP)
@@ -2391,6 +2352,11 @@ namespace PlayerStats
 					if (fkyyzyes)
 					{
 						fkyyzcardint++;
+					}
+					if (!die && start)
+					{
+						scp.AddItem(ItemType.Medkit);
+						scp.Health += 80f;
 					}
 					kccd = false;
 					if (!scp457die && !scp457a)
@@ -2526,7 +2492,7 @@ namespace PlayerStats
 							{
 								if (player15.Role == RoleType.Scp0492)
 								{
-									player15.Role = RoleType.Scp049;
+									player15.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.Scp049, true);
 									break;
 								}
 							}
@@ -2587,7 +2553,7 @@ namespace PlayerStats
 							{
 								if (player19.Role == RoleType.Scp106)
 								{
-									player19.Role = RoleType.Scp096;
+									player19.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.Scp096, true);
 								}
 							}
 							break;
@@ -2597,7 +2563,7 @@ namespace PlayerStats
 							{
 								if (player20.Role == RoleType.Scp096)
 								{
-									player20.Role = RoleType.Scp106;
+									player20.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.Scp106, true);
 								}
 							}
 							break;
@@ -2623,7 +2589,7 @@ namespace PlayerStats
 							break;
 						case 19:
 							Exiled.API.Features.Map.Broadcast(10, "<color=#BB1444>杨永信网戒所！-事件：一名事件刷成079变回D级</color>");
-							foreach (Exiled.API.Features.Player player22 in Exiled.API.Features.Player.List)
+							foreach (Exiled.API.Features.Player player22 in scpd79)
 							{
 								if (player22.Role == RoleType.Scp079)
 								{
@@ -2884,50 +2850,6 @@ namespace PlayerStats
 			}
 		}
 
-		private IEnumerator<float> SecondCounter4()
-		{
-			while (true)
-			{
-				if (bhsx)
-				{
-					bhsx = false;
-				}
-				if (scp650yes)
-				{
-					foreach (Exiled.API.Features.Player player in Exiled.API.Features.Player.List)
-					{
-						if (player.Id == scp650id && player.Role != 0)
-						{
-							scp650.IsGodModeEnabled = false;
-						}
-						int Rolenum = new System.Random().Next(1, 10);
-						if (Rolenum >= 6 && (int)player.Team > 0)
-						{
-							scp650.Position = player.Position;
-						}
-					}
-				}
-				stealcd = false;
-				Exiled.API.Features.Map.Broadcast(10, "<color=#00FFFF>如果你有什么好点子或者游玩中有什么问题欢迎您加群哦\n1021889243</color>");
-				yield return Timing.WaitForSeconds(200f);
-			}
-		}
-
-		private IEnumerator<float> SecondCounter15()
-		{
-			while (true)
-			{
-				yield return Timing.WaitForSeconds(120f);
-				if (!die && start)
-				{
-					scp.AddItem(ItemType.Medkit);
-					scp.Health += 80f;
-					continue;
-				}
-				break;
-			}
-		}
-
 		private IEnumerator<float> SecondCounter2()
 		{
 			while (true)
@@ -3079,7 +3001,7 @@ namespace PlayerStats
 		{
 			if (!die)
 			{
-				scp.Role = RoleType.Tutorial;
+				scp.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.Tutorial, true);
 				scp.AddItem(ItemType.Disarmer);
 				scp.AddItem(ItemType.Flashlight);
 				scp.AddItem(ItemType.KeycardGuard);
@@ -3096,8 +3018,6 @@ namespace PlayerStats
 				start = true;
 				scp_999.Add(scp.UserId);
 				Coroutines.Add(Timing.RunCoroutine(testHint("scp999", scp)));
-				Coroutines.Add(Timing.RunCoroutine(SecondCounter15()));
-				Coroutines.Add(Timing.RunCoroutine(Scp999tp()));
 				Log.Info("SCP999已刷新，玩家为:" + scp.Nickname + start);
 			}
 		}
@@ -4480,8 +4400,7 @@ namespace PlayerStats
 		{
 			if (ev.Killer.Id == scp035id)
 			{
-				scp035item = ev.Killer.Inventory.items;
-				scp035.Role = ev.Target.Role;
+				scp035.ReferenceHub.characterClassManager.SetClassIDAdv(ev.Target.Role, true);
 				Coroutines.Add(Timing.RunCoroutine(SecondCounter24()));
 			}
 		}
@@ -4736,11 +4655,11 @@ namespace PlayerStats
 				health = ev.Player.Health;
 				if (ev.Player.Role == RoleType.ChaosInsurgency)
 				{
-					ev.Player.Role = RoleType.NtfCadet;
+					ev.Player.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.NtfCadet, true);
 				}
 				else if (ev.Player.Role == RoleType.NtfCadet)
 				{
-					ev.Player.Role = RoleType.ChaosInsurgency;
+					ev.Player.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.ChaosInsurgency, true);
 				}
 				Coroutines.Add(Timing.RunCoroutine(SecondCounter25()));
 			}
@@ -5810,12 +5729,12 @@ namespace PlayerStats
 					health = ev.Player.Health;
 					if (ev.Player.Role == RoleType.ChaosInsurgency)
 					{
-						ev.Player.Role = RoleType.NtfCadet;
+						ev.Player.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.NtfCadet, true);
 						ev.Player.ClearInventory();
 					}
 					else if (ev.Player.Role == RoleType.NtfCadet)
 					{
-						ev.Player.Role = RoleType.ChaosInsurgency;
+						ev.Player.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.ChaosInsurgency, true);
 						ev.Player.ClearInventory();
 					}
 					Coroutines.Add(Timing.RunCoroutine(SecondCounter25()));
@@ -5834,8 +5753,7 @@ namespace PlayerStats
 					}
 					if (ev.Item.id == ItemType.Flashlight && times <= 5)
 					{
-						D9341.SetRole(D9341js);
-						Coroutines.Add(Timing.RunCoroutine(SecondCounter28()));
+						D9341.ReferenceHub.characterClassManager.SetClassIDAdv(D9341js, true);
 						times++;
 					}
 				}
@@ -6559,46 +6477,46 @@ namespace PlayerStats
 				switch (new System.Random().Next(1, 17))
 				{
 					case 1:
-						ev.Target.Role = RoleType.Scientist;
+						ev.Target.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.Scientist, true);
 						break;
 					case 2:
-						ev.Target.Role = RoleType.ChaosInsurgency;
+						ev.Target.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.ChaosInsurgency, true);
 						break;
 					case 3:
-						ev.Target.Role = RoleType.FacilityGuard;
+						ev.Target.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.FacilityGuard, true);
 						break;
 					case 4:
-						ev.Target.Role = RoleType.NtfCadet;
+						ev.Target.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.NtfCadet, true);
 						break;
 					case 5:
-						ev.Target.Role = RoleType.NtfCommander;
+						ev.Target.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.NtfCommander, true);
 						break;
 					case 6:
-						ev.Target.Role = RoleType.NtfLieutenant;
+						ev.Target.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.NtfLieutenant, true);
 						break;
 					case 7:
-						ev.Target.Role = RoleType.NtfScientist;
+						ev.Target.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.NtfScientist, true);
 						break;
 					case 8:
-						ev.Target.Role = RoleType.Scp0492;
+						ev.Target.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.Scp0492, true);
 						break;
 					case 9:
-						ev.Target.Role = RoleType.Scp079;
+						ev.Target.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.Scp079, true);
 						break;
 					case 10:
-						ev.Target.Role = RoleType.Scp106;
+						ev.Target.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.Scp106, true);
 						break;
 					case 11:
-						ev.Target.Role = RoleType.Scp173;
+						ev.Target.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.Scp173, true);
 						break;
 					case 12:
-						ev.Target.Role = RoleType.Scp93953;
+						ev.Target.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.Scp93953, true);
 						break;
 					case 13:
-						ev.Target.Role = RoleType.Scp93989;
+						ev.Target.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.Scp93989, true);
 						break;
 					case 14:
-						ev.Target.Role = RoleType.Tutorial;
+						ev.Target.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.Tutorial, true);
 						break;
 				}
 				ev.Target.Broadcast(5, "<color=red>你被SCP-3108射击已经转变身份</color>");
@@ -6686,8 +6604,7 @@ namespace PlayerStats
 			if (ev.Target.Id == D9341id && ev.Amount >= ev.Target.Health && times <= 5)
 			{
 				ev.Amount = 0f;
-				D9341.SetRole(D9341js);
-				Coroutines.Add(Timing.RunCoroutine(SecondCounter28()));
+				D9341.ReferenceHub.characterClassManager.SetClassIDAdv(D9341js, true);
 				times++;
 			}
 			if (scp2818pick && scp2818id == ev.Attacker.Id && ev.DamageType == DamageTypes.Com15)
@@ -6717,8 +6634,7 @@ namespace PlayerStats
 				if (num4 == 2)
 				{
 					ev.Amount = 0f;
-					ev.Target.Role = RoleType.Scp0492;
-					Coroutines.Add(Timing.RunCoroutine(Tp(ev.Target, ev.Attacker.Position)));
+					ev.Target.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.Scp0492, true);
 				}
 			}
 			if (ev.Target.Id != scp650id && ev.Target.Id == scp076id)
@@ -6843,12 +6759,10 @@ namespace PlayerStats
 			{
 				Vector3 vector3 = ev.Target.Position;
 				ev.Amount = 0f;
-				ev.Target.Role = RoleType.Scp0492;
+				ev.Target.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.Scp0492, true); 
 				Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(scp49j, 1000)));
 				Setrank_new("SCP-49-J", "yellow", ev.Target);
 				ev.Target.Broadcast(10, "<color=#FFC0CB>[SCP-49-J 瘟疫二逼]</color>\n<color=#00FFFF>你无法攻击人 但是你可以拉起小僵尸</color>\n<color=#FFC0CB>当经验超过600后你可以攻击人类</color>");
-				ev.Target.Position = vector3;
-				Coroutines.Add(Timing.RunCoroutine(Tp(ev.Target, vector3)));
 				scp49jid = 0;
 			}
 			if (jwhngyes && !jwhngwufashanghai)
