@@ -166,8 +166,6 @@ namespace PlayerStats
 
 		public bool jntmlq;
 
-		public int times3 = 0;
-
 		private Exiled.API.Features.Player scp2006;
 
 		private int scp2006id;
@@ -727,7 +725,7 @@ namespace PlayerStats
 		private IEnumerator<float> Tp(Exiled.API.Features.Player player, Vector3 vector3)
 		{
 			yield return Timing.WaitForSeconds(0.5f);
-			player.Position = vector3;
+			player.ReferenceHub.playerMovementSync.OverridePosition(vector3, 0, false);
 		}
 
 		private IEnumerator<float> Chenghao()
@@ -1158,7 +1156,7 @@ namespace PlayerStats
 		private IEnumerator<float> Wshf()
 		{
 			yield return Timing.WaitForSeconds(10f);
-			误杀玩家.Position = RoleType.NtfCadet.GetRandomSpawnPoint();
+			误杀玩家.ReferenceHub.playerMovementSync.OverridePosition(RoleType.NtfCadet.GetRandomSpawnPoint(), 0, false);
 		}
 
 		private IEnumerator<float> Zgzz()
@@ -1337,7 +1335,8 @@ namespace PlayerStats
 				{
 					if (door.DoorName == "173_ARMORY")
 					{
-						scp035.Position = new Vector3(door.transform.position.x, door.transform.position.y + 1.5f, door.transform.position.z);
+						door.isOpen = true;
+						scp035.ReferenceHub.playerMovementSync.OverridePosition(new Vector3(door.transform.position.x, door.transform.position.y + 1.5f, door.transform.position.z), 0, false);
 					}
 				}
 			}
@@ -1794,7 +1793,8 @@ namespace PlayerStats
 				}
 				if (qblcq2)
 				{
-					qblcq.Position = scpqbl3.Position;
+					qblcq.ReferenceHub.playerMovementSync.OverridePosition(qblcq.Position, 0, false);
+
 				}
 				if (ljfuse)
 				{
@@ -1891,9 +1891,6 @@ namespace PlayerStats
 						break;
 				}
 				scp817.Broadcast(5, "<color=red>[个人通知]</color>\n<color=#FFFF00>恭喜你性转成功 你已经是女孩子了</color>");
-				times3 = 1;
-				yield return Timing.WaitForSeconds(0.3f);
-				scp817.Position = pos3;
 				yield return Timing.WaitForSeconds(10f);
 			}
 		}
@@ -2070,7 +2067,7 @@ namespace PlayerStats
 			scp550.Broadcast(10, "<color=lime>[SCP550]</color>\n<color=yello>你是食尸鬼:HP:5000 如果30s内没吞噬尸体每秒损失8HP</color>\n<color=yellow>站在尸体边上即可吞噬尸体 吞噬完成后你会获得能力的提升</color>");
 			Coroutines.Add(Timing.RunCoroutine(SecondCounter26()));
 			scp550.AddItem(ItemType.GunProject90);
-			scp550.Position = RoleType.Scp049.GetRandomSpawnPoint();
+			scp550.ReferenceHub.playerMovementSync.OverridePosition(RoleType.Scp049.GetRandomSpawnPoint(), 0, false);
 			Coroutines.Add(Timing.RunCoroutine(testHint("scp550", scp550)));
 		}
 
@@ -2103,7 +2100,6 @@ namespace PlayerStats
 			yield return Timing.WaitForSeconds(1f);
 			mrfish.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.Scientist,true);
 			yield return Timing.WaitForSeconds(1f);
-			mrfish.Position = RoleType.NtfCommander.GetRandomSpawnPoint();
 			mrfish.ClearInventory();
 			yield return Timing.WaitForSeconds(2f);
 			mrfish.Health = 120f;
@@ -2278,7 +2274,7 @@ namespace PlayerStats
 		private IEnumerator<float> Fkyyztp()
 		{
 			yield return Timing.WaitForSeconds(2f);
-			fkyyz.Position = RoleType.Scp93989.GetRandomSpawnPoint();
+			fkyyz.ReferenceHub.playerMovementSync.OverridePosition(RoleType.Scp93989.GetRandomSpawnPoint(), 0, false); 
 		}
 
 		private IEnumerator<float> SecondCounter5()
@@ -2303,7 +2299,7 @@ namespace PlayerStats
 							int Rolenum = new System.Random().Next(1, 10);
 							if (Rolenum >= 6 && (int)player.Team > 0)
 							{
-								scp650.Position = player.Position;
+								scp650.ReferenceHub.playerMovementSync.OverridePosition(player.Position, 0, false);
 							}
 						}
 					}
@@ -2481,7 +2477,7 @@ namespace PlayerStats
 							{
 								if (player13.Role == RoleType.ClassD)
 								{
-									scp106a.Position = player13.Position;
+									scp650.ReferenceHub.playerMovementSync.OverridePosition(player13.Position, 0, false);
 									break;
 								}
 							}
@@ -2941,9 +2937,9 @@ namespace PlayerStats
 			{
 				if (player.Id == jwhhkid)
 				{
-					jwhhk.SetRole(RoleType.NtfScientist);
+					jwhhk.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.NtfLieutenant, true);
 					yield return Timing.WaitForSeconds(1f);
-					jwhhk.Position = hkzb;
+					jwhhk.ReferenceHub.playerMovementSync.OverridePosition(hkzb, 0, false);
 					hrss = false;
 				}
 			}
@@ -3355,7 +3351,6 @@ namespace PlayerStats
 			scp2006 = null;
 			scp2006a.Clear();
 			scp2006id = 0;
-			times3 = 0;
 			deadtimer = 0;
 			scpqblid2 = 0;
 			scpqbl = null;
@@ -4982,7 +4977,7 @@ namespace PlayerStats
 			if (ev.Name.Contains("dk") && hrss)
 			{
 				jwhhk.SetRole(RoleType.NtfScientist);
-				jwhhk.Position = hkzb;
+				jwhhk.ReferenceHub.playerMovementSync.OverridePosition(hkzb, 0, false);
 				hrss = false;
 			}
 			if (ev.Name.Contains("hk") && jwhhkid == ev.Player.Id && !hrss)
@@ -5327,49 +5322,29 @@ namespace PlayerStats
 			}
 			Log.Info("混沌人数:" + chaos);
 			Log.Info("MTF人数:" + mtf);
-			int[] array = touxiang;
-			foreach (int num2 in array)
+			if (touxiang.Contains(ev.Player.Id))
 			{
-				if (num2 == ev.Player.Id)
+				Log.Info("投降玩家是:" + ev.Player.Nickname);
+				if (ev.Player.Role == RoleType.ClassD && chaos == 0)
 				{
-					Log.Info("投降玩家是:" + ev.Player.Nickname);
-				}
-				if (num2 == ev.Player.Id && ev.Player.Role == RoleType.ClassD && chaos == 0)
-				{
+					ev.IsAllowed = false;
 					Log.Info("玩家即将变为NTF学员");
 					Log.Info("玩家名:" + ev.Player.Nickname);
 					ev.Player.Role = RoleType.NtfCadet;
-					for (int j = 0; j <= 100; j++)
-					{
-						if (touxiang[j] == ev.Player.Id)
-						{
-							touxiang[j] = 0;
-						}
-					}
-					chaos = 0;
-					mtf = 0;
-					return;
 				}
-				if (num2 != ev.Player.Id || ev.Player.Role != RoleType.Scientist || mtf != 0)
+				if (ev.Player.Role == RoleType.Scientist && mtf == 0)
 				{
-					continue;
+					ev.IsAllowed = false;
+					Log.Info("玩家即将变为混沌");
+					Log.Info("玩家名:" + ev.Player.Nickname);
+					ev.Player.Role = RoleType.ChaosInsurgency;
 				}
-				Log.Info("玩家即将变为混沌");
-				Log.Info("玩家名:" + ev.Player.Nickname);
-				ev.Player.Role = RoleType.ChaosInsurgency;
-				for (int i = 0; i <= 100; i++)
-				{
-					if (touxiang[i] == ev.Player.Id)
-					{
-						touxiang[i] = 0;
-					}
-				}
-				chaos = 0;
-				mtf = 0;
-				return;
+				
 			}
 			chaos = 0;
 			mtf = 0;
+			return;
+
 		}
 
 		public void OnDoorInteract(InteractingDoorEventArgs ev)
@@ -6520,7 +6495,6 @@ namespace PlayerStats
 						break;
 				}
 				ev.Target.Broadcast(5, "<color=red>你被SCP-3108射击已经转变身份</color>");
-				ev.Target.Position = scp3108shotatplayerpos;
 			}
 			if (ev.Attacker.Id == scp650id && ev.DamageType != DamageTypes.Tesla && ev.DamageType != DamageTypes.Decont && ev.DamageType != DamageTypes.Falldown && ev.DamageType != DamageTypes.Flying && ev.DamageType != DamageTypes.Nuke && ev.DamageType != DamageTypes.Pocket && ev.DamageType != DamageTypes.Wall && ev.DamageType != DamageTypes.Lure)
 			{
