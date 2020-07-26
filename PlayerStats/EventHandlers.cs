@@ -607,6 +607,19 @@ namespace PlayerStats
 					}
 				}
 			}
+			if (ev.Name == "cleanall")
+			{
+				Ragdoll[] array = UnityEngine.Object.FindObjectsOfType<Ragdoll>();
+				foreach (Ragdoll ragdoll in array)
+				{
+					NetworkServer.Destroy(ragdoll.gameObject);
+				}
+				Pickup[] array2 = UnityEngine.Object.FindObjectsOfType<Pickup>();
+				foreach (Pickup item in array2)
+				{
+					item.Delete();
+				}
+			}
 
 		}
 
@@ -749,36 +762,6 @@ namespace PlayerStats
 
 		public void OnWaitingForPlayers()
 		{
-			Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnd;
-			Exiled.Events.Handlers.Player.Died += OnPlayerDeath;
-			Exiled.Events.Handlers.Player.MedicalItemUsed += OnMedicalItem;
-			Exiled.Events.Handlers.Server.RespawningTeam += OnTeamRespawn;
-			Exiled.Events.Handlers.Server.SendingConsoleCommand += OnConsoleCommand;
-			Exiled.Events.Handlers.Player.FailingEscapePocketDimension += OnPocketDimDeath;
-			Exiled.Events.Handlers.Player.Escaping += OnCheckEscape;
-			Exiled.Events.Handlers.Player.InteractingDoor += OnDoorInteract;
-			Exiled.Events.Handlers.Scp106.Containing += OnScp106Contain;
-			Exiled.Events.Handlers.Player.DroppingItem += OnDropItem;
-			Exiled.Events.Handlers.Player.PickingUpItem += OnPickupItem;
-			Exiled.Events.Handlers.Player.Hurting += OnPlayerHurt;
-			Exiled.Events.Handlers.Player.EscapingPocketDimension += OnPocketDimEscaped;
-			Exiled.Events.Handlers.Player.ChangingRole += OnSetClass;
-			Exiled.Events.Handlers.Player.Spawning += OnPlayerSpawn;
-			Exiled.Events.Handlers.Scp079.GainingLevel += OnScp079LvlGain;
-			Exiled.Events.Handlers.Player.UnlockingGenerator += OnGeneratorUnlock;
-			Exiled.Events.Handlers.Player.Joined += OnPlayerJoin;
-			Exiled.Events.Handlers.Warhead.Stopping += ONWarheadCancelled;
-			Exiled.Events.Handlers.Server.SendingRemoteAdminCommand += OnRemoteAdminCommand;
-			Exiled.Events.Handlers.Scp096.Enraging += OnScp096Enrage;
-			Exiled.Events.Handlers.Server.EndingRound += OnCheckRoundEnd;
-			Exiled.Events.Handlers.Scp914.ChangingKnobSetting += On914KnobChange;
-			Exiled.Events.Handlers.Map.Decontaminating += OnDecontaminate;
-			Exiled.Events.Handlers.Server.RoundStarted += OnRoundStart;
-
-
-
-
-
 			pmd = new Thread(PMD);
 			pmd.Start();
 			Coroutines.Add(Timing.RunCoroutine(SecondCounter14()));
@@ -3461,32 +3444,6 @@ namespace PlayerStats
 
 		public void OnRoundEnd(RoundEndedEventArgs ev)
 		{
-			Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnd;
-			Exiled.Events.Handlers.Player.Died -= OnPlayerDeath;
-			Exiled.Events.Handlers.Player.MedicalItemUsed -= OnMedicalItem;
-			Exiled.Events.Handlers.Server.RespawningTeam -= OnTeamRespawn;
-			Exiled.Events.Handlers.Server.SendingConsoleCommand -= OnConsoleCommand;
-			Exiled.Events.Handlers.Player.FailingEscapePocketDimension -= OnPocketDimDeath;
-			Exiled.Events.Handlers.Player.Escaping -= OnCheckEscape;
-			Exiled.Events.Handlers.Player.InteractingDoor -= OnDoorInteract;
-			Exiled.Events.Handlers.Scp106.Containing -= OnScp106Contain;
-			Exiled.Events.Handlers.Player.DroppingItem -= OnDropItem;
-			Exiled.Events.Handlers.Player.PickingUpItem -= OnPickupItem;
-			Exiled.Events.Handlers.Player.Hurting -= OnPlayerHurt;
-			Exiled.Events.Handlers.Player.EscapingPocketDimension -= OnPocketDimEscaped;
-			Exiled.Events.Handlers.Player.ChangingRole -= OnSetClass;
-			Exiled.Events.Handlers.Player.Spawning -= OnPlayerSpawn;
-			Exiled.Events.Handlers.Scp079.GainingLevel -= OnScp079LvlGain;
-			Exiled.Events.Handlers.Player.UnlockingGenerator -= OnGeneratorUnlock;
-			Exiled.Events.Handlers.Player.Joined -= OnPlayerJoin;
-			Exiled.Events.Handlers.Warhead.Stopping -= ONWarheadCancelled;
-			Exiled.Events.Handlers.Server.SendingRemoteAdminCommand -= OnRemoteAdminCommand;
-			Exiled.Events.Handlers.Scp096.Enraging -= OnScp096Enrage;
-			Exiled.Events.Handlers.Server.EndingRound -= OnCheckRoundEnd;
-			Exiled.Events.Handlers.Scp914.ChangingKnobSetting -= On914KnobChange;
-			Exiled.Events.Handlers.Map.Decontaminating -= OnDecontaminate;
-			Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStart;
-
 			foreach (Exiled.API.Features.Player p in Exiled.API.Features.Player.List)
 			{
 				if (!p.IsHost && player_list.Contains(p))
@@ -4282,11 +4239,11 @@ namespace PlayerStats
 				times2 = 1;
 				Coroutines.Add(Timing.RunCoroutine(SetHd(ev.Players)));
 			}
-			if (ev.NextKnownTeam != SpawnableTeamType.NineTailedFox)
+			if (ev.NextKnownTeam == SpawnableTeamType.NineTailedFox)
 			{
 				tiems = 0;
-				Coroutines.Add(Timing.RunCoroutine(SetNineFox()));
 				Coroutines.Add(Timing.RunCoroutine(SetNineFox2(ev.Players)));
+				Coroutines.Add(Timing.RunCoroutine(SetNineFox()));
 
 			}
 
@@ -4343,84 +4300,81 @@ namespace PlayerStats
 			foreach(Player player in players)
 			{
 				tiems++;
-				if(player.Role == RoleType.NtfCadet)
+				switch (tiems)
 				{
-					switch(tiems)
-					{
-						case 1:
-							mrfish = player;
-							Setrank_new("Mr.Fish", "yellow", mrfish);
-							Exiled.API.Features.Map.Broadcast(10, "<color=#FF0000>Mr.Fish:</color>你们太菜了看我把SCP都收容了");
-							LLBS233.Add(mrfish.Id);
-							Coroutines.Add(Timing.RunCoroutine(Mrfishzb()));
-							break;
-						case 2:
-							if(!ylb1)
-							{
-								ylb1 = true;
-								Setrank_new("九尾医疗兵", "yellow", player);
-								player.Broadcast(5, "<color=#FF0000>你是九尾狐医疗兵</color>:在你周围的人会回血，捡起对讲机和闪光弹可以变成血包");
-								ylb = player;
-								ylb2.Add(ylb.UserId);
-								Coroutines.Add(Timing.RunCoroutine(testHint("jwhylb", player)));
-							}
-							break;
-						case 3:
-							if(!scp073a)
-							{
-								scp073 = player;
-								scp073a = true;
-								scp073id = scp073.Id;
-								Setrank_new("SCP-073", "red", player);
-								player.Broadcast(5, "<color=#FF0000>你是九尾狐SCP-073</color>\n<color=lime>如果SCP攻击你 只有10点伤害 且反伤50 枪械攻击伤害为1且反伤5</color>");
-								Coroutines.Add(Timing.RunCoroutine(testHint("scp073", scp073)));
-								Coroutines.Add(Timing.RunCoroutine(Scp073zb()));
-							}
-							break;
-						case 4:
-							if(!bpb)
-							{
-								bpb = true;
-								bpb2.Add(player.Id);
-								Setrank_new("九尾狐爆破兵", "red", player);
-								player.Broadcast(5, "<color=red>你是九尾狐爆破兵</color>:捡起对讲机和闪光弹可以变成手雷");
-								Coroutines.Add(Timing.RunCoroutine(testHint("jwhbpb", player)));
-							}
-							break;
-						case 5:
-							jwhhk = player;
-							jwhhkid = jwhhk.Id;
-							Setrank_new("九尾狐黑客", "red", jwhhk);
-							jwhhk.Broadcast(5, "<color=lime>你是九尾狐黑客</color>:输入.hk可以黑入实验室");
-							break;
-						case 6:
-							if (!jwhngshuachu)
-							{
-								jwhng = player;
-								jwhngid = jwhng.Id;
-								jwhngwufashanghai = true;
-								jwhngyes = true;
-								Coroutines.Add(Timing.RunCoroutine(Jwhngwufashanghai()));
-								Coroutines.Add(Timing.RunCoroutine(Jwhngitem()));
-							}
-							break;
-						case 7:
-							if (!scp550shuachu)
-							{
-								scp550 = player;
-								scp550id = scp550.Id;
-								Coroutines.Add(Timing.RunCoroutine(Scp550item()));
-								scp550yes = true;
-								scp550shuachu = true;
-								scp550lv = 0;
-								scp550.SetRole(RoleType.Tutorial);
-								tssl = 0;
-								Coroutines.Add(Timing.RunCoroutine(SecondCounter27()));
-							}
-							break;
-						default:
-							break;
-					}
+					case 1:
+						mrfish = player;
+						Setrank_new("Mr.Fish", "yellow", mrfish);
+						Exiled.API.Features.Map.Broadcast(10, "<color=#FF0000>Mr.Fish:</color>你们太菜了看我把SCP都收容了");
+						LLBS233.Add(mrfish.Id);
+						Coroutines.Add(Timing.RunCoroutine(Mrfishzb()));
+						break;
+					case 2:
+						if (!ylb1)
+						{
+							ylb1 = true;
+							Setrank_new("九尾医疗兵", "yellow", player);
+							player.Broadcast(5, "<color=#FF0000>你是九尾狐医疗兵</color>:在你周围的人会回血，捡起对讲机和闪光弹可以变成血包");
+							ylb = player;
+							ylb2.Add(ylb.UserId);
+							Coroutines.Add(Timing.RunCoroutine(testHint("jwhylb", player)));
+						}
+						break;
+					case 3:
+						if (!scp073a)
+						{
+							scp073 = player;
+							scp073a = true;
+							scp073id = scp073.Id;
+							Setrank_new("SCP-073", "red", player);
+							player.Broadcast(5, "<color=#FF0000>你是九尾狐SCP-073</color>\n<color=lime>如果SCP攻击你 只有10点伤害 且反伤50 枪械攻击伤害为1且反伤5</color>");
+							Coroutines.Add(Timing.RunCoroutine(testHint("scp073", scp073)));
+							Coroutines.Add(Timing.RunCoroutine(Scp073zb()));
+						}
+						break;
+					case 4:
+						if (!bpb)
+						{
+							bpb = true;
+							bpb2.Add(player.Id);
+							Setrank_new("九尾狐爆破兵", "red", player);
+							player.Broadcast(5, "<color=red>你是九尾狐爆破兵</color>:捡起对讲机和闪光弹可以变成手雷");
+							Coroutines.Add(Timing.RunCoroutine(testHint("jwhbpb", player)));
+						}
+						break;
+					case 5:
+						jwhhk = player;
+						jwhhkid = jwhhk.Id;
+						Setrank_new("九尾狐黑客", "red", jwhhk);
+						jwhhk.Broadcast(5, "<color=lime>你是九尾狐黑客</color>:输入.hk可以黑入实验室");
+						break;
+					case 6:
+						if (!jwhngshuachu)
+						{
+							jwhng = player;
+							jwhngid = jwhng.Id;
+							jwhngwufashanghai = true;
+							jwhngyes = true;
+							Coroutines.Add(Timing.RunCoroutine(Jwhngwufashanghai()));
+							Coroutines.Add(Timing.RunCoroutine(Jwhngitem()));
+						}
+						break;
+					case 7:
+						if (!scp550shuachu)
+						{
+							scp550 = player;
+							scp550id = scp550.Id;
+							Coroutines.Add(Timing.RunCoroutine(Scp550item()));
+							scp550yes = true;
+							scp550shuachu = true;
+							scp550lv = 0;
+							scp550.SetRole(RoleType.Tutorial);
+							tssl = 0;
+							Coroutines.Add(Timing.RunCoroutine(SecondCounter27()));
+						}
+						break;
+					default:
+						break;
 				}
 
 			}

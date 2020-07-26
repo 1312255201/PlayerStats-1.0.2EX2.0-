@@ -21,8 +21,31 @@ namespace PlayerStats
 		{
 			server = new EventHandlers();
 			Exiled.Events.Handlers.Server.WaitingForPlayers += server.OnWaitingForPlayers;
-			
-
+			Exiled.Events.Handlers.Server.RoundEnded += server.OnRoundEnd;
+			Exiled.Events.Handlers.Player.Died += server.OnPlayerDeath;
+			Exiled.Events.Handlers.Player.MedicalItemUsed += server.OnMedicalItem;
+			Exiled.Events.Handlers.Server.RespawningTeam += server.OnTeamRespawn;
+			Exiled.Events.Handlers.Server.SendingConsoleCommand += server.OnConsoleCommand;
+			Exiled.Events.Handlers.Player.FailingEscapePocketDimension += server.OnPocketDimDeath;
+			Exiled.Events.Handlers.Player.Escaping += server.OnCheckEscape;
+			Exiled.Events.Handlers.Player.InteractingDoor += server.OnDoorInteract;
+			Scp106.Containing += server.OnScp106Contain;
+			Exiled.Events.Handlers.Player.DroppingItem += server.OnDropItem;
+			Exiled.Events.Handlers.Player.PickingUpItem += server.OnPickupItem;
+			Exiled.Events.Handlers.Player.Hurting += server.OnPlayerHurt;
+			Exiled.Events.Handlers.Player.EscapingPocketDimension += server.OnPocketDimEscaped;
+			Exiled.Events.Handlers.Player.ChangingRole += server.OnSetClass;
+			Exiled.Events.Handlers.Player.Spawning += server.OnPlayerSpawn;
+			Scp079.GainingLevel += server.OnScp079LvlGain;
+			Exiled.Events.Handlers.Player.UnlockingGenerator += server.OnGeneratorUnlock;
+			Exiled.Events.Handlers.Player.Joined += server.OnPlayerJoin;
+			Exiled.Events.Handlers.Warhead.Stopping += server.ONWarheadCancelled;
+			Exiled.Events.Handlers.Server.SendingRemoteAdminCommand += server.OnRemoteAdminCommand;
+			Scp096.Enraging += server.OnScp096Enrage;
+			Exiled.Events.Handlers.Server.EndingRound += server.OnCheckRoundEnd;
+			Exiled.Events.Handlers.Scp914.ChangingKnobSetting += server.On914KnobChange;
+			Exiled.Events.Handlers.Server.RoundStarted += server.OnRoundStart;
+			Exiled.Events.Handlers.Map.Decontaminating += server.OnDecontaminate;
 			Thread thread = new Thread(Watchconnecting);
 			thread.IsBackground = true;
 			thread.Start();
@@ -44,8 +67,6 @@ namespace PlayerStats
 			Exiled.Events.Handlers.Server.WaitingForPlayers -= server.OnWaitingForPlayers;
 			Exiled.Events.Handlers.Server.RoundStarted -= server.OnRoundStart;
 			Exiled.Events.Handlers.Server.RoundEnded -= server.OnRoundEnd;
-
-
 			Exiled.Events.Handlers.Player.Joined -= server.OnPlayerJoin;
 			Exiled.Events.Handlers.Player.Died -= server.OnPlayerDeath;
 			Exiled.Events.Handlers.Player.MedicalItemUsed -= server.OnMedicalItem;
