@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Respawning;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -503,6 +504,7 @@ namespace PlayerStats
 
 		private bool dfzgc;
 		private bool chenghaoyes;
+		private bool scp650noxiaren;
 
 		private IEnumerator<float> testHint(string txtweizhi, Exiled.API.Features.Player player)
 		{
@@ -2351,7 +2353,7 @@ namespace PlayerStats
 							referenceHub.Health += 50f;
 						}
 					}
-					int sjsj2 = new System.Random().Next(1, 40);
+					int sjsj2 = new System.Random().Next(1, 41);
 					Log.Info(sjsj2.ToString());
 					if (!fkyyshuachu)
 					{
@@ -2811,6 +2813,13 @@ namespace PlayerStats
 								door4.lockdown = false;
 							}
 							break;
+						case 40:
+							Exiled.API.Features.Map.Broadcast(10, "<color=#BB1444>爷不吓人了！-事件：650恢复伤害 但是只有5点</color>");
+							scp650noxiaren = true;
+							break;
+						default:
+							break;
+
 					}
 					if (!Dio1)
 					{
@@ -3212,7 +3221,7 @@ namespace PlayerStats
 			Exiled.Events.Handlers.Player.Died -= OnPlayerDeath;
 			Exiled.Events.Handlers.Player.Left -= OnPlayerLeave;
 			Exiled.Events.Handlers.Player.Dying -= OnDying;
-
+			scp650noxiaren = false;
 			scp3108playerid = 0;
 			sjtz1 = false;
 			sjtz2 = false;
@@ -6533,15 +6542,6 @@ namespace PlayerStats
 			}
 			int num = 0;
 			int num2 = 0;
-			if (ev.Attacker.Id == scp650id)
-			{
-				gjtr++;
-				ev.Attacker.Broadcast(4, "<color=red>停止多次攻击刷血否则您将会被请出服务器</color>");
-				if (gjtr == 50)
-				{
-					ev.Attacker.Kick("你触发650刷血限制");
-				}
-			}
 			if (ev.Attacker.Id == scp3108playerid && ev.DamageType == DamageTypes.Usp && ev.Target.Id != scp650id && ev.Target.Id != scp457id)
 			{
 				scp3108playerid = 0;
@@ -6596,7 +6596,15 @@ namespace PlayerStats
 			}
 			if (ev.Attacker.Id == scp650id && ev.DamageType != DamageTypes.Tesla && ev.DamageType != DamageTypes.Decont && ev.DamageType != DamageTypes.Falldown && ev.DamageType != DamageTypes.Flying && ev.DamageType != DamageTypes.Nuke && ev.DamageType != DamageTypes.Pocket && ev.DamageType != DamageTypes.Wall && ev.DamageType != DamageTypes.Lure)
 			{
-				ev.Amount = 0f;
+				if(!scp650noxiaren)
+				{
+					ev.Amount = 0f;
+				}
+				else
+				{
+					ev.Amount = 5f;
+					ev.Attacker.IsGodModeEnabled = false;
+				}
 			}
 			if (ev.Attacker.Role == RoleType.Scp173 && Dio2.Contains(ev.Target.UserId) && ev.DamageType != DamageTypes.Tesla && ev.DamageType != DamageTypes.Decont && ev.DamageType != DamageTypes.Falldown && ev.DamageType != DamageTypes.Flying && ev.DamageType != DamageTypes.Nuke && ev.DamageType != DamageTypes.Pocket && ev.DamageType != DamageTypes.Wall && ev.DamageType != DamageTypes.Lure)
 			{
