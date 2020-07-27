@@ -254,8 +254,6 @@ namespace PlayerStats
 
 		private bool scp1577pick;
 
-		private int gjtr;
-
 		private bool bhsx;
 
 		private bool yshkq;
@@ -333,8 +331,6 @@ namespace PlayerStats
 		private Exiled.API.Features.Player HDZHG;
 
 		private Exiled.API.Features.Player mrfish;
-
-		private Vector3 scp457b;
 
 		private Exiled.API.Features.Player ylb;
 
@@ -471,8 +467,6 @@ namespace PlayerStats
 		private int tlid;
 
 		private int g;
-
-		private Inventory.SyncListItemInfo scp035item;
 
 		private bool kccd;
 
@@ -1218,16 +1212,9 @@ namespace PlayerStats
 			{
 				if (scp457.Role == RoleType.Tutorial)
 				{
-					scp457b = scp457.Position;
-					float num2 = scp457b.x + 4f;
-					float num3 = scp457b.y + 4f;
-					float num4 = scp457b.z + 4f;
-					float num5 = scp457b.x - 4f;
-					float num6 = scp457b.y - 4f;
-					float num7 = scp457b.z - 4f;
 					foreach (Exiled.API.Features.Player player in Exiled.API.Features.Player.List)
 					{
-						if (player.Team != 0 && player.Id != scp457id && player.Position.x <= num2 && player.Position.x >= num5 && player.Position.y <= num3 && player.Position.y >= num6 && player.Position.z <= num4 && player.Position.z >= num7)
+						if (player.Team != 0 && player.Id != scp457id && Vector3.Distance(scp457.Position,player.Position) <= 6)
 						{
 							int sh = 4 + 2 * scp457sh;
 							player.Health -= sh;
@@ -1715,16 +1702,9 @@ namespace PlayerStats
 			{
 				if (ylb1)
 				{
-					Vector3 pos2 = ylb.Position;
-					float num2 = pos2.x + 3f;
-					float num3 = pos2.y + 3f;
-					float num4 = pos2.z + 3f;
-					float num5 = pos2.x - 3f;
-					float num6 = pos2.y - 3f;
-					float num7 = pos2.z - 3f;
 					foreach (Exiled.API.Features.Player player6 in Exiled.API.Features.Player.List)
 					{
-						if (player6.Team == Team.MTF && player6.Position.x <= num2 && player6.Position.x >= num5 && player6.Position.y <= num3 && player6.Position.y >= num6 && player6.Position.z <= num4 && player6.Position.z >= num7)
+						if (player6.Team == Team.MTF && Vector3.Distance(ylb.Position,player6.Position) <= 6)
 						{
 							player6.Health += 1f;
 							player6.Broadcast(5, "<color=yellow>[九尾狐医疗兵]</color>\n<color=#00FFFF>我正在治疗你的伤势</color>");
@@ -2165,17 +2145,10 @@ namespace PlayerStats
 		{
 			while (scp550yes)
 			{
-				Vector3 pos2 = scp550.Position;
-				float num2 = pos2.x + 3f;
-				float num3 = pos2.y + 3f;
-				float num4 = pos2.z + 3f;
-				float num5 = pos2.x - 3f;
-				float num6 = pos2.y - 3f;
-				float num7 = pos2.z - 3f;
 				Ragdoll[] array = UnityEngine.Object.FindObjectsOfType<Ragdoll>();
 				foreach (Ragdoll ragdoll in array)
 				{
-					if (ragdoll.transform.position.x <= num2 && ragdoll.transform.position.x >= num5 && ragdoll.transform.position.y <= num3 && ragdoll.transform.position.y >= num6 && ragdoll.transform.position.z <= num4 && ragdoll.transform.position.z >= num7)
+					if (Vector3.Distance(ragdoll.transform.transform.position,scp550.Position) <= 5)
 					{
 						tssj++;
 						scp550.Broadcast(1, "<color=lime>[提示]吞噬尸体中进度</color>" + tssj);
@@ -2297,7 +2270,7 @@ namespace PlayerStats
 								scp650.IsGodModeEnabled = false;
 							}
 							int Rolenum = new System.Random().Next(1, 10);
-							if (Rolenum >= 6 && (int)player.Team > 0)
+							if (Rolenum >= 6 && (player.Role != RoleType.Spectator)&&(int)player.Team > 0)
 							{
 								scp650.ReferenceHub.playerMovementSync.OverridePosition(player.Position, 0, false);
 							}
@@ -2780,12 +2753,12 @@ namespace PlayerStats
 							foreach (Door door in Exiled.API.Features.Map.Doors)
 							{
 								door.isOpen = false;
-								door.lockdown = true;
+								door.locked = true;
 							}
 							yield return Timing.WaitForSeconds(10f);
 							foreach (Door door4 in Exiled.API.Features.Map.Doors)
 							{
-								door4.lockdown = false;
+								door4.locked = false;
 							}
 							break;
 						case 40:
@@ -3020,16 +2993,9 @@ namespace PlayerStats
 
 		public void On914KnobChange(ChangingKnobSettingEventArgs ev)
 		{
-			Vector3 pos2 = ev.Player.Position;
-			float num2 = pos2.x + 10f;
-			float num3 = pos2.y + 10f;
-			float num4 = pos2.z + 10f;
-			float num5 = pos2.x - 10f;
-			float num6 = pos2.y - 10f;
-			float num7 = pos2.z - 10f;
 			foreach (Exiled.API.Features.Player player3 in Exiled.API.Features.Player.List)
 			{
-				if (player3.Position.x <= num2 && player3.Position.x >= num5 && player3.Position.y <= num3 && player3.Position.y >= num6 && player3.Position.z <= num4 && player3.Position.z >= num7)
+				if (Vector3.Distance(ev.Player.Position,player3.Position) <= 10)
 				{
 					ev.Player.Broadcast(5, "914当前设置：" + ev.KnobSetting.ToString() + "更改人员：" + ev.Player.Nickname);
 				}
@@ -3053,7 +3019,6 @@ namespace PlayerStats
 			Exiled.Events.Handlers.Warhead.Stopping += ONWarheadCancelled;
 			Exiled.Events.Handlers.Player.Hurting += OnPlayerHurt;
 			Exiled.Events.Handlers.Player.Left += OnPlayerLeave;
-			Exiled.Events.Handlers.Player.Died += OnPlayerDeath;
 			Exiled.Events.Handlers.Player.Dying += OnDying;
 
 			player_list = new List<Exiled.API.Features.Player>();
@@ -3147,7 +3112,6 @@ namespace PlayerStats
 		{
 			Exiled.Events.Handlers.Player.Shooting -= OnShoot;
 			Exiled.Events.Handlers.Player.Hurting -= OnPlayerHurt;
-			Exiled.Events.Handlers.Player.Died -= OnPlayerDeath;
 			Exiled.Events.Handlers.Player.Left -= OnPlayerLeave;
 			Exiled.Events.Handlers.Player.Dying -= OnDying;
 			scp650noxiaren = false;
@@ -3289,7 +3253,6 @@ namespace PlayerStats
 			sjqx = false;
 			yshkq = false;
 			bhsx = false;
-			gjtr = 0;
 			scp1577pick = false;
 			scp1577id = 0;
 			scp1577pos = new Vector3();
@@ -3714,7 +3677,7 @@ namespace PlayerStats
 		{
 			try
 			{
-				if (ev.Killer.Role != RoleType.None && ev.Killer.Role != RoleType.Spectator && ev.Target.Nickname != ev.Killer.Nickname)
+				if (ev.Killer.Role != RoleType.None && ev.Killer.Role != RoleType.Spectator && ev.Target.Id != ev.Killer.Id)
 				{
 					if (ev.Target.Team == Team.SCP && ev.Target.Role != RoleType.Scp0492)
 					{
@@ -3724,7 +3687,7 @@ namespace PlayerStats
 							ev.Killer.Broadcast(4, Red("个人通知：") + "杀死scp奖励250积分");
 						}
 					}
-					else if ((ev.Target.Role.ToString().IndexOf("Ntf") >= 0 || ev.Target.Role.ToString().IndexOf("Chaos") >= 0) && (ev.Killer.Role == RoleType.ClassD || ev.Killer.Role == RoleType.Scientist))
+					else if ((ev.Target.Team == Team.MTF || ev.Target.Role == RoleType.ChaosInsurgency) && (ev.Killer.Role == RoleType.ClassD || ev.Killer.Role == RoleType.Scientist))
 					{
 						string a2 = addPoint(ev.Killer, "困难击杀奖励", 50);
 						if (a2 == "true")
@@ -3850,7 +3813,6 @@ namespace PlayerStats
 					scp457 = null;
 					scp457a = false;
 					scp457die = true;
-					scp457b = default(Vector3);
 					Setrank_new("", "white", ev.Target);
 					scp457id = 0;
 					Exiled.API.Features.Map.Broadcast(6, "----[<color=#32CD32>SCP457</color>]----\n<color=#FF0000>[收容成功]</color>\n收容者: <color=#40E0D0>" + ev.Killer.Nickname + "</color>");
@@ -4735,27 +4697,23 @@ namespace PlayerStats
 				{
 					if (ev.Name.Contains("ljf"))
 					{
-						Vector3 pos3 = ev.Player.Position;
-						float numx1 = pos3.x + 30f;
-						float num3 = pos3.y + 30f;
-						float num6 = pos3.z + 30f;
-						float num8 = pos3.x - 30f;
-						float num9 = pos3.y - 30f;
-						float num10 = pos3.z - 30f;
 						fkyyzcardint--;
 						foreach (Exiled.API.Features.Player player10 in Exiled.API.Features.Player.List)
 						{
-							if (player10.Position.x <= numx1 && player10.Position.x >= num8 && player10.Position.y <= num3 && player10.Position.y >= num9 && player10.Position.z <= num6 && player10.Position.z >= num10)
+							if (Vector3.Distance(player10.Position,ev.Player.Position) <= 30)
 							{
 								ljfwj.Add(player10);
 								ljfuse = true;
 								player10.Broadcast(5, "「灵击符」十秒内无法行动");
 								Coroutines.Add(Timing.RunCoroutine(Ljfsx()));
-								Timing.KillCoroutines(Coroutines3);
 								Coroutines3.Clear();
-								Coroutines3.Add(Timing.RunCoroutine(SecondCounter3()));
 							}
 						}
+						ljfwj.Remove(ev.Player);
+						Timing.KillCoroutines(Coroutines3);
+						Coroutines3.Clear();
+						Coroutines3.Add(Timing.RunCoroutine(SecondCounter3()));
+
 					}
 					if (ev.Name.Contains("jzsj"))
 					{
@@ -5339,7 +5297,13 @@ namespace PlayerStats
 					Log.Info("玩家名:" + ev.Player.Nickname);
 					ev.Player.Role = RoleType.ChaosInsurgency;
 				}
-				
+				for (int i = 0; i <= 100; i++)
+				{
+					if (touxiang[i] == ev.Player.Id)
+					{
+						touxiang[i] = 0;
+					}
+				}
 			}
 			chaos = 0;
 			mtf = 0;
@@ -5651,26 +5615,22 @@ namespace PlayerStats
 						ev.IsAllowed = false;
 						if (fkyyzcardint > 0)
 						{
-							Vector3 pos2 = ev.Player.Position;
-							float numx1 = pos2.x + 30f;
-							float numx2 = pos2.y + 30f;
-							float numx3 = pos2.z + 30f;
-							float numx4 = pos2.x - 30f;
-							float numx5 = pos2.y - 30f;
-							float numx6 = pos2.z - 30f;
+							fkyyzcardint--;
 							foreach (Exiled.API.Features.Player player3 in Exiled.API.Features.Player.List)
 							{
-								if (player3.Position.x <= numx1 && player3.Position.x >= numx4 && player3.Position.y <= numx2 && player3.Position.y >= numx5 && player3.Position.z <= numx3 && player3.Position.z >= numx6)
+								if (Vector3.Distance(player3.Position, ev.Player.Position) <= 30)
 								{
 									ljfwj.Add(player3);
 									ljfuse = true;
-									player3.Broadcast(5, "「灵击符」五秒内无法行动");
+									player3.Broadcast(5, "「灵击符」十秒内无法行动");
 									Coroutines.Add(Timing.RunCoroutine(Ljfsx()));
-									Timing.KillCoroutines(Coroutines3);
 									Coroutines3.Clear();
-									Coroutines3.Add(Timing.RunCoroutine(SecondCounter3()));
 								}
 							}
+							ljfwj.Remove(ev.Player);
+							Timing.KillCoroutines(Coroutines3);
+							Coroutines3.Clear();
+							Coroutines3.Add(Timing.RunCoroutine(SecondCounter3()));
 						}
 					}
 					if (bindjzsj && ev.Item.id == ItemType.KeycardScientist && fkyyzcardint > 0)
@@ -6214,6 +6174,7 @@ namespace PlayerStats
 					{
 						scp1577pick = true;
 						scp1577id = ev.Player.Id;
+						Exiled.Events.Handlers.Player.Shooting += OnShoot;
 						ev.Player.Broadcast(5, "<color=lime>你捡起了 信号枪</color>\n[<color=red>SCP-1577</color>]\n<color=lime>使用本手枪射击可以呼叫空投</color>");
 					}
 				}
@@ -6835,21 +6796,12 @@ namespace PlayerStats
 			{
 				for (int i = 0; i <= 100; i++)
 				{
-					try
+					if (touxiang[i] == ev.Target.Id)
 					{
-						if (touxiang[i] == ev.Target.Id)
-						{
-							touxiang[i] = 0;
-						}
-					}
-					catch
-					{
-						goto IL_29d4;
+						touxiang[i] = 0;
 					}
 				}
 			}
-			goto IL_29d4;
-			IL_29d4:
 			if (ev.Target.Role == RoleType.Scp173)
 			{
 				if (ev.DamageType == DamageTypes.Logicer || ev.DamageType == DamageTypes.E11StandardRifle || ev.DamageType == DamageTypes.P90 || ev.DamageType == DamageTypes.Mp7)
@@ -6909,7 +6861,17 @@ namespace PlayerStats
 				}
 				if (ev.Target.Team != Team.SCP)
 				{
-					ev.Target.Health += 3;
+					if(ev.Target.Id != scp076id&& ev.Target.Id != scp073id && LLBS233.Contains(ev.Target.Id)==false)
+					{
+						ev.Target.Health += 3;
+					}
+					else
+					{
+						if(ev.Target.Health <= 300)
+						{
+							ev.Target.Health += 3;
+						}
+					}
 				}
 			}
 			else if (ev.DamageType == DamageTypes.Tesla)
@@ -7235,7 +7197,6 @@ namespace PlayerStats
 					scp457 = null;
 					scp457a = false;
 					scp457die = true;
-					scp457b = default(Vector3);
 					Setrank_new("white", "", ev.Player);
 					scp457id = 0;
 					Exiled.API.Features.Map.Broadcast(6, "----[<color=#32CD32>SCP457</color>]----\n<color=#FF0000>[收容成功]</color>\n收容者: <color=#40E0D0>掉线了</color>");

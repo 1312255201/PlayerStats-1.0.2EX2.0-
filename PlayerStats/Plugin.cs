@@ -20,6 +20,7 @@ namespace PlayerStats
 		private void RegisterEvents()
 		{
 			server = new EventHandlers();
+			Exiled.Events.Handlers.Player.Died += server.OnPlayerDeath;
 			Exiled.Events.Handlers.Server.WaitingForPlayers += server.OnWaitingForPlayers;
 			Exiled.Events.Handlers.Server.RoundEnded += server.OnRoundEnd;
 			Exiled.Events.Handlers.Player.Died += server.OnPlayerDeath;
