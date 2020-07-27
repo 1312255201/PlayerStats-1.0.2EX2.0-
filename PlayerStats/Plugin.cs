@@ -3,6 +3,7 @@ using Exiled.API.Features;
 using Exiled.Events.Handlers;
 using HarmonyLib;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace PlayerStats
 {

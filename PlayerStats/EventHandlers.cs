@@ -16,6 +16,7 @@ using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace PlayerStats
@@ -43,7 +44,7 @@ namespace PlayerStats
 		private int KillerID;
 
 		private int PlayerID;
-
+		List<Vector3> vector3s = new List<Vector3>();
 		public bool roundstart = false;
 
 		public int[] GuardType = new int[200];
@@ -274,8 +275,6 @@ namespace PlayerStats
 
 		public List<int> 小僵尸id = new List<int>();
 
-		private Thread pmd;
-
 		private Exiled.API.Features.Player D9341;
 
 		private RoleType D9341js;
@@ -430,8 +429,6 @@ namespace PlayerStats
 
 		public Exiled.API.Features.Player Gears博士;
 
-		private bool 中国制造;
-
 		private bool lxyes;
 
 		private Exiled.API.Features.Player scp49j;
@@ -497,6 +494,8 @@ namespace PlayerStats
 		private bool dfzgc;
 		private bool chenghaoyes;
 		private bool scp650noxiaren;
+		private bool pmdon;
+		private Task pmd;
 
 		private IEnumerator<float> testHint(string txtweizhi, Exiled.API.Features.Player player)
 		{
@@ -722,48 +721,14 @@ namespace PlayerStats
 			player.ReferenceHub.playerMovementSync.OverridePosition(vector3, 0, false);
 		}
 
-		private IEnumerator<float> Chenghao()
-		{
-			while (true)
-			{
-				yield return Timing.WaitForSeconds(300f);
-				foreach (Exiled.API.Features.Player referenceHub in Exiled.API.Features.Player.List)
-				{
-					try
-					{
-						string a = Get(dic: new Dictionary<string, string>
-						{
-							{
-								"userid",
-								referenceHub.UserId
-							}
-						}, url: url + "GetBadge");
-						new List<badge>();
-						List<badge> model = JsonConvert.DeserializeObject<List<badge>>(a);
-						if (model.Count >= 1)
-						{
-							Coroutines.Add(Timing.RunCoroutine(nodify_badeg(referenceHub, model[0])));
-						}
-					}
-					catch
-					{
-					}
-				}
-			}
-		}
-
 		public void OnWaitingForPlayers()
 		{
-			pmd = new Thread(PMD);
+			pmdon = true;
+			pmd = new Task(PMD);
 			pmd.Start();
-			Coroutines.Add(Timing.RunCoroutine(SecondCounter14()));
-			Coroutines.Add(Timing.RunCoroutine(SecondCounter16()));
-			Coroutines.Add(Timing.RunCoroutine(GuangBoSHhi()));
-			Coroutines.Add(Timing.RunCoroutine(Chenghao()));
 			Coroutines.Add(Timing.RunCoroutine(SecondCounter()));
 			Coroutines.Add(Timing.RunCoroutine(SecondCounter2()));
 			Coroutines.Add(Timing.RunCoroutine(SecondCounter5()));
-			Coroutines.Add(Timing.RunCoroutine(SecondCounter7()));
 		}
 
 		private IEnumerator<float> HdjjsCD()
@@ -823,33 +788,6 @@ namespace PlayerStats
 						referenceHub.Broadcast(5, "当前句子" + 句子 + "\n当前缺少" + 缺少);
 					}
 				}
-			}
-		}
-
-		private IEnumerator<float> GuangBoSHhi()
-		{
-			while (true)
-			{
-				Intercom.host.CustomContent = "你好呀 欢迎来到广播室(*^▽^*)";
-				yield return Timing.WaitForSeconds(10f);
-				Intercom.host.CustomContent = "现在时间是" + DateTime.Now.ToString();
-				yield return Timing.WaitForSeconds(10f);
-				Intercom.host.CustomContent = "插件版本是" + DateTime.Today.ToString() + "'ω'";
-				yield return Timing.WaitForSeconds(10f);
-				Intercom.host.CustomContent = "?( ??\u02d9ω\u02d9?? ?)";
-				yield return Timing.WaitForSeconds(10f);
-				Intercom.host.CustomContent = "(*^▽^*)请河蟹游戏 友善对待他人";
-				yield return Timing.WaitForSeconds(10f);
-				Intercom.host.CustomContent = "服主QQ:1312255201(\uffe3▽\uffe3)~*交个朋友";
-				yield return Timing.WaitForSeconds(10f);
-				Intercom.host.CustomContent = "\uffe3へ\uffe3进来还不加群打屎你";
-				yield return Timing.WaitForSeconds(10f);
-				Intercom.host.CustomContent = "<*))>>=< 最好可以给我money没错就是这条鱼";
-				yield return Timing.WaitForSeconds(10f);
-				Intercom.host.CustomContent = "⊂(ο･㉨･ο)⊃ 阿巴阿巴";
-				yield return Timing.WaitForSeconds(10f);
-				Intercom.host.CustomContent = "(≧▽≦)/下面是重复的了";
-				yield return Timing.WaitForSeconds(10f);
 			}
 		}
 
@@ -1152,13 +1090,6 @@ namespace PlayerStats
 			yield return Timing.WaitForSeconds(10f);
 			误杀玩家.ReferenceHub.playerMovementSync.OverridePosition(RoleType.NtfCadet.GetRandomSpawnPoint(), 0, false);
 		}
-
-		private IEnumerator<float> Zgzz()
-		{
-			yield return Timing.WaitForSeconds(50f);
-			中国制造 = false;
-		}
-
 		private IEnumerator<float> Jwhngwufashanghai()
 		{
 			yield return Timing.WaitForSeconds(120f);
@@ -1681,82 +1612,6 @@ namespace PlayerStats
 			}
 		}
 
-		private IEnumerator<float> SecondCounter16()
-		{
-			while (true)
-			{
-				foreach (Exiled.API.Features.Player hub in Exiled.API.Features.Player.List)
-				{
-					if (hub.Role != 0)
-					{
-						hub.IsGodModeEnabled = false;
-					}
-				}
-				yield return Timing.WaitForSeconds(100f);
-			}
-		}
-
-		private IEnumerator<float> SecondCounter14()
-		{
-			while (true)
-			{
-				if (ylb1)
-				{
-					foreach (Exiled.API.Features.Player player6 in Exiled.API.Features.Player.List)
-					{
-						if (player6.Team == Team.MTF && Vector3.Distance(ylb.Position,player6.Position) <= 6)
-						{
-							player6.Health += 1f;
-							player6.Broadcast(5, "<color=yellow>[九尾狐医疗兵]</color>\n<color=#00FFFF>我正在治疗你的伤势</color>");
-						}
-					}
-				}
-				switch (lv)
-				{
-					case 1:
-						foreach (Exiled.API.Features.Player player3 in Exiled.API.Features.Player.List)
-						{
-							if (player3.Role == RoleType.Scp049)
-							{
-								player3.Health += 5f;
-							}
-						}
-						break;
-					case 2:
-						foreach (Exiled.API.Features.Player player4 in Exiled.API.Features.Player.List)
-						{
-							if (player4.Role == RoleType.Scp049)
-							{
-								player4.Health += 5f;
-							}
-						}
-						break;
-					case 3:
-						foreach (Exiled.API.Features.Player player5 in Exiled.API.Features.Player.List)
-						{
-							if (player5.Role == RoleType.Scp049)
-							{
-								player5.Health += 15f;
-							}
-						}
-						break;
-				}
-				if (scp49jyes)
-				{
-					foreach (Exiled.API.Features.Player referenceHub in Exiled.API.Features.Player.List)
-					{
-						if (referenceHub.Role == RoleType.FacilityGuard && !scp_999.Contains(referenceHub.UserId))
-						{
-							scp49j = referenceHub;
-							scp49jid = referenceHub.Id;
-							break;
-						}
-					}
-				}
-				yield return Timing.WaitForSeconds(10f);
-			}
-		}
-
 		private IEnumerator<float> SecondCounter3()
 		{
 			while (true)
@@ -1765,16 +1620,24 @@ namespace PlayerStats
 				{
 					foreach (Exiled.API.Features.Player referenceHub3 in Exiled.API.Features.Player.List)
 					{
-						if (!Dio2.Contains(referenceHub3.UserId))
+						vector3s[referenceHub3.Id] = referenceHub3.Position;
+					}
+					while(sjtz1)
+					{
+						foreach(Player player in Player.List)
 						{
-							referenceHub3.ReferenceHub.playerMovementSync.OverridePosition(referenceHub3.Position, 0, false);
+							if (Dio2.Contains(player.UserId) == false)
+							{
+								player.ReferenceHub.playerMovementSync.OverridePosition(vector3s[player.Id], 0, false);
+								yield return Timing.WaitForSeconds(0.2f);
+							}
+
 						}
 					}
 				}
 				if (qblcq2)
 				{
 					qblcq.ReferenceHub.playerMovementSync.OverridePosition(qblcq.Position, 0, false);
-
 				}
 				if (ljfuse)
 				{
@@ -1783,17 +1646,24 @@ namespace PlayerStats
 						if (referenceHub2.Id != fkyyzid)
 						{
 							referenceHub2.ReferenceHub.playerMovementSync.OverridePosition(referenceHub2.Position, 0, false);
-
 						}
 					}
 				}
 				if (jzsjuse)
 				{
-					foreach (Exiled.API.Features.Player referenceHub in Exiled.API.Features.Player.List)
+					foreach (Exiled.API.Features.Player referenceHub3 in Exiled.API.Features.Player.List)
 					{
-						if (referenceHub.Id != fkyyzid)
+						vector3s[referenceHub3.Id] = referenceHub3.Position;
+					}
+					while (sjtz1)
+					{
+						foreach (Player player in Player.List)
 						{
-							referenceHub.ReferenceHub.playerMovementSync.OverridePosition(referenceHub.Position, 0, false);
+							if(player.Id != fkyyzid)
+							{
+								player.ReferenceHub.playerMovementSync.OverridePosition(vector3s[player.Id], 0, false);
+								yield return Timing.WaitForSeconds(0.2f);
+							}
 						}
 					}
 				}
@@ -1961,58 +1831,6 @@ namespace PlayerStats
 					scp076.AddItem(ItemType.MicroHID);
 				}
 				yield return Timing.WaitForSeconds(240f);
-			}
-		}
-
-
-		private IEnumerator<float> SecondCounter7()
-		{
-			while (true)
-			{
-				if (starttimer)
-				{
-					Exiled.API.Features.Map.Broadcast(10, "<color=#FFFF00>[小鱼服务器清理大师]</color>\n<color=#66FFFF>哇你们白给了好多垃圾成堆了呀</color>\n我会在<color=red>500s</color>后清理服务器");
-					yield return Timing.WaitForSeconds(100f);
-					Exiled.API.Features.Map.Broadcast(10, "<color=#FFFF00>[小鱼服务器清理大师]</color>\n<color=#66FFFF>哇你们白给了好多垃圾成堆了呀</color>\n我会在<color=red>400s</color>后清理服务器");
-					yield return Timing.WaitForSeconds(200f);
-					Exiled.API.Features.Map.Broadcast(10, "<color=#FFFF00>[小鱼服务器清理大师]</color>\n<color=#66FFFF>哇你们白给了好多垃圾成堆了呀</color>\n我会在<color=red>200s</color>后清理服务器");
-					yield return Timing.WaitForSeconds(150f);
-					Exiled.API.Features.Map.Broadcast(10, "<color=#FFFF00>[小鱼服务器清理大师]</color>\n<color=#66FFFF>哇你们白给了好多垃圾成堆了呀</color>\n我会在<color=red>50s</color>后清理服务器");
-					yield return Timing.WaitForSeconds(40f);
-					Exiled.API.Features.Map.Broadcast(5, "<color=#FFFF00>[小鱼服务器清理大师]</color>\n<color=#66FFFF>哇你们白给了好多垃圾成堆了呀</color>\n我会在<color=red>10s</color>后清理服务器");
-					yield return Timing.WaitForSeconds(5f);
-					Exiled.API.Features.Map.Broadcast(1, "<color=#FFFF00>[小鱼服务器清理大师]</color>\n<color=#66FFFF>哇你们白给了好多垃圾成堆了呀</color>\n我会在<color=red>5s</color>后清理服务器");
-					yield return Timing.WaitForSeconds(1f);
-					Exiled.API.Features.Map.Broadcast(1, "<color=#FFFF00>[小鱼服务器清理大师]</color>\n<color=#66FFFF>哇你们白给了好多垃圾成堆了呀</color>\n我会在<color=red>4s</color>后清理服务器");
-					yield return Timing.WaitForSeconds(1f);
-					Exiled.API.Features.Map.Broadcast(1, "<color=#FFFF00>[小鱼服务器清理大师]</color>\n<color=#66FFFF>哇你们白给了好多垃圾成堆了呀</color>\n我会在<color=red>3s</color>后清理服务器");
-					yield return Timing.WaitForSeconds(1f);
-					Exiled.API.Features.Map.Broadcast(1, "<color=#FFFF00>[小鱼服务器清理大师]</color>\n<color=#66FFFF>哇你们白给了好多垃圾成堆了呀</color>\n我会在<color=red>2s</color>后清理服务器");
-					yield return Timing.WaitForSeconds(1f);
-					Exiled.API.Features.Map.Broadcast(1, "<color=#FFFF00>[小鱼服务器清理大师]</color>\n<color=#66FFFF>哇你们白给了好多垃圾成堆了呀</color>\n我会在<color=red>1s</color>后清理服务器");
-					yield return Timing.WaitForSeconds(1f);
-					Exiled.API.Features.Map.Broadcast(4, "<color=#FFFF00>[小鱼服务器清理大师]</color>\n<color=#66FFFF>开始清理</color>");
-					Ragdoll[] array = UnityEngine.Object.FindObjectsOfType<Ragdoll>();
-					foreach (Ragdoll ragdoll in array)
-					{
-						NetworkServer.Destroy(ragdoll.gameObject);
-						ragdolltime++;
-					}
-					Pickup[] array2 = UnityEngine.Object.FindObjectsOfType<Pickup>();
-					foreach (Pickup item in array2)
-					{
-						if (item.ItemId == ItemType.Ammo556 || item.ItemId == ItemType.Ammo762 || item.ItemId == ItemType.Ammo9mm || item.ItemId == ItemType.GunE11SR || item.ItemId == ItemType.MicroHID || item.ItemId == ItemType.WeaponManagerTablet || item.ItemId == ItemType.Medkit || item.ItemId == ItemType.KeycardGuard || item.ItemId == ItemType.KeycardSeniorGuard || item.ItemId == ItemType.GrenadeFlash || item.ItemId == ItemType.GrenadeFrag || item.ItemId == ItemType.Disarmer || item.ItemId == ItemType.GunLogicer || item.ItemId == ItemType.GunProject90 || item.ItemId == ItemType.Radio)
-						{
-							item.Delete();
-							itemtime++;
-						}
-					}
-					Exiled.API.Features.Map.Broadcast(4, "<color=#FFFF00>[小鱼服务器清理大师]</color>\n<color=#66FFFF>好饱呀</color>\n本次清理了" + itemtime + "个物品" + ragdolltime + "个尸体");
-					itemtime = 0;
-					ragdolltime = 0;
-					yield return Timing.WaitForSeconds(100f);
-				}
-				yield return Timing.WaitForSeconds(1f);
 			}
 		}
 
@@ -2670,15 +2488,6 @@ namespace PlayerStats
 								}
 							}
 							break;
-						case 32:
-							Exiled.API.Features.Map.Broadcast(10, "<color=#BB1444>中 国 制 造！-事件：门无法被破坏</color>");
-							foreach (Exiled.API.Features.Player item2 in Exiled.API.Features.Player.List)
-							{
-								_ = item2;
-								中国制造 = true;
-								Coroutines.Add(Timing.RunCoroutine(Zgzz()));
-							}
-							break;
 						case 33:
 							Exiled.API.Features.Map.Broadcast(10, "<color=#BB1444>哔哩哔哩 (\u309c-\u309c)つロ 干杯~！-事件：每人获取一瓶可乐</color>");
 							foreach (Exiled.API.Features.Player player29 in Exiled.API.Features.Player.List)
@@ -3110,6 +2919,7 @@ namespace PlayerStats
 
 		public void End()
 		{
+			pmdon = false;
 			Exiled.Events.Handlers.Player.Shooting -= OnShoot;
 			Exiled.Events.Handlers.Player.Hurting -= OnPlayerHurt;
 			Exiled.Events.Handlers.Player.Left -= OnPlayerLeave;
@@ -3138,7 +2948,6 @@ namespace PlayerStats
 			timesjw = 0;
 			scp49j = null;
 			scp49jid = 0;
-			中国制造 = false;
 			Gears博士id = 0;
 			Gears博士 = null;
 			zybuse = false;
@@ -5172,56 +4981,263 @@ namespace PlayerStats
 
 		public void PMD()
 		{
-			while (true)
+			Log.Info("PMD线程初始化");
+			int pmdjsq = 0;
+			int pmdawa = 0;
+			int xunhuan14 = 0;
+			int xunhuan16 = 0;
+			int guangboshi = 0;
+			int guangboshitxt = 0;
+			int chenghao = 0;
+			int lajiqingli = 0;
+			while (pmdon)
 			{
+				xunhuan14++;
+				xunhuan16++;
+				chenghao++;
+				lajiqingli++;
 				if (!roundstart)
 				{
-					for (int i = 0; i < player233.Count; i++)
+					pmdjsq++;
+					if(pmdjsq ==5)
 					{
-						if (!roundstart && player233[i].UserId != "76561198284755079@steam" && player233[i].UserId != "76561198389200613@steam")
+						switch(pmdawa)
 						{
-							Setrank_new("称号预留位置", "red", player233[i]);
+							case 0:
+								for (int i = 0; i < player233.Count; i++)
+								{
+									if (!roundstart && player233[i].UserId != "76561198284755079@steam" && player233[i].UserId != "76561198389200613@steam")
+									{
+										Setrank_new("称号预留位置", "red", player233[i]);
+									}
+								}
+								break;
+							case 1:
+								for (int j = 0; j < player233.Count; j++)
+								{
+									if (!roundstart && player233[j].UserId != "76561198284755079@steam" && player233[j].UserId != "76561198389200613@steam")
+									{
+										Setrank_new("欢迎加入这个破服务器:1021889243 | 请看标题", "red", player233[j]);
+									}
+								}
+								break;
+							case 2:
+								for (int k = 0; k < player233.Count; k++)
+								{
+									if (!roundstart && player233[k].UserId != "76561198284755079@steam" && player233[k].UserId != "76561198389200613@steam")
+									{
+										Setrank_new("欢迎加入这个破服务器:1021889243 | 请看标题", "yellow", player233[k]);
+									}
+								}
+								break;
+							case 3:
+								for (int l = 0; l < player233.Count; l++)
+								{
+									if (!roundstart && player233[l].UserId != "76561198284755079@steam" && player233[l].UserId != "76561198389200613@steam")
+									{
+										Setrank_new("欢迎加入这个破服务器:1021889243 | 请看标题", "green", player233[l]);
+									}
+								}
+								break;
+							case 4:
+								for (int m = 0; m < player233.Count; m++)
+								{
+									if (!roundstart && player233[m].UserId != "76561198284755079@steam" && player233[m].UserId != "76561198389200613@steam")
+									{
+										Setrank_new("欢迎加入这个破服务器:1021889243 | 请看标题", "pink", player233[m]);
+									}
+								}
+								break;
+							default:
+								pmdawa = 0;
+								break;
 						}
+						pmdawa++;
+						pmdjsq = 0;
 					}
-					Thread.Sleep(5000);
-					for (int j = 0; j < player233.Count; j++)
-					{
-						if (!roundstart && player233[j].UserId != "76561198284755079@steam" && player233[j].UserId != "76561198389200613@steam")
-						{
-							Setrank_new("欢迎加入这个破服务器:1021889243 | 请看标题", "red", player233[j]);
-						}
-					}
-					Thread.Sleep(5000);
-					for (int k = 0; k < player233.Count; k++)
-					{
-						if (!roundstart && player233[k].UserId != "76561198284755079@steam" && player233[k].UserId != "76561198389200613@steam")
-						{
-							Setrank_new("欢迎加入这个破服务器:1021889243 | 请看标题", "yellow", player233[k]);
-						}
-					}
-					Thread.Sleep(5000);
-					for (int l = 0; l < player233.Count; l++)
-					{
-						if (!roundstart && player233[l].UserId != "76561198284755079@steam" && player233[l].UserId != "76561198389200613@steam")
-						{
-							Setrank_new("欢迎加入这个破服务器:1021889243 | 请看标题", "green", player233[l]);
-						}
-					}
-					Thread.Sleep(5000);
-					for (int m = 0; m < player233.Count; m++)
-					{
-						if (!roundstart && player233[m].UserId != "76561198284755079@steam" && player233[m].UserId != "76561198389200613@steam")
-						{
-							Setrank_new("欢迎加入这个破服务器:1021889243 | 请看标题", "pink", player233[m]);
-						}
-					}
-					Thread.Sleep(5000);
 				}
-				else
+				if(xunhuan14 >= 10)
 				{
-					pmd.Abort();
+					xunhuan14 = 0;
+					if (ylb1)
+					{
+						foreach (Exiled.API.Features.Player player6 in Exiled.API.Features.Player.List)
+						{
+							if (player6.Team == Team.MTF && Vector3.Distance(ylb.Position, player6.Position) <= 6)
+							{
+								player6.Health += 1f;
+								player6.Broadcast(5, "<color=yellow>[九尾狐医疗兵]</color>\n<color=#00FFFF>我正在治疗你的伤势</color>");
+							}
+						}
+					}
+					switch (lv)
+					{
+						case 1:
+							foreach (Exiled.API.Features.Player player3 in Exiled.API.Features.Player.List)
+							{
+								if (player3.Role == RoleType.Scp049)
+								{
+									player3.Health += 5f;
+								}
+							}
+							break;
+						case 2:
+							foreach (Exiled.API.Features.Player player4 in Exiled.API.Features.Player.List)
+							{
+								if (player4.Role == RoleType.Scp049)
+								{
+									player4.Health += 5f;
+								}
+							}
+							break;
+						case 3:
+							foreach (Exiled.API.Features.Player player5 in Exiled.API.Features.Player.List)
+							{
+								if (player5.Role == RoleType.Scp049)
+								{
+									player5.Health += 15f;
+								}
+							}
+							break;
+					}
+					if (scp49jyes)
+					{
+						foreach (Exiled.API.Features.Player referenceHub in Exiled.API.Features.Player.List)
+						{
+							if (referenceHub.Role == RoleType.FacilityGuard && !scp_999.Contains(referenceHub.UserId))
+							{
+								scp49j = referenceHub;
+								scp49jid = referenceHub.Id;
+								break;
+							}
+						}
+					}
 				}
+				if(xunhuan16 >= 100)
+				{
+					xunhuan16 = 0;
+					foreach (Exiled.API.Features.Player hub in Exiled.API.Features.Player.List)
+					{
+						if (hub.Role != 0)
+						{
+							hub.IsGodModeEnabled = false;
+						}
+					}
+				}
+				if(guangboshi >= 10)
+				{
+					switch(guangboshitxt)
+					{
+						case 0:
+							Intercom.host.CustomContent = "你好呀 欢迎来到广播室(*^▽^*)";
+							break;
+						case 1:
+							Intercom.host.CustomContent = "现在时间是" + DateTime.Now.ToString();
+							break;
+						case 2:
+							Intercom.host.CustomContent = "插件版本是" + DateTime.Today.ToString() + "'ω'";
+							break;
+						case 3:
+							Intercom.host.CustomContent = "(*^▽^*)请河蟹游戏 友善对待他人";
+							break;
+						case 4:
+							Intercom.host.CustomContent = "服主QQ:1312255201(\uffe3▽\uffe3)~*交个朋友";
+							break;
+						case 5:
+							Intercom.host.CustomContent = "\uffe3へ\uffe3进来还不加群打屎你";
+							break;
+						case 6:
+							Intercom.host.CustomContent = "<*))>>=< 最好可以给我money没错就是这条鱼";
+							break;
+						case 7:
+							Intercom.host.CustomContent = "⊂(ο･㉨･ο)⊃ 阿巴阿巴";
+							break;
+						case 8:
+							Intercom.host.CustomContent = "(≧▽≦)/下面是重复的了";
+							break;
+						default:
+							guangboshitxt = 0;
+							break;
+					}
+					guangboshitxt++;
+				}
+				if(chenghao >=300)
+				{
+					chenghao = 0;
+					foreach (Exiled.API.Features.Player referenceHub in Exiled.API.Features.Player.List)
+					{
+						try
+						{
+							string a = Get(dic: new Dictionary<string, string>
+						{
+							{
+								"userid",
+								referenceHub.UserId
+							}
+						}, url: url + "GetBadge");
+							new List<badge>();
+							List<badge> model = JsonConvert.DeserializeObject<List<badge>>(a);
+							if (model.Count >= 1)
+							{
+								Coroutines.Add(Timing.RunCoroutine(nodify_badeg(referenceHub, model[0])));
+							}
+						}
+						catch
+						{
+						}
+					}
+				}
+				if (starttimer)
+				{
+					switch(lajiqingli)
+					{
+						case 1:
+							Exiled.API.Features.Map.Broadcast(10, "<color=#FFFF00>[小鱼服务器清理大师]</color>\n<color=#66FFFF>哇你们白给了好多垃圾成堆了呀</color>\n我会在<color=red>400s</color>后清理服务器");
+							break;
+						case 200:
+							Exiled.API.Features.Map.Broadcast(10, "<color=#FFFF00>[小鱼服务器清理大师]</color>\n<color=#66FFFF>哇你们白给了好多垃圾成堆了呀</color>\n我会在<color=red>200s</color>后清理服务器");
+							break;
+						case 350:
+							Exiled.API.Features.Map.Broadcast(10, "<color=#FFFF00>[小鱼服务器清理大师]</color>\n<color=#66FFFF>哇你们白给了好多垃圾成堆了呀</color>\n我会在<color=red>50s</color>后清理服务器");
+							break;
+						case 390:
+							Exiled.API.Features.Map.Broadcast(5, "<color=#FFFF00>[小鱼服务器清理大师]</color>\n<color=#66FFFF>哇你们白给了好多垃圾成堆了呀</color>\n我会在<color=red>10s</color>后清理服务器");
+							Exiled.API.Features.Map.Broadcast(1, "<color=#FFFF00>[小鱼服务器清理大师]</color>\n<color=#66FFFF>哇你们白给了好多垃圾成堆了呀</color>\n我会在<color=red>5s</color>后清理服务器");
+							Exiled.API.Features.Map.Broadcast(1, "<color=#FFFF00>[小鱼服务器清理大师]</color>\n<color=#66FFFF>哇你们白给了好多垃圾成堆了呀</color>\n我会在<color=red>4s</color>后清理服务器");
+							Exiled.API.Features.Map.Broadcast(1, "<color=#FFFF00>[小鱼服务器清理大师]</color>\n<color=#66FFFF>哇你们白给了好多垃圾成堆了呀</color>\n我会在<color=red>3s</color>后清理服务器");
+							Exiled.API.Features.Map.Broadcast(1, "<color=#FFFF00>[小鱼服务器清理大师]</color>\n<color=#66FFFF>哇你们白给了好多垃圾成堆了呀</color>\n我会在<color=red>2s</color>后清理服务器");
+							Exiled.API.Features.Map.Broadcast(1, "<color=#FFFF00>[小鱼服务器清理大师]</color>\n<color=#66FFFF>哇你们白给了好多垃圾成堆了呀</color>\n我会在<color=red>1s</color>后清理服务器");
+							Exiled.API.Features.Map.Broadcast(4, "<color=#FFFF00>[小鱼服务器清理大师]</color>\n<color=#66FFFF>开始清理</color>");
+							break;
+						default:
+							break;
+					}
+					if (lajiqingli >= 400)
+					{
+						lajiqingli = 0;
+						Ragdoll[] array = UnityEngine.Object.FindObjectsOfType<Ragdoll>();
+						foreach (Ragdoll ragdoll in array)
+						{
+							NetworkServer.Destroy(ragdoll.gameObject);
+							ragdolltime++;
+						}
+						Pickup[] array2 = UnityEngine.Object.FindObjectsOfType<Pickup>();
+						foreach (Pickup item in array2)
+						{
+							if (item.ItemId == ItemType.Ammo556 || item.ItemId == ItemType.Ammo762 || item.ItemId == ItemType.Ammo9mm || item.ItemId == ItemType.GunE11SR || item.ItemId == ItemType.MicroHID || item.ItemId == ItemType.WeaponManagerTablet || item.ItemId == ItemType.Medkit || item.ItemId == ItemType.KeycardGuard || item.ItemId == ItemType.KeycardSeniorGuard || item.ItemId == ItemType.GrenadeFlash || item.ItemId == ItemType.GrenadeFrag || item.ItemId == ItemType.Disarmer || item.ItemId == ItemType.GunLogicer || item.ItemId == ItemType.GunProject90 || item.ItemId == ItemType.Radio)
+							{
+								item.Delete();
+								itemtime++;
+							}
+						}
+						Exiled.API.Features.Map.Broadcast(4, "<color=#FFFF00>[小鱼服务器清理大师]</color>\n<color=#66FFFF>好饱呀</color>\n本次清理了" + itemtime + "个物品" + ragdolltime + "个尸体");
+						itemtime = 0;
+						ragdolltime = 0;
+					}
+				}
+				Thread.Sleep(1000);
 			}
+			Log.Info("PMD线程结束运行");
 		}
 
 		public void OnPocketDimDeath(FailingEscapePocketDimensionEventArgs ev)
@@ -5315,7 +5331,7 @@ namespace PlayerStats
 		{
 			if (dfzgc)
 			{
-				ev.Door.DestroyDoor(b: true);
+				ev.Door.DestroyDoor(true);
 			}
 			System.Random num111 = new System.Random();
 			if (!dq && num111.Next(1, 500) >= 499)
@@ -5388,17 +5404,14 @@ namespace PlayerStats
 			}
 			if (Dio2.Contains(ev.Player.UserId) && sjtz1)
 			{
-				ev.Door.DestroyDoor(b: true);
+				ev.Door.DestroyDoor(true);
 				ev.IsAllowed = true;
 			}
 			if (!Dio2.Contains(ev.Player.UserId) && sjtz1)
 			{
 				ev.IsAllowed = false;
 			}
-			if (中国制造)
-			{
-				ev.Door.DestroyDoor(b: false);
-			}
+
 		}
 
 		public void OnScp106Contain(ContainingEventArgs ev)
