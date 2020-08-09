@@ -48,6 +48,10 @@ namespace PlayerStats
 			Exiled.Events.Handlers.Scp914.ChangingKnobSetting += server.On914KnobChange;
 			Exiled.Events.Handlers.Server.RoundStarted += server.OnRoundStart;
 			Exiled.Events.Handlers.Map.Decontaminating += server.OnDecontaminate;
+			Exiled.Events.Handlers.Server.RestartingRound += server.OnRestartingRound;
+			Exiled.Events.Handlers.Warhead.Starting += server.ONWarheadStarter;
+			Exiled.Events.Handlers.Player.TriggeringTesla += server.OnTriggeringTesla;
+
 			Thread thread = new Thread(Watchconnecting);
 			thread.IsBackground = true;
 			thread.Start();
@@ -96,6 +100,10 @@ namespace PlayerStats
 			Exiled.Events.Handlers.Server.SendingRemoteAdminCommand -= server.OnRemoteAdminCommand;
 			Exiled.Events.Handlers.Map.Decontaminating -= server.OnDecontaminate;
 			Exiled.Events.Handlers.Player.Dying -= server.OnDying;
+			Exiled.Events.Handlers.Server.RestartingRound += server.OnRestartingRound;
+			Exiled.Events.Handlers.Warhead.Starting -= server.ONWarheadStarter;
+			Exiled.Events.Handlers.Player.TriggeringTesla -= server.OnTriggeringTesla;
+
 			server = null;
 		}
 	}

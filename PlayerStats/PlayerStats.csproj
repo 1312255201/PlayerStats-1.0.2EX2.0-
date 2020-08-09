@@ -45,38 +45,32 @@
   <ItemGroup>
     <Reference Include="0Harmony, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Desktop\steamcommunity_302_V10.4_解压密码dogfight360\Exiled (2)\EXILED\Plugins\dependencies\0Harmony.dll</HintPath>
+      <HintPath>..\..\..\..\Desktop\steamcommunity_302_V10.4_解压密码dogfight360\Exiled\EXILED\Plugins\dependencies\0Harmony.dll</HintPath>
     </Reference>
-    <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Desktop\steamcommunity_302_V10.4_解压密码dogfight360\Exiled (2)\Assembly-CSharp.dll</HintPath>
-    </Reference>
+    <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\PlayerStats-1.0.2 EX2.0\PlayerStats\bin\Debug\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.API, Version=2.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Exiled.API, Version=2.0.9.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Desktop\steamcommunity_302_V10.4_解压密码dogfight360\Exiled (2)\EXILED\Plugins\dependencies\Exiled.API.dll</HintPath>
+      <HintPath>..\..\..\..\Desktop\steamcommunity_302_V10.4_解压密码dogfight360\Exiled\EXILED\Plugins\dependencies\Exiled.API.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.Events, Version=2.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Exiled.Events, Version=2.0.9.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Desktop\steamcommunity_302_V10.4_解压密码dogfight360\Exiled (2)\EXILED\Plugins\Exiled.Events.dll</HintPath>
+      <HintPath>..\..\..\..\Desktop\steamcommunity_302_V10.4_解压密码dogfight360\Exiled\EXILED\Plugins\Exiled.Events.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.Example">
-      <HintPath>..\..\..\..\Desktop\steamcommunity_302_V10.4_解压密码dogfight360\Exiled (2)\EXILED\Plugins\Exiled.Example.dll</HintPath>
-    </Reference>
-    <Reference Include="Exiled.Loader, Version=2.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Exiled.Loader, Version=2.0.9.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Desktop\steamcommunity_302_V10.4_解压密码dogfight360\Exiled (2)\EXILED\Exiled.Loader.dll</HintPath>
+      <HintPath>..\..\..\..\Desktop\steamcommunity_302_V10.4_解压密码dogfight360\Exiled\EXILED\Exiled.Loader.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.Permissions, Version=2.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Exiled.Permissions, Version=2.0.9.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Desktop\steamcommunity_302_V10.4_解压密码dogfight360\Exiled (2)\EXILED\Plugins\Exiled.Permissions.dll</HintPath>
+      <HintPath>..\..\..\..\Desktop\steamcommunity_302_V10.4_解压密码dogfight360\Exiled\EXILED\Plugins\Exiled.Permissions.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.Updater, Version=2.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Exiled.Updater, Version=2.0.9.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Desktop\steamcommunity_302_V10.4_解压密码dogfight360\Exiled (2)\EXILED\Plugins\Exiled.Updater.dll</HintPath>
+      <HintPath>..\..\..\..\Desktop\steamcommunity_302_V10.4_解压密码dogfight360\Exiled\EXILED\Plugins\Exiled.Updater.dll</HintPath>
     </Reference>
     <Reference Include="Mirror, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -113,7 +107,7 @@
     </Reference>
     <Reference Include="YamlDotNet, Version=8.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Desktop\steamcommunity_302_V10.4_解压密码dogfight360\Exiled (2)\EXILED\Plugins\dependencies\YamlDotNet.dll</HintPath>
+      <HintPath>..\..\..\..\Desktop\steamcommunity_302_V10.4_解压密码dogfight360\Exiled\EXILED\Plugins\dependencies\YamlDotNet.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
