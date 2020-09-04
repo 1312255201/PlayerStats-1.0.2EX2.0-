@@ -7,8 +7,8 @@
     <ProjectGuid>{A5B76EDC-90B0-4C2F-80AD-EEEDB8D67065}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PlayerStats</RootNamespace>
-    <AssemblyName>PlayerStats</AssemblyName>
+    <RootNamespace>YYYLike</RootNamespace>
+    <AssemblyName>YYYLike</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

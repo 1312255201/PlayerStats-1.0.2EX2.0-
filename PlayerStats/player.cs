@@ -1,4 +1,4 @@
-namespace PlayerStats
+namespace YYYLike
 {
 
 	public class Playerpython

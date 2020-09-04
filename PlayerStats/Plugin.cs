@@ -5,7 +5,7 @@ using HarmonyLib;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PlayerStats
+namespace YYYLike
 {
 	public class Plugin : Plugin<YYYlikeconfig>
 	{
@@ -21,10 +21,16 @@ namespace PlayerStats
 		private void RegisterEvents()
 		{
 			server = new EventHandlers();
+
+			Exiled.Events.Handlers.Warhead.Detonated += server.OnWarheadDetonation;
+			Exiled.Events.Handlers.Player.Left += server.OnPlayerLeave;
+			Exiled.Events.Handlers.Player.Dying += server.OnDying;
+			Exiled.Events.Handlers.Player.Shooting += server.OnShoot;
+			Exiled.Events.Handlers.Scp914.UpgradingItems += server.OnUpgradingItems;
+
 			Exiled.Events.Handlers.Player.Died += server.OnPlayerDeath;
 			Exiled.Events.Handlers.Server.WaitingForPlayers += server.OnWaitingForPlayers;
 			Exiled.Events.Handlers.Server.RoundEnded += server.OnRoundEnd;
-			Exiled.Events.Handlers.Player.Died += server.OnPlayerDeath;
 			Exiled.Events.Handlers.Player.MedicalItemUsed += server.OnMedicalItem;
 			Exiled.Events.Handlers.Server.RespawningTeam += server.OnTeamRespawn;
 			Exiled.Events.Handlers.Server.SendingConsoleCommand += server.OnConsoleCommand;
@@ -51,6 +57,7 @@ namespace PlayerStats
 			Exiled.Events.Handlers.Server.RestartingRound += server.OnRestartingRound;
 			Exiled.Events.Handlers.Warhead.Starting += server.ONWarheadStarter;
 			Exiled.Events.Handlers.Player.TriggeringTesla += server.OnTriggeringTesla;
+			Exiled.Events.Handlers.Player.EnteringPocketDimension += server.OnEnteringPocketDimension;
 
 			Thread thread = new Thread(Watchconnecting);
 			thread.IsBackground = true;
@@ -92,6 +99,7 @@ namespace PlayerStats
 			Exiled.Events.Handlers.Player.Spawning -= server.OnPlayerSpawn;
 			Scp079.GainingLevel -= server.OnScp079LvlGain;
 			Exiled.Events.Handlers.Player.UnlockingGenerator -= server.OnGeneratorUnlock;
+			Exiled.Events.Handlers.Scp914.UpgradingItems -= server.OnUpgradingItems;
 			Exiled.Events.Handlers.Player.Left -= server.OnPlayerLeave;
 			Exiled.Events.Handlers.Warhead.Stopping -= server.ONWarheadCancelled;
 			Exiled.Events.Handlers.Scp914.ChangingKnobSetting -= server.On914KnobChange;
@@ -103,7 +111,7 @@ namespace PlayerStats
 			Exiled.Events.Handlers.Server.RestartingRound += server.OnRestartingRound;
 			Exiled.Events.Handlers.Warhead.Starting -= server.ONWarheadStarter;
 			Exiled.Events.Handlers.Player.TriggeringTesla -= server.OnTriggeringTesla;
-
+			Exiled.Events.Handlers.Player.EnteringPocketDimension -= server.OnEnteringPocketDimension;
 			server = null;
 		}
 	}

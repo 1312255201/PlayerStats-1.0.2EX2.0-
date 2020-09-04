@@ -2,7 +2,7 @@
 using MEC;
 using UnityEngine;
 
-namespace PlayerStats
+namespace YYYLike
 {
     public class shop
     {

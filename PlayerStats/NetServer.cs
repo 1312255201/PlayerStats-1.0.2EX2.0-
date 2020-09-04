@@ -10,7 +10,7 @@ using System.Collections;
 using Newtonsoft.Json;
 using Exiled.API.Features;
 
-namespace PlayerStats
+namespace YYYLike
 {
 
 

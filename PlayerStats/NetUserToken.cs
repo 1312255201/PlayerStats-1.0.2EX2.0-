@@ -1,7 +1,7 @@
 ﻿using Exiled.API.Features;
 using System.Net.Sockets;
 
-namespace PlayerStats
+namespace YYYLike
 {
     // 表示一个客户端
     public class NetUserToken

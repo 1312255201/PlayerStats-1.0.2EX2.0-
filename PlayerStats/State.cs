@@ -2,7 +2,7 @@
 using MEC;
 using UnityEngine;
 
-namespace PlayerStats
+namespace YYYLike
 {
 	internal static class State {
 		internal static int LuresCount;

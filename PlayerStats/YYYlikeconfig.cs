@@ -5,7 +5,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace PlayerStats
+namespace YYYLike
 {
     using System.Collections.Generic;
     using System.ComponentModel;
