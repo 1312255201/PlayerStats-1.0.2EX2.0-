@@ -34,6 +34,9 @@
   <ItemGroup>
     <Compile Include="csgo.cs" />
     <Compile Include="EventHandlers.cs" />
+    <Compile Include="Ini.cs" />
+    <Compile Include="JianDie.cs" />
+    <Compile Include="KickPlayer.cs" />
     <Compile Include="NetServer.cs" />
     <Compile Include="NetUserToken.cs" />
     <Compile Include="player.cs" />
@@ -48,31 +51,29 @@
     </Reference>
     <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Desktop\steamcommunity_302_V10.4_解压密码dogfight360\Exiled\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\..\..\Exiled (2)\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\PlayerStats-1.0.2 EX2.0\PlayerStats\bin\Debug\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.API, Version=2.0.13.0, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Desktop\steamcommunity_302_V10.4_解压密码dogfight360\Exiled\EXILED\Plugins\dependencies\Exiled.API.dll</HintPath>
+    <Reference Include="Exiled.API, Version=2.1.28.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\EXILED.2.1.28\lib\net472\Exiled.API.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.Events, Version=2.0.13.0, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Desktop\steamcommunity_302_V10.4_解压密码dogfight360\Exiled\EXILED\Plugins\Exiled.Events.dll</HintPath>
+    <Reference Include="Exiled.Bootstrap, Version=2.1.28.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\EXILED.2.1.28\lib\net472\Exiled.Bootstrap.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.Loader, Version=2.0.13.0, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Desktop\steamcommunity_302_V10.4_解压密码dogfight360\Exiled\EXILED\Exiled.Loader.dll</HintPath>
+    <Reference Include="Exiled.Events, Version=2.1.28.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\EXILED.2.1.28\lib\net472\Exiled.Events.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.Permissions, Version=2.0.13.0, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Desktop\steamcommunity_302_V10.4_解压密码dogfight360\Exiled\EXILED\Plugins\Exiled.Permissions.dll</HintPath>
+    <Reference Include="Exiled.Loader, Version=2.1.28.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\EXILED.2.1.28\lib\net472\Exiled.Loader.dll</HintPath>
     </Reference>
-    <Reference Include="Exiled.Updater, Version=3.0.2.0, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Desktop\steamcommunity_302_V10.4_解压密码dogfight360\Exiled\EXILED\Plugins\Exiled.Updater.dll</HintPath>
+    <Reference Include="Exiled.Permissions, Version=2.1.28.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\EXILED.2.1.28\lib\net472\Exiled.Permissions.dll</HintPath>
+    </Reference>
+    <Reference Include="Exiled.Updater, Version=3.0.3.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\EXILED.2.1.28\lib\net472\Exiled.Updater.dll</HintPath>
     </Reference>
     <Reference Include="Mirror, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -114,6 +115,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Patches\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

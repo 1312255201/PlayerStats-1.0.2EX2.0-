@@ -22,6 +22,8 @@ namespace YYYLike
 			if(Exiled.API.Features.Server.Port != 7779)
             {
 				server = new EventHandlers();
+				KickPlayer kickPlayer = new KickPlayer();
+
 
 				Exiled.Events.Handlers.Warhead.Detonated += server.OnWarheadDetonation;
 				Exiled.Events.Handlers.Player.Left += server.OnPlayerLeave;
@@ -58,6 +60,11 @@ namespace YYYLike
 				Exiled.Events.Handlers.Warhead.Starting += server.ONWarheadStarter;
 				Exiled.Events.Handlers.Player.TriggeringTesla += server.OnTriggeringTesla;
 				Exiled.Events.Handlers.Player.EnteringPocketDimension += server.OnEnteringPocketDimension;
+				Exiled.Events.Handlers.Map.AnnouncingDecontamination += server.OnAnnouncingDecontamination;
+				//注册投票踢人
+				Exiled.Events.Handlers.Server.SendingConsoleCommand += kickPlayer.OnCommandSend;
+				Exiled.Events.Handlers.Server.RoundEnded += kickPlayer.OnRoundEnd;
+
 
 				Thread thread = new Thread(Watchconnecting);
 				thread.IsBackground = true;
@@ -79,6 +86,7 @@ namespace YYYLike
 
 		private void UnregisterEvents()
 		{
+			KickPlayer kickPlayer = new KickPlayer();
 			Exiled.Events.Handlers.Server.WaitingForPlayers -= server.OnWaitingForPlayers;
 			Exiled.Events.Handlers.Server.RoundStarted -= server.OnRoundStart;
 			Exiled.Events.Handlers.Server.RoundEnded -= server.OnRoundEnd;
@@ -113,7 +121,12 @@ namespace YYYLike
 			Exiled.Events.Handlers.Warhead.Starting -= server.ONWarheadStarter;
 			Exiled.Events.Handlers.Player.TriggeringTesla -= server.OnTriggeringTesla;
 			Exiled.Events.Handlers.Player.EnteringPocketDimension -= server.OnEnteringPocketDimension;
+			Exiled.Events.Handlers.Map.AnnouncingDecontamination -= server.OnAnnouncingDecontamination;
 			server = null;
+			//关闭投票踢人
+			Exiled.Events.Handlers.Server.SendingConsoleCommand += kickPlayer.OnCommandSend;
+			Exiled.Events.Handlers.Server.RoundEnded += kickPlayer.OnRoundEnd;
+			kickPlayer = null;
 		}
 	}
 }

