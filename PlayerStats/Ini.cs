@@ -74,7 +74,40 @@ namespace YYYLike
             return Lv;
         }
 
+        public static string ReadLevel2(int exp)
+        {
+            int Lv = 0;
+            string Lv2 = "";
 
+            Lv = exp / 1000;
+            if(Lv <=10)
+            {
+                Lv2 = Lv.ToString() + "|Neutralized";
+            }
+            if(Lv >10 && Lv <=30)
+            {
+                Lv2 = Lv.ToString() + "|Safe";
+
+            }
+            if (Lv > 30 && Lv <= 60 )
+            {
+                Lv2 = Lv.ToString() + "|Euclid";
+
+            }
+            if (Lv > 60 && Lv <= 100)
+            {
+                Lv2 = Lv.ToString() + "|Keter";
+            }
+            if (Lv > 100 && Lv <= 150)
+            {
+                Lv2 = Lv.ToString() + "|Thaumiel";
+            }
+            if (Lv > 150)
+            {
+                Lv2 = Lv.ToString() + "|O5";
+            }
+            return Lv2;
+        }
         public static bool AddExp(string steam64id, int Exp)
         {
             string path = "C:\\\\经验\\\\"+steam64id;

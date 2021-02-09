@@ -3,6 +3,7 @@ using Exiled.API.Features;
 using Exiled.Events.Handlers;
 using System.Threading;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace YYYLike
 {
@@ -23,8 +24,11 @@ namespace YYYLike
             {
 				server = new EventHandlers();
 				KickPlayer kickPlayer = new KickPlayer();
+				CmdBinding.Load();
 
-
+				CmdBinding.KeyBind(KeyCode.G, ".jineng");
+				CmdBinding.KeyBind(KeyCode.F, ".f");
+				CmdBinding.Save();
 				Exiled.Events.Handlers.Warhead.Detonated += server.OnWarheadDetonation;
 				Exiled.Events.Handlers.Player.Left += server.OnPlayerLeave;
 				Exiled.Events.Handlers.Player.Dying += server.OnDying;
@@ -61,10 +65,14 @@ namespace YYYLike
 				Exiled.Events.Handlers.Player.TriggeringTesla += server.OnTriggeringTesla;
 				Exiled.Events.Handlers.Player.EnteringPocketDimension += server.OnEnteringPocketDimension;
 				Exiled.Events.Handlers.Map.AnnouncingDecontamination += server.OnAnnouncingDecontamination;
+				Exiled.Events.Handlers.Player.UsingMedicalItem += server.OnUsingMedicalItem;
+				Exiled.Events.Handlers.Player.Verified += server.OnVerified;
+				Exiled.Events.Handlers.Scp914.Activating += server.OnActivating;
 				//注册投票踢人
 				Exiled.Events.Handlers.Server.SendingConsoleCommand += kickPlayer.OnCommandSend;
 				Exiled.Events.Handlers.Server.RoundEnded += kickPlayer.OnRoundEnd;
-
+				
+				Exiled.Events.Handlers.Map.GeneratorActivated += server.电板激活事件;
 
 				Thread thread = new Thread(Watchconnecting);
 				thread.IsBackground = true;
@@ -87,6 +95,7 @@ namespace YYYLike
 		private void UnregisterEvents()
 		{
 			KickPlayer kickPlayer = new KickPlayer();
+			Exiled.Events.Handlers.Player.UsingMedicalItem -= server.OnUsingMedicalItem;
 			Exiled.Events.Handlers.Server.WaitingForPlayers -= server.OnWaitingForPlayers;
 			Exiled.Events.Handlers.Server.RoundStarted -= server.OnRoundStart;
 			Exiled.Events.Handlers.Server.RoundEnded -= server.OnRoundEnd;
@@ -109,6 +118,7 @@ namespace YYYLike
 			Exiled.Events.Handlers.Player.Spawning -= server.OnPlayerSpawn;
 			Scp079.GainingLevel -= server.OnScp079LvlGain;
 			Exiled.Events.Handlers.Player.UnlockingGenerator -= server.OnGeneratorUnlock;
+			Exiled.Events.Handlers.Scp914.Activating -= server.OnActivating;
 			Exiled.Events.Handlers.Player.Left -= server.OnPlayerLeave;
 			Exiled.Events.Handlers.Warhead.Stopping -= server.ONWarheadCancelled;
 			Exiled.Events.Handlers.Scp914.ChangingKnobSetting -= server.On914KnobChange;
@@ -122,11 +132,13 @@ namespace YYYLike
 			Exiled.Events.Handlers.Player.TriggeringTesla -= server.OnTriggeringTesla;
 			Exiled.Events.Handlers.Player.EnteringPocketDimension -= server.OnEnteringPocketDimension;
 			Exiled.Events.Handlers.Map.AnnouncingDecontamination -= server.OnAnnouncingDecontamination;
+			Exiled.Events.Handlers.Player.Verified -= server.OnVerified;
 			server = null;
 			//关闭投票踢人
-			Exiled.Events.Handlers.Server.SendingConsoleCommand += kickPlayer.OnCommandSend;
-			Exiled.Events.Handlers.Server.RoundEnded += kickPlayer.OnRoundEnd;
+			Exiled.Events.Handlers.Server.SendingConsoleCommand -= kickPlayer.OnCommandSend;
+			Exiled.Events.Handlers.Server.RoundEnded -= kickPlayer.OnRoundEnd;
 			kickPlayer = null;
+			Exiled.Events.Handlers.Map.GeneratorActivated -= server.电板激活事件;
 		}
 	}
 }

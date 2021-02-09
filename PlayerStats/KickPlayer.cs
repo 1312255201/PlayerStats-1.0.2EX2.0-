@@ -190,7 +190,7 @@ namespace YYYLike
             yield return Timing.WaitForSeconds(60f);
             if(已经参与投票的人ID.Count()>= Player.List.Count()/2)
             {
-                if(赞成 - 否决 >=10)
+                if(赞成 - 否决 >= 2)
                 {
                     被踢的人.Ban(10, "你已经被投票踢出 投票t出为玩家决定与服务器无关");
                     Reset();
@@ -200,7 +200,7 @@ namespace YYYLike
             }
             else
             {
-                Map.Broadcast(10, "提出失败 参与投票人数不足");
+                Map.Broadcast(10, "踢出失败 参与投票人数不足");
                 Reset();
             }
 
