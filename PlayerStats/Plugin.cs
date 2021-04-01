@@ -1,6 +1,8 @@
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.Events.Handlers;
+using HarmonyLib;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -10,6 +12,8 @@ namespace YYYLike
 	public class Plugin : Plugin<YYYlikeconfig>
 	{
 		private EventHandlers server;
+		public int PatchesCounter { get; private set; }
+		public Harmony Harmony { get; private set; }
 
 		public override void OnEnabled()
 		{
@@ -73,18 +77,21 @@ namespace YYYLike
 				Exiled.Events.Handlers.Server.RoundEnded += kickPlayer.OnRoundEnd;
 				
 				Exiled.Events.Handlers.Map.GeneratorActivated += server.电板激活事件;
-
-				Thread thread = new Thread(Watchconnecting);
-				thread.IsBackground = true;
-				thread.Start();
+				
+				Exiled.Events.Handlers.Player.PreAuthenticating += server.OnPreAuthenticating;
+				try
+				{
+					Harmony = new Harmony($"com.galaxy.cu-{DateTime.UtcNow.Ticks}");
+					Harmony.PatchAll(); 
+				}
+				catch (Exception e)
+				{
+					Log.Error($"Patching failed!, " + e);
+				}
 			}
 
 		}
 
-		private void Watchconnecting()
-		{
-			NetServer.Instance.Start();
-		}
 
 		public override void OnDisabled()
 		{
@@ -139,6 +146,8 @@ namespace YYYLike
 			Exiled.Events.Handlers.Server.RoundEnded -= kickPlayer.OnRoundEnd;
 			kickPlayer = null;
 			Exiled.Events.Handlers.Map.GeneratorActivated -= server.电板激活事件;
+			Exiled.Events.Handlers.Player.PreAuthenticating -= server.OnPreAuthenticating;
+			Harmony.UnpatchAll();
 		}
 	}
 }

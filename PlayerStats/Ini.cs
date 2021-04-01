@@ -36,41 +36,50 @@ namespace YYYLike
 
         public static int ReadExp(string steam64id)
         {
-            string path = "C:\\\\经验\\\\" + steam64id;
-            if (File.Exists(path))
+            try
             {
-                string[] conf = File.ReadAllLines(path);
-                foreach (string cat in conf)
+                string path = Path.Combine(Path.Combine(Path.Combine(Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), ".config"), "SCP Secret Laboratory"), "config"), "经验"),steam64id);
+
+                if (File.Exists(path))
                 {
-                    if (cat.Contains("="))
+                    string[] conf = File.ReadAllLines(path);
+                    foreach (string cat in conf)
                     {
-                        if (cat.Split('=')[0] == steam64id)
+                        if (cat.Contains("="))
                         {
-                            string s = cat;
-                            Regex r = new Regex(steam64id + "=");
-                            try
+                            if (cat.Split('=')[0] == steam64id)
                             {
-                                return int.Parse(r.Replace(s, "", 1));
-                            }
-                            catch
-                            {
-                                return 0;
+                                string s = cat;
+                                Regex r = new Regex(steam64id + "=");
+                                try
+                                {
+                                    return int.Parse(r.Replace(s, "", 1));
+                                }
+                                catch
+                                {
+                                    return 0;
+                                }
                             }
                         }
                     }
+                    return 0;
                 }
-                return 0;
+                else
+                {
+                    File.WriteAllText(path, "");
+                    return 0;
+                }
             }
-            else
+            catch
             {
-                File.WriteAllText(path,"");
                 return 0;
             }
+
         }
         public static int ReadLevel(int exp)
         {
             int Lv = 0;
-            Lv = exp / 500;
+            Lv = exp / 1000;
             return Lv;
         }
 
@@ -110,8 +119,9 @@ namespace YYYLike
         }
         public static bool AddExp(string steam64id, int Exp)
         {
-            string path = "C:\\\\经验\\\\"+steam64id;
+            string path = Path.Combine(Path.Combine(Path.Combine(Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), ".config"), "SCP Secret Laboratory"), "config"), "经验"), steam64id);
 
+            EventHandlers eventHandlers = new EventHandlers();
             if (File.Exists(path))
             {
                 string[] conf = File.ReadAllLines(path);
@@ -130,7 +140,7 @@ namespace YYYLike
                                 File.WriteAllText(path, ra.Replace(sa, steam64id + "=" + (int.Parse(r.Replace(s, "", 1)) + Exp).ToString(), 1));
                                 if (Player.Get(steam64id) != null)
                                 {
-                                    EventHandlers.setnick(Player.Get(steam64id).ReferenceHub);
+                                    eventHandlers.setnick(Player.Get(steam64id).ReferenceHub);
                                 }
                                 return true;
                             }
