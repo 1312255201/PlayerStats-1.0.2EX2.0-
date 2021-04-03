@@ -53,7 +53,6 @@ namespace YYYLike
 
 		public int count2 = 0;
 		public static Dictionary<Player, int> talk_limit = new Dictionary<Player, int>();
-		private int waring1;
 		private int playernum = 0;
 		public bool waring = false;
 		public int[] touxiang = new int[101];
@@ -380,29 +379,11 @@ namespace YYYLike
 		private Exiled.API.Features.Player 误杀玩家;
 
 		private int Gears博士id;
-
 		public Exiled.API.Features.Player Gears博士;
-
 		private bool lxyes;
 		private int tuolikadianid;
-
-
 		private int timesjw;
-
 		private int timestop;
-
-		private string 事件;
-
-		private string 时间;
-
-		private string 地点;
-
-		private string 人物;
-
-		private string 句子;
-
-		private string 缺少;
-
 		private Exiled.API.Features.Player rhdzzwj;
 
 		private bool rhdyes;
@@ -464,7 +445,6 @@ namespace YYYLike
 		private int caidanqiangid;
 		private Pickup caidanqiang;
 		private bool testmode;
-		private Thread thread;
 		private Player scp4364;
 		private int scp4364id;
 		private bool scp4364zhandou;
@@ -479,8 +459,6 @@ namespace YYYLike
 		private int scp326id;
 		private int baxb;
 		private Pickup bigshen;
-		private object netId;
-		private CoroutineHandle Chenghao;
 		private Room pocketworld;
         private bool firstcho;
         private int timescp650;
@@ -1660,38 +1638,6 @@ namespace YYYLike
 			yield return Timing.WaitForSeconds(180f);
 			hdsx = false;
 		}
-		private IEnumerator<float> GuanZhanYouXi()
-		{
-			while (true)
-			{
-				yield return Timing.WaitForSeconds(25f);
-				foreach (Exiled.API.Features.Player referenceHub in Player.Get(RoleType.Spectator))
-				{
-					句子 = 时间 + 地点 + 人物 + 事件;
-					if ((时间 + "").Length == 0)
-					{
-						缺少 = "时间 输入.jl 内容补充内容";
-					}
-					else if ((地点 + "").Length == 0)
-					{
-						缺少 = "地点 输入.jl 内容补充内容";
-					}
-					else if ((人物 + "").Length == 0)
-					{
-						缺少 = "人物 输入.jl 内容补充内容";
-					}
-					else if ((事件 + "").Length == 0)
-					{
-						缺少 = "事件 输入.jl 内容补充内容";
-					}
-					else
-					{
-						缺少 = "输入.jlck开启下一回合";
-					}
-					referenceHub.Broadcast(5, "当前句子" + 句子 + "\n当前缺少" + 缺少);
-				}
-			}
-		}
 		private IEnumerator<float> YanJingZhengDa()
 		{
 			yield return Timing.WaitForSeconds(50f);
@@ -2623,7 +2569,7 @@ namespace YYYLike
 					}
 				}
 				Map.ClearBroadcasts();
-				Exiled.API.Features.Map.Broadcast(10, "<color=#FFC0CB>---[SCP079]---</color>\n<color=aqua>人类感受恐惧吧 本局SCP079选择帮助SCP</color>\n<color=aqua>SCP不会受到电网的伤害</color>");
+				Exiled.API.Features.Map.Broadcast(7, "<color=#FFC0CB>---[SCP079]---</color>\n<color=aqua>人类感受恐惧吧 本局SCP079选择帮助SCP</color>\n<color=aqua>SCP不会受到电网的伤害</color>");
 			}
 		}
 		private IEnumerator<float> Liangmin()
@@ -3185,7 +3131,7 @@ namespace YYYLike
 					yield return Timing.WaitForSeconds(100f);
 					cxk.AddItem(ItemType.Flashlight);
 					cxk.ClearBroadcasts();
-					cxk.Broadcast(4, "<color=#00FF00>你感受到 一段音乐在你脑中想起\n你突然感觉鸡很美丽</color>");
+					cxk.Broadcast(3, "<color=#00FF00>你感受到 一段音乐在你脑中想起\n你突然感觉鸡很美丽</color>");
 					continue;
 				}
 				break;
@@ -3652,7 +3598,7 @@ namespace YYYLike
 							}
 						}
 						int222 = 0;
-						Exiled.API.Features.Map.Broadcast(10, "<color=lime>SCP-079:你的电脑遇到问题 需要重新启动（蓝屏的钙,好喝的钙）</color>");
+						Exiled.API.Features.Map.Broadcast(6, "<color=lime>SCP-079:你的电脑遇到问题 需要重新启动（蓝屏的钙,好喝的钙）</color>");
 					}
 				}
 				yield return Timing.WaitForSeconds(30f);
@@ -4099,7 +4045,7 @@ namespace YYYLike
 				}
 			}
 			stealcd = false;
-			Exiled.API.Features.Map.Broadcast(10, "<color=#00FFFF>如果你有什么好点子或者游玩中有什么问题欢迎您加群哦\n1021889243</color>");
+			Exiled.API.Features.Map.Broadcast(5, "<color=#00FFFF>如果你有什么好点子或者游玩中有什么问题欢迎您加群哦\n1021889243</color>");
 			if (scp2006id != 0)
 			{
 				if (scp2006 != null)
@@ -4230,18 +4176,18 @@ namespace YYYLike
 					}
 					break;
 				case 62:
-					Exiled.API.Features.Map.Broadcast(10, "<color=#BB1444>傻瓜蛋！-事件：傻瓜蛋 要炸了</color>");
+					Exiled.API.Features.Map.Broadcast(5, "<color=#BB1444>傻瓜蛋！-事件：傻瓜蛋 要炸了</color>");
 					yield return Timing.WaitForSeconds(5f);
 					Map.ClearBroadcasts();
-					Exiled.API.Features.Map.Broadcast(10, "<color=#BB1444>5s</color>");
+					Exiled.API.Features.Map.Broadcast(1, "<color=#BB1444>5s</color>");
 					yield return Timing.WaitForSeconds(1f);
-					Exiled.API.Features.Map.Broadcast(10, "<color=#BB1444>4s</color>");
+					Exiled.API.Features.Map.Broadcast(1, "<color=#BB1444>4s</color>");
 					yield return Timing.WaitForSeconds(1f);
-					Exiled.API.Features.Map.Broadcast(10, "<color=#BB1444>3s</color>");
+					Exiled.API.Features.Map.Broadcast(1, "<color=#BB1444>3s</color>");
 					yield return Timing.WaitForSeconds(1f);
-					Exiled.API.Features.Map.Broadcast(10, "<color=#BB1444>2s</color>");
+					Exiled.API.Features.Map.Broadcast(1, "<color=#BB1444>2s</color>");
 					yield return Timing.WaitForSeconds(1f);
-					Exiled.API.Features.Map.Broadcast(10, "<color=#BB1444>1s</color>");
+					Exiled.API.Features.Map.Broadcast(1, "<color=#BB1444>1s</color>");
 					yield return Timing.WaitForSeconds(1f);
 
 					foreach (Player p in Player.List)
@@ -4915,7 +4861,7 @@ namespace YYYLike
 								default:
 									break;
 							}
-							Exiled.API.Features.Map.Broadcast(10, "<color=#BB1444>Dio:</color>\n<color=lime>" + diotaici + "</color>");
+							Exiled.API.Features.Map.Broadcast(6, "<color=#BB1444>Dio:</color>\n<color=lime>" + diotaici + "</color>");
 							if (Dio != null)
 							{
 								Dio.SetRole(RoleType.Tutorial);
@@ -5029,7 +4975,6 @@ namespace YYYLike
 			Coroutines.Add(Timing.RunCoroutine(SecondCounter5()));
 			Coroutines.Add(Timing.RunCoroutine(SecondCounter18()));
 			Coroutines.Add(Timing.RunCoroutine(SecondCounter21()));
-			Coroutines.Add(Timing.RunCoroutine(GuanZhanYouXi()));
 			Coroutines.Add(Timing.RunCoroutine(SecondCounter20()));
 			Coroutines.Add(Timing.RunCoroutine(SetNineFox()));
 			Coroutines.Add(Timing.RunCoroutine(RenWuFenPei()));
@@ -5069,7 +5014,7 @@ namespace YYYLike
 					time2++;
 				}
 			}
-			Exiled.API.Features.Map.Broadcast(8, "<color=lime>本局已生成</color>" + time2 + "<color=lime>个幸运硬币</color>\n 你能找到吗awa？");
+			Exiled.API.Features.Map.Broadcast(6, "<color=lime>本局已生成</color>" + time2 + "<color=lime>个幸运硬币</color>\n 你能找到吗awa？");
 			Exiled.API.Features.Map.Broadcast(1, "<color=red>让我看看 哪个小可爱这么幸运 获得幸运玩家呢？</color>");
 			Exiled.API.Features.Map.Broadcast(1, "<color=yellow>让我看看 哪个小可爱这么幸运 获得幸运玩家呢？</color>");
 			Exiled.API.Features.Map.Broadcast(1, "<color=lime>让我看看 哪个小可爱这么幸运 获得幸运玩家呢？</color>");
@@ -5120,12 +5065,12 @@ namespace YYYLike
 			starttimer = true;
 			roundstart = true;
 			deadtime = true;
-			Exiled.API.Features.Map.Broadcast(6, "<color=#FF0000>警告:</color>站点发生收容失效,Alpha弹头协议将会摧毁此站点\n请在30分钟内遏制重新收容所有SCP项目");
-			Exiled.API.Features.Map.Broadcast(2, "<color=#FFFF00>[进入投降模式]</color>\n---|<color=#FF0000>点击键盘上的 ~ 键[数字1左边]</color>|---\n输入<color=#9400D3>.tx</color>即可进入<color=#9400D3>投降模式</color>");
-			Exiled.API.Features.Map.Broadcast(2, "<color=#FFFF00>[进入投降模式]</color>\n---|<color=#FF0000>点击键盘上的 ~ 键[数字1左边]</color>|---\n输入<color=#FFFF33>.tx</color>即可进入<color=#9400D3>投降模式</color>");
-			Exiled.API.Features.Map.Broadcast(2, "<color=#FFFF00>[进入投降模式]</color>\n---|<color=#FF0000>点击键盘上的 ~ 键[数字1左边]</color>|---\n输入<color=#66FF33>.tx</color>即可进入<color=#9400D3>投降模式</color>");
-			Exiled.API.Features.Map.Broadcast(2, "<color=#FFFF00>[进入投降模式]</color>\n---|<color=#FF0000>点击键盘上的 ~ 键[数字1左边]</color>|---\n输入<color=#00CCFF>.tx</color>即可进入<color=#9400D3>投降模式</color>");
-			Exiled.API.Features.Map.Broadcast(2, "<color=#FFFF00>[进入投降模式]</color>\n---|<color=#FF0000>点击键盘上的 ~ 键[数字1左边]</color>|---\n输入<color=#FF9900>.tx</color>即可进入<color=#9400D3>投降模式</color>");
+			Exiled.API.Features.Map.Broadcast(4, "<color=#FF0000>警告:</color>站点发生收容失效,Alpha弹头协议将会摧毁此站点\n请在30分钟内遏制重新收容所有SCP项目");
+			Exiled.API.Features.Map.Broadcast(1, "<color=#FFFF00>[进入投降模式]</color>\n---|<color=#FF0000>点击键盘上的 ~ 键[数字1左边]</color>|---\n输入<color=#9400D3>.tx</color>即可进入<color=#9400D3>投降模式</color>");
+			Exiled.API.Features.Map.Broadcast(1, "<color=#FFFF00>[进入投降模式]</color>\n---|<color=#FF0000>点击键盘上的 ~ 键[数字1左边]</color>|---\n输入<color=#FFFF33>.tx</color>即可进入<color=#9400D3>投降模式</color>");
+			Exiled.API.Features.Map.Broadcast(1, "<color=#FFFF00>[进入投降模式]</color>\n---|<color=#FF0000>点击键盘上的 ~ 键[数字1左边]</color>|---\n输入<color=#66FF33>.tx</color>即可进入<color=#9400D3>投降模式</color>");
+			Exiled.API.Features.Map.Broadcast(1, "<color=#FFFF00>[进入投降模式]</color>\n---|<color=#FF0000>点击键盘上的 ~ 键[数字1左边]</color>|---\n输入<color=#00CCFF>.tx</color>即可进入<color=#9400D3>投降模式</color>");
+			Exiled.API.Features.Map.Broadcast(1, "<color=#FFFF00>[进入投降模式]</color>\n---|<color=#FF0000>点击键盘上的 ~ 键[数字1左边]</color>|---\n输入<color=#FF9900>.tx</color>即可进入<color=#9400D3>投降模式</color>");
 			Coroutines.Add(Timing.RunCoroutine(ChopperThread()));
 			foreach (Player player1 in Player.List)
 			{
@@ -5460,12 +5405,6 @@ namespace YYYLike
 			tuolikadianid = 0;
 			timesjw = 0;
 			timestop = 0;
-			事件 = "";
-			时间 = "";
-			地点 = "";
-			人物 = "";
-			句子 = "";
-			缺少 = "";
 			rhdzzwj = null;
 			rhdyes = false;
 			tlid = 0;
@@ -5547,16 +5486,16 @@ namespace YYYLike
 			ev.Player.Broadcast(1, "<color=yellow>国服攻击严重 请务必加群：</color><color=#66FF99>1021889243</color><color=yellow>以便最快速度获得服务器动态</color>");
 			ev.Player.Broadcast(1, "<color=yellow>国服攻击严重 请务必加群：</color><color=#66FF66>1021889243</color><color=yellow>以便最快速度获得服务器动态</color>");
 
-			ev.Player.Broadcast(6, Red("个人通知：") + "本服开启积分插件，按 ~ 打开控制台输入  .shop 查看");
-			ev.Player.Broadcast(6, Red("个人通知：") + "本服开启投票踢人插件，按 ~ 打开控制台输入  .kick 查看");
+			ev.Player.Broadcast(3, Red("个人通知：") + "本服开启积分插件，按 ~ 打开控制台输入  .shop 查看");
+			ev.Player.Broadcast(3, Red("个人通知：") + "本服开启投票踢人插件，按 ~ 打开控制台输入  .kick 查看");
 
 			if (!player233.Contains(ev.Player))
 			{
 				player233.Add(ev.Player);
 			}
 
-			ev.Player.Broadcast(5, "<color=yellow>[提示]</color>\n<color=lime>如果你想获得玩家编号\n按~开启控制台，在控制台输入.list获取玩家编号</color>");
-			ev.Player.Broadcast(10, "<color=#BB1444>如果你看到这条消息证明随机事件插件已经在运行</color>\n<color=#FFFF00>如有破坏游戏体验等问题请在群内支出qwq</color>");
+			ev.Player.Broadcast(4, "<color=yellow>[提示]</color>\n<color=lime>如果你想获得玩家编号\n按~开启控制台，在控制台输入.list获取玩家编号</color>");
+			ev.Player.Broadcast(6, "<color=#BB1444>如果你看到这条消息证明随机事件插件已经在运行</color>\n<color=#FFFF00>如有破坏游戏体验等问题请在群内支出qwq</color>");
 			switch (new System.Random().Next(1, 11))
 			{
 				case 1:
@@ -5656,13 +5595,13 @@ namespace YYYLike
 				switch (new System.Random().Next(1, 6))
 				{
 					case 1:
-						ev.Player.Broadcast(15, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>告诉你一个秘密,下班的神秘代码复制到迅雷</color>");
+						ev.Player.Broadcast(7, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>告诉你一个秘密,下班的神秘代码复制到迅雷</color>");
 						break;
 					case 2:
-						ev.Player.Broadcast(15, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>神秘代码不可能给你的233</color>");
+						ev.Player.Broadcast(7, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>神秘代码不可能给你的233</color>");
 						break;
 					default:
-						ev.Player.Broadcast(15, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>其实50%以下比50%还好相信我!</color>");
+						ev.Player.Broadcast(7, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>其实50%以下比50%还好相信我!</color>");
 						break;
 				}
 			}
@@ -5671,19 +5610,19 @@ namespace YYYLike
 				switch (new System.Random().Next(1, 6))
 				{
 					case 1:
-						ev.Player.Broadcast(15, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>也不差嘛~不过电磁炮可能合不出来哇咔咔</color>");
+						ev.Player.Broadcast(7, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>也不差嘛~不过电磁炮可能合不出来哇咔咔</color>");
 						break;
 					case 2:
-						ev.Player.Broadcast(15, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>50%是好还是坏呢</color>");
+						ev.Player.Broadcast(7, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>50%是好还是坏呢</color>");
 						break;
 					case 3:
-						ev.Player.Broadcast(15, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>改编不是乱编!戏说不是胡说!</color>");
+						ev.Player.Broadcast(7, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>改编不是乱编!戏说不是胡说!</color>");
 						break;
 					case 4:
-						ev.Player.Broadcast(15, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>改编不是乱编!戏说不是胡说!</color>");
+						ev.Player.Broadcast(7, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>改编不是乱编!戏说不是胡说!</color>");
 						break;
 					default:
-						ev.Player.Broadcast(15, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>50%...如果加1%会不会变得更强呢?</color>");
+						ev.Player.Broadcast(7, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>50%...如果加1%会不会变得更强呢?</color>");
 						break;
 				}
 			}
@@ -5692,19 +5631,19 @@ namespace YYYLike
 				switch (new System.Random().Next(1, 6))
 				{
 					case 1:
-						ev.Player.Broadcast(15, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>我觉得海星</color>");
+						ev.Player.Broadcast(7, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>我觉得海星</color>");
 						break;
 					case 2:
-						ev.Player.Broadcast(15, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>快乐DD每一天</color>");
+						ev.Player.Broadcast(7, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>快乐DD每一天</color>");
 						break;
 					case 3:
-						ev.Player.Broadcast(15, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>不行啊，太短了满足不了我</color>");
+						ev.Player.Broadcast(7, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>不行啊，太短了满足不了我</color>");
 						break;
 					case 4:
-						ev.Player.Broadcast(15, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>不行啊，太短了满足不了我</color>");
+						ev.Player.Broadcast(7, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>不行啊，太短了满足不了我</color>");
 						break;
 					default:
-						ev.Player.Broadcast(15, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>你看你队友打游戏像蔡徐坤</color>");
+						ev.Player.Broadcast(7, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>你看你队友打游戏像蔡徐坤</color>");
 						break;
 				}
 			}
@@ -5713,16 +5652,16 @@ namespace YYYLike
 				switch (new System.Random().Next(1, 6))
 				{
 					case 1:
-						ev.Player.Broadcast(15, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>妈妈咪耶，欧皇？我先吸掉你欧气为敬!</color>");
+						ev.Player.Broadcast(7, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>妈妈咪耶，欧皇？我先吸掉你欧气为敬!</color>");
 						break;
 					case 2:
-						ev.Player.Broadcast(15, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>wdnm你太强了</color>");
+						ev.Player.Broadcast(7, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>wdnm你太强了</color>");
 						break;
 					case 3:
-						ev.Player.Broadcast(15, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>你的欧气已被后台转移到服主身上</color>");
+						ev.Player.Broadcast(7, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>你的欧气已被后台转移到服主身上</color>");
 						break;
 					case 4:
-						ev.Player.Broadcast(15, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>你的人品今天已经花在本服了,切勿抽卡233!</color>");
+						ev.Player.Broadcast(7, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>你的人品今天已经花在本服了,切勿抽卡233!</color>");
 						break;
 				}
 			}
@@ -5730,11 +5669,11 @@ namespace YYYLike
 			{
 				if (new System.Random().Next(1, 6) <= 3)
 				{
-					ev.Player.Broadcast(15, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>....不就是100%[才不是羡慕],你可以把这条信息截图给服主秀一波了</color>");
+					ev.Player.Broadcast(7, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>....不就是100%[才不是羡慕],你可以把这条信息截图给服主秀一波了</color>");
 				}
 				else
 				{
-					ev.Player.Broadcast(15, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>100%!恭喜你,但是这条信息截图也无效233333</color>");
+					ev.Player.Broadcast(7, "=w= 经过本鱼的检测,你本回合人品指数为\n[<color=#FFC0CB>" + num + "</color>%]\n<color=#FF00FF>100%!恭喜你,但是这条信息截图也无效233333</color>");
 				}
 			}
 			if (Server.IpAddress == "60.214.102.214")
@@ -5950,10 +5889,10 @@ namespace YYYLike
 			int num = (int)(Generator079.mainGenerator.NetworktotalVoltage + 1);
 			if (num != 5)
 			{
-				Map.Broadcast(10, string.Format("----[<color=#ffff00>系统提示</color>]----\n<i>发电机 <color=red>{0}</color>/<color=red>5</color>个发电机被激活</i>.", num), global::Broadcast.BroadcastFlags.Normal);
+				Map.Broadcast(7, string.Format("----[<color=#ffff00>系统提示</color>]----\n<i>发电机 <color=red>{0}</color>/<color=red>5</color>个发电机被激活</i>.", num), global::Broadcast.BroadcastFlags.Normal);
 				return;
 			}
-			Map.Broadcast(10, "----[<color=#ff3366>系统提示</color>]----\n<i>发电机 <color=red>5</color>个全部激活79快要爆炸了</i>.", global::Broadcast.BroadcastFlags.Normal);
+			Map.Broadcast(7, "----[<color=#ff3366>系统提示</color>]----\n<i>发电机 <color=red>5</color>个全部激活79快要爆炸了</i>.", global::Broadcast.BroadcastFlags.Normal);
 		}
 
 		public void OnPlayerDeath(DiedEventArgs ev)
@@ -7179,91 +7118,6 @@ namespace YYYLike
 				ev.Player.ReferenceHub.serverRoles.SetGroup(userGroup, false, true);
 			}
 
-
-			if (ev.Name.Contains("jlck"))
-			{
-				时间 = "";
-				地点 = "";
-				人物 = "";
-				事件 = "";
-				句子 = "";
-				缺少 = "";
-			}
-			if (ev.Name.Contains("jl"))
-			{
-				if ((时间 + "").Length == 0)
-				{
-					try
-					{
-						时间 = ev.Arguments[0];
-					}
-					catch
-					{
-						Log.Info("nope");
-					}
-				}
-				else if ((地点 + "").Length == 0)
-				{
-					try
-					{
-						地点 = ev.Arguments[0];
-					}
-					catch
-					{
-						Log.Info("nope");
-					}
-				}
-				else if ((人物 + "").Length == 0)
-				{
-					try
-					{
-						人物 = ev.Arguments[0];
-					}
-					catch
-					{
-						Log.Info("nope");
-					}
-				}
-				else if ((事件 + "").Length == 0)
-				{
-					try
-					{
-						事件 = ev.Arguments[0];
-					}
-					catch
-					{
-						Log.Info("nope");
-					}
-				}
-				foreach (Exiled.API.Features.Player referenceHub in Exiled.API.Features.Player.List)
-				{
-					if (referenceHub.Role == RoleType.Spectator)
-					{
-						句子 = 时间 + 地点 + 人物 + 事件;
-						if ((时间 + "").Length == 0)
-						{
-							缺少 = "时间 输入.jl 内容补充内容";
-						}
-						else if ((地点 + "").Length == 0)
-						{
-							缺少 = "地点 输入.jl 内容补充内容";
-						}
-						else if ((人物 + "").Length == 0)
-						{
-							缺少 = "人物 输入.jl 内容补充内容";
-						}
-						else if ((事件 + "").Length == 0)
-						{
-							缺少 = "事件 输入.jl 内容补充内容";
-						}
-						else
-						{
-							缺少 = "输入.jlck开启下一回合";
-						}
-						referenceHub.Broadcast(5, "当前句子" + 句子 + "\n当前缺少" + 缺少);
-					}
-				}
-			}
 			if (!jwhngwufashanghai && !bscd && ev.Player.Id == jwhngid && ev.Name.Contains("wz"))
 			{
 				item = ev.Player.Inventory.items;
@@ -7486,7 +7340,7 @@ namespace YYYLike
 						}
 					}
 					scp79 = true;
-					Exiled.API.Features.Map.Broadcast(10, "<color=#FFC0CB>---[SCP079]---</color>\n<color=aqua>人类感受恐惧吧 本局SCP079选择帮助SCP</color>\n<color=aqua>SCP不会受到电网伤害(人形scp除外)</color>");
+					Exiled.API.Features.Map.Broadcast(7, "<color=#FFC0CB>---[SCP079]---</color>\n<color=aqua>人类感受恐惧吧 本局SCP079选择帮助SCP</color>\n<color=aqua>SCP不会受到电网伤害(人形scp除外)</color>");
 				}
 				if (ev.Name.Contains("h"))
 				{
@@ -7500,7 +7354,7 @@ namespace YYYLike
 					h = true;
 					Setrank_new("SCP079 - 最大电力:130 | 电力恢复:3AP/s   帮助人类", "aqua", ev.Player);
 					choise = true;
-					Exiled.API.Features.Map.Broadcast(10, "<color=#FFC0CB>---[SCP079]---</color>\n<color=aqua>SCP没想到吧我是25仔 本局SCP079选择帮助人类</color>\n<color=aqua>人类不会受到电网伤害</color>");
+					Exiled.API.Features.Map.Broadcast(7, "<color=#FFC0CB>---[SCP079]---</color>\n<color=aqua>SCP没想到吧我是25仔 本局SCP079选择帮助人类</color>\n<color=aqua>人类不会受到电网伤害</color>");
 					foreach (Exiled.API.Features.Player p5 in Exiled.API.Features.Player.List)
 					{
 						if (p5.Team == Team.SCP)
@@ -8142,7 +7996,7 @@ namespace YYYLike
 			}
 			if (ev.IsAllowed)
 			{
-				Exiled.API.Features.Map.Broadcast(50, "<color=red>广播</color>:(因大腿骨粉碎机而痛苦大叫)\n为什么? 为什么!\n呜呜呜呜呜呜呜");
+				Exiled.API.Features.Map.Broadcast(25, "<color=red>广播</color>:(因大腿骨粉碎机而痛苦大叫)\n为什么? 为什么!\n呜呜呜呜呜呜呜");
 			}
 		}
 
