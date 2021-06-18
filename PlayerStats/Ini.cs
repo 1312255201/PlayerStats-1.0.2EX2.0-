@@ -33,12 +33,43 @@ namespace YYYLike
         /// <param name="iniFilePath">ini配置文件的路径加ini文件名</param>
         /// <returns></returns>
         #region 读Ini文件
+        public static bool ReadCJ(string 成就名称,string steam64id)
+        {
+            string path = "C:\\\\Users\\Administrator\\AppData\\Roaming\\SCP Secret Laboratory\\config\\经验\\"+steam64id;
 
+            if (File.Exists(path))
+            {
+                string[] conf = File.ReadAllLines(path);
+                foreach (string cat in conf)
+                {
+                    if(cat.Contains(成就名称))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            else
+            {
+                File.WriteAllText(path, "");
+                return false;
+            }
+        }
+
+        public static bool SaveCJ(string 成就名称, string steam64id)
+        {
+            string path = "C:\\\\Users\\Administrator\\AppData\\Roaming\\SCP Secret Laboratory\\config\\经验\\" + steam64id;
+
+            string temp = File.ReadAllText(path);
+            File.WriteAllText(path, temp+"\n"+成就名称);
+            return true;
+
+        }
         public static int ReadExp(string steam64id)
         {
             try
             {
-                string path = Path.Combine(Path.Combine(Path.Combine(Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), ".config"), "SCP Secret Laboratory"), "config"), "经验"),steam64id);
+                string path = "C:\\\\Users\\Administrator\\AppData\\Roaming\\SCP Secret Laboratory\\config\\经验\\" + steam64id;
 
                 if (File.Exists(path))
                 {
@@ -119,7 +150,7 @@ namespace YYYLike
         }
         public static bool AddExp(string steam64id, int Exp)
         {
-            string path = Path.Combine(Path.Combine(Path.Combine(Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), ".config"), "SCP Secret Laboratory"), "config"), "经验"), steam64id);
+            string path = "C:\\\\Users\\Administrator\\AppData\\Roaming\\SCP Secret Laboratory\\config\\经验\\" + steam64id;
 
             EventHandlers eventHandlers = new EventHandlers();
             if (File.Exists(path))

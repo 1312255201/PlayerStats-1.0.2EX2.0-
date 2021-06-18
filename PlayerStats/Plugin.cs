@@ -2,6 +2,7 @@ using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.Events.Handlers;
 using HarmonyLib;
+using MEC;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -71,6 +72,11 @@ namespace YYYLike
 				Exiled.Events.Handlers.Map.AnnouncingDecontamination += server.OnAnnouncingDecontamination;
 				Exiled.Events.Handlers.Player.UsingMedicalItem += server.OnUsingMedicalItem;
 				Exiled.Events.Handlers.Player.Verified += server.OnVerified;
+				Exiled.Events.Handlers.Player.InteractingElevator += server.OnInteractingElevator;
+				Exiled.Events.Handlers.Map.PlacingBlood += server.OnPlaceBlood;
+				Exiled.Events.Handlers.Player.ChangingItem += server.OnChangeItem;
+				Exiled.Events.Handlers.Map.ExplodingGrenade += server.OnExplodingGrenade;
+
 				Exiled.Events.Handlers.Scp914.Activating += server.OnActivating;
 				//注册投票踢人
 				Exiled.Events.Handlers.Server.SendingConsoleCommand += kickPlayer.OnCommandSend;
@@ -79,6 +85,7 @@ namespace YYYLike
 				Exiled.Events.Handlers.Map.GeneratorActivated += server.电板激活事件;
 				
 				Exiled.Events.Handlers.Player.PreAuthenticating += server.OnPreAuthenticating;
+				
 				try
 				{
 					Harmony = new Harmony($"com.galaxy.cu-{DateTime.UtcNow.Ticks}");
@@ -88,6 +95,7 @@ namespace YYYLike
 				{
 					Log.Error($"Patching failed!, " + e);
 				}
+
 			}
 
 		}
@@ -140,6 +148,10 @@ namespace YYYLike
 			Exiled.Events.Handlers.Player.EnteringPocketDimension -= server.OnEnteringPocketDimension;
 			Exiled.Events.Handlers.Map.AnnouncingDecontamination -= server.OnAnnouncingDecontamination;
 			Exiled.Events.Handlers.Player.Verified -= server.OnVerified;
+			Exiled.Events.Handlers.Player.InteractingElevator -= server.OnInteractingElevator;
+			Exiled.Events.Handlers.Map.PlacingBlood -= server.OnPlaceBlood;
+			Exiled.Events.Handlers.Player.ChangingItem -= server.OnChangeItem;
+			Exiled.Events.Handlers.Map.ExplodingGrenade -= server.OnExplodingGrenade;
 			server = null;
 			//关闭投票踢人
 			Exiled.Events.Handlers.Server.SendingConsoleCommand -= kickPlayer.OnCommandSend;

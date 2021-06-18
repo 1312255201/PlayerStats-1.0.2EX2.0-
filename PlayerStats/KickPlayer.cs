@@ -175,7 +175,7 @@ namespace YYYLike
             while (投票发起)
             {
                 yield return Timing.WaitForSeconds(1f);
-                string temp = "<align=left>" + "<pos=-27%>正在进行投票踢人" + "\n<pos=-27%>发起者:" + 发起者名称 + "被投票请出的人:" + 被踢玩家名称 + "\n<pos=-27%>原因:" + 理由+"\n<pos=-27%>当前已参与人数" + 已经参与投票的人ID.Count() + "/" + Player.List.Count()+"最后投票玩家"+ 最后投票玩家名称 + "\n<pos=-27%>按~打开控制台.kickyes同意.kickno不同意<pos=-27%>\n\n\n\n\n\n";
+                string temp = "<align=left>" + "<pos=-27%>正在进行投票踢人" + "\n<pos=-27%>发起者:" + 发起者名称 + "被投票请出的人:" + 被踢玩家名称 + "\n<pos=-27%>原因:" + 理由+"\n<pos=-27%>当前已参与人数" + 已经参与投票的人ID.Count() + "/" + Player.List.Count()+"最后投票玩家"+ 最后投票玩家名称 + "\n<pos=-27%>同意："+赞成+"否决:"+否决 + "\n<pos=-27%>按~打开控制台.kickyes同意.kickno不同意<pos=-27%>\n\n\n\n\n\n";
 
                 foreach(Player player in Player.List)
                 {
